@@ -57,8 +57,8 @@ namespace CustomWindowsProperties
         // of property names
         private TreeItem AddTreeItem(Dictionary<string, TreeItem> dict, List<TreeItem> roots, PropertyView pv)
         {
-            Debug.Assert(pv.FullName.Contains('.')); // Because the algorithm assumes that this is the case
-            TreeItem ti = AddTreeItemInner(dict, roots, pv.FullName, pv.DisplayName);
+            Debug.Assert(pv.CanonicalName.Contains('.')); // Because the algorithm assumes that this is the case
+            TreeItem ti = AddTreeItemInner(dict, roots, pv.CanonicalName, pv.DisplayName);
             ti.Item = pv;
 
             return ti;
