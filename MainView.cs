@@ -1,10 +1,13 @@
-﻿using System;
+﻿// Copyright (c) 2020, Dijji, and released under Ms-PL.  This, with other relevant licenses, can be found in the root of this distribution.
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Xml;
 
 namespace CustomWindowsProperties
 {
@@ -12,7 +15,28 @@ namespace CustomWindowsProperties
     {
         public List<TreeItem> SystemPropertyTree { get; } = new List<TreeItem>();
         public List<TreeItem> CustomPropertyTree { get; } = new List<TreeItem>();
+        public string Publisher { get; set; } = "Publisher";
+        public string Product { get; set; } = "Product";
 
+        public XmlDocument GetPropertyViewsAsXml(IEnumerable<PropertyView> properties)
+        {
+            var doc = new XmlDocument();
+            var root = doc.CreateElement("schema");
+            root.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            root.SetAttribute("xmlns", "http://schemas.microsoft.com/windows/2006/propertydescription");
+            root.SetAttribute("schemaVersion", "1.0");
+            doc.AppendChild(root);
+
+            var list = doc.CreateElement("propertyDescriptionList");
+            list.SetAttribute("publisher", Publisher);
+            list.SetAttribute("product", Product);
+            root.AppendChild(list);
+
+            foreach (var property in properties)
+                list.AppendChild(property.GetXmlPropertyDescription(doc));
+
+            return doc;
+        }
 
         public void PopulatePropertyTrees(State state)
         {

@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿// Copyright (c) 2020, Dijji, and released under Ms-PL.  This, with other relevant licenses, can be found in the root of this distribution.
+
+using System.Windows;
 using System.Windows.Controls;
 
 namespace CustomWindowsProperties
@@ -26,7 +28,20 @@ namespace CustomWindowsProperties
 
         private void treeSystem_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            var item = ((TreeView)sender).SelectedItem as TreeItem;
+            if (item != null)
+                pview = item.Item as PropertyView;
+        }
 
+        PropertyView pview = null;
+
+        private void Export_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (pview != null)
+            {
+                var doc = view.GetPropertyViewsAsXml(new PropertyView[] { pview });
+                doc.Save(@"d:\documents\schema.xml");
+            }
         }
     }
 

@@ -6,31 +6,6 @@ using System.Xml;
 
 namespace CustomWindowsProperties
 {
-    public enum PropertyTypes
-    {
-        Any,
-        Null,
-        String,
-        Boolean,
-        Byte,
-        Buffer,
-        Int16,
-        UInt16,
-        Int32,
-        UInt32,
-        Int64,
-        UInt64,
-        Double,
-        DateTime,
-        Guid,
-        Blob,
-        Stream,
-        Clipboard,
-        Object,
-    }
-
-   
-
     public class PropertyView
     {
         // BASICS
@@ -44,12 +19,12 @@ namespace CustomWindowsProperties
         /// <summary>
         /// A unique GUID for the property
         /// </summary>
-        public Guid FormatId { get; set; }
+        public Guid? FormatId { get; set; }
 
         /// <summary>
         ///  Property identifier (PID)
         /// </summary>
-        public Int32 PropertyId { get; set; }
+        public Int32? PropertyId { get; set; }
 
         // SEARCH
 
@@ -232,18 +207,18 @@ namespace CustomWindowsProperties
         /// </summary>
         public uint DefaultColumWidth { get; set; }
 
+
+        /// <summary>
+        /// The control used to edit the property.
+        /// </summary>
+        public EditControl EditControl { get; set; }
+
         // OTHER
 
         /// <summary>
         /// This property is owned by the system.
         /// </summary>
         public bool IsSystemProperty { get; set; }
-
-        /// <summary>
-        /// Gets the .NET system type for a value of this property, or
-        /// null if the value is empty.
-        /// </summary>
-        public Type ValueType { get; set; }
 
         /// <summary>
         /// Gets the column state flag, which describes how the property 
@@ -276,8 +251,7 @@ namespace CustomWindowsProperties
             SortDescription = propertyDescription.SortDescription;
 
             // Type information
-            ValueType = propertyDescription.ValueType;
-            // to do set Type from Value Type
+            Type = PropertyUtils.VarEnumToPropertyType(propertyDescription.VarEnumType);
             GroupingRange = propertyDescription.GroupingRange;
             MultipleValues = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.MultipleValues);
             IsInnate = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IsInnate);
@@ -298,10 +272,12 @@ namespace CustomWindowsProperties
             // To do are these just pre-Windows 7?
             //ColumnState = propertyDescription.ColumnState;
 
+            // To do elements controlling editing the property
+
+            // To do this GetRelativeDescription:  shell property Does not read it  from the interface
+
             // To do. See if these are still relevant
             ViewFlags = propertyDescription.ViewFlags;
-
-            // GetRelativeDescription: is it in the shell property?
 
         }
 
@@ -343,7 +319,7 @@ namespace CustomWindowsProperties
         {
             var desc = doc.CreateElement("propertyDescription");
             desc.SetAttribute("name", CanonicalName);
-            desc.SetAttribute("formatID", FormatId.ToString("B").ToUpper());
+            desc.SetAttribute("formatID", FormatId?.ToString("B").ToUpper());
             desc.SetAttribute("propID", PropertyId.ToString());
 
             var search = doc.CreateElement("searchInfo");
@@ -390,11 +366,16 @@ namespace CustomWindowsProperties
             display.SetAttribute("displayType", DisplayType.ToString());
             if (DefaultColumWidth != 20)
                 display.SetAttribute("defaultColumnWidth", DefaultColumWidth.ToString());
+            if (EditControl != EditControl.Default)
+            {
+                var edit = doc.CreateElement("editControl");
+                edit.SetAttribute("control", DisplayType.ToString());
+                display.AppendChild(edit);
+            }
+            desc.AppendChild(display);
 
+            return desc;
 
-
-            // Pre Windows 7?
-            // canStackBy=\"{CanStackBy}\" 
             //string S = $"<propertyDescription name=\"{CanonicalName}\" formatID=\"{FormatId.ToString("B").ToUpper()}\" propID=\"{PropertyId}\">" +
             //       $"<searchInfo inInvertedIndex=\"{EnableFullTextSearch}\" isColumn=\"{EnableSearchQueries}\"/>" +
             //       $"<typeInfo type=\"{Type}\" groupingRange=\"{GroupingRange}\" isInnate=\"{IsInnate}\"" +
@@ -409,27 +390,42 @@ namespace CustomWindowsProperties
             //        $" alignment=\"Left\" relativeDescriptionType=\"General\" defaultSortDirection=\"Ascending\"/>" +
             //       //$"<aliasInfo sortByAlias=\"{DisplayName}\" additionalSortByAliases=\"{SortDescription}\"" +
             //       "</ propertyDescription >";
-            return desc;
         }
 
         internal void CopyFrom(PropertyView from, bool isSystem)
         {
-            CanonicalName = from.CanonicalName;
+            // Basics
+            if (!isSystem)
+                CanonicalName = from.CanonicalName;
+            FormatId = null;
+            PropertyId = null;
+
+            // Search
+            EnableFullTextSearch = from.EnableFullTextSearch;
+            EnableSearchQueries = from.EnableSearchQueries;
+
+            // Label
             DisplayName = from.DisplayName;
-            FormatId = from.FormatId;
-            PropertyId = from.PropertyId;
+            SortDescription = from.SortDescription;
             EditInvitation = from.EditInvitation;
-            ValueType = from.ValueType;
+
+            // Type
+            Type = from.Type;
+            GroupingRange = from.GroupingRange;
+            IsInnate = from.IsInnate;
+            CanBePurged = from.CanBePurged;
+            MultipleValues = from.MultipleValues;
+            IsGroup = from.IsGroup;
+            AggregationType = from.AggregationType;
+            IsTreeProperty = from.IsTreeProperty;
+            IsViewable = from.IsViewable;
+            ConditionType = from.ConditionType;
+            ConditionOperation = from.ConditionOperation;
+
+            // Display
             DisplayType = from.DisplayType;
             DefaultColumWidth = from.DefaultColumWidth;
-            AggregationType = from.AggregationType;
-            
-            GroupingRange = from.GroupingRange;
-            SortDescription = from.SortDescription;
-            // To do type flags
-            ViewFlags = from.ViewFlags;
-            
+            EditControl = from.EditControl;
         }
-    
     }
 }

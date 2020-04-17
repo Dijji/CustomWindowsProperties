@@ -60,5 +60,15 @@
                 </TreeView.ItemTemplate>
             </TreeView>
         </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Button Content="Export" Height="25" Click="Export_Clicked"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
