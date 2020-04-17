@@ -2,6 +2,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Xml;
 
 namespace CustomWindowsProperties
 {
@@ -29,32 +30,17 @@ namespace CustomWindowsProperties
     }
 
    
-    public enum AggregationTypes
-    {
-        Default,
-        First,
-        Sum,
-        Average,
-        DateRange,
-        Union,
-        Maximum,
-        Minimum,
-    }
 
     public class PropertyView
     {
+        // BASICS
 
         /// <summary>
         /// The case-sensitive name of a property as it is known to the system, 
         /// regardless of its localized name.
         /// </summary>
         public string CanonicalName { get; set; }
-
-        /// <summary>
-        /// Gets the display name of the property as it is shown in any user interface (UI).
-        /// </summary>
-        public string DisplayName { get; set; }
-
+      
         /// <summary>
         /// A unique GUID for the property
         /// </summary>
@@ -65,46 +51,32 @@ namespace CustomWindowsProperties
         /// </summary>
         public Int32 PropertyId { get; set; }
 
-        /// <summary>
-        /// Gets the text used in edit controls hosted in various dialog boxes.
-        /// </summary>
-        public string EditInvitation { get; set; }
+        // SEARCH
 
         /// <summary>
-        /// Gets the .NET system type for a value of this property, or
-        /// null if the value is empty.
+        /// inInvertedIndex. 
+        /// Indicates whether the property value should be stored in the inverted index. 
+        /// This lets end users perform full-text queries over the values of this property.
+        /// The default is "false".
         /// </summary>
-        public Type ValueType { get; set; }
+        public bool EnableFullTextSearch { get; set; }
 
         /// <summary>
-        /// Gets the current data type used to display the property.
+        /// isColumn
+        /// Indicates whether the property should also be stored in the Windows search database as a column,
+        /// so that independent software vendors (ISVs) can create predicate-based queries
+        /// (for example, "Select * Where "System.Title"='qqq'").
+        /// Set to "true" to enable end users (or developers) to create predicate based queries on the property
+        /// The default is "false".
         /// </summary>
-        public PropertyDisplayType DisplayType { get; set; }
+        public bool EnableSearchQueries { get; set; }
+
+        // LABEL
 
         /// <summary>
-        /// Gets the default user interface (UI) column width for this property.
+        /// Gets the display name of the property as it is shown in any user interface (UI).
         /// </summary>
-        public uint DefaultColumWidth { get; set; }
-
-        /// <summary>
-        /// Gets a value that describes how the property values are displayed when 
-        /// multiple items are selected in the user interface (UI).
-        /// </summary>
-        public PropertyAggregationType AggregationType { get; set; }
-
-        /// <summary>
-        /// Gets the column state flag, which describes how the property 
-        /// should be treated by interfaces or APIs that use this flag.
-        /// </summary>
-        public PropertyColumnStateOptions ColumnState { get; set; }
-
-        /// <summary>
-        /// Gets the method used when a view is grouped by this property.
-        /// </summary>
-        /// <remarks>The information retrieved by this method comes from 
-        /// the <c>groupingRange</c> attribute of the <c>typeInfo</c> element in the 
-        /// property's .propdesc file.</remarks>
-        public PropertyGroupingRange GroupingRange { get; set; }
+        public string DisplayName { get; set; }
 
         /// <summary>
         /// Gets the current sort description flags for the property, 
@@ -128,46 +100,26 @@ namespace CustomWindowsProperties
             return null;
         }
 
+        // To do HideLabel
+
+        /// <summary>
+        /// Gets the text used in edit controls hosted in various dialog boxes.
+        /// </summary>
+        public string EditInvitation { get; set; }
+
       
-        /// <summary>
-        /// Gets the current set of flags governing the property's view.
-        /// </summary>
-        public PropertyViewOptions ViewFlags { get; set; }
-
-        /// <summary>
-        /// Description that appears in the XML. It appears to be discarded by Windows.
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        /// inInvertedIndex. 
-        /// Indicates whether the property value should be stored in the inverted index. 
-        /// This lets end users perform full-text queries over the values of this property.
-        /// The default is "false".
-        /// </summary>
-        public bool EnableFullTextSearch { get; set; }
-
-        /// <summary>
-        /// isColumn
-        /// Indicates whether the property should also be stored in the Windows search database as a column,
-        /// so that independent software vendors (ISVs) can create predicate-based queries
-        /// (for example, "Select * Where "System.Title"='qqq'").
-        /// Set to "true" to enable end users (or developers) to create predicate based queries on the property
-        /// The default is "false".
-        /// </summary>
-        public bool EnableSearchQueries { get; set; }
+        // TYPE
 
         public PropertyTypes Type { get; set; }
 
         /// <summary>
-        /// The property can have multiple values.   
+        /// Gets the method used when a view is grouped by this property.
         /// </summary>
-        /// <remarks>
-        /// These values are stored as a VT_VECTOR in the PROPVARIANT structure.
-        /// This value is set by the multipleValues attribute of the typeInfo element in the property's .propdesc file.
-        /// </remarks>
-        public bool MultipleValues { get; set; }
-
+        /// <remarks>The information retrieved by this method comes from 
+        /// the <c>groupingRange</c> attribute of the <c>typeInfo</c> element in the 
+        /// property's .propdesc file.</remarks>
+        public PropertyGroupingRange GroupingRange { get; set; }
+      
         /// <summary>
         /// This property cannot be written to. 
         /// </summary>
@@ -175,65 +127,6 @@ namespace CustomWindowsProperties
         /// This value is set by the isInnate attribute of the typeInfo element in the property's .propdesc file.
         /// </remarks>
         public bool IsInnate { get; set; }
-
-        /// <summary>
-        /// The property is a group heading. 
-        /// </summary>
-        /// <remarks>
-        /// This value is set by the isGroup attribute of the typeInfo element in the property's .propdesc file.
-        /// </remarks>
-        public bool IsGroup { get; set; }
-
-        /// <summary>
-        /// The user can group by this property. 
-        /// </summary>
-        /// <remarks>
-        /// This value is set by the canGroupBy attribute of the typeInfo element in the property's .propdesc file.
-        /// </remarks>
-        public bool CanGroupBy { get; set; }
-
-        /// <summary>
-        /// The user can stack by this property. 
-        /// </summary>
-        /// <remarks>
-        /// This value is set by the canStackBy attribute of the typeInfo element in the property's .propdesc file.
-        /// </remarks>
-        public bool CanStackBy { get; set; }
-
-        /// <summary>
-        /// This property contains a hierarchy. 
-        /// </summary>
-        /// <remarks>
-        /// This value is set by the isTreeProperty attribute of the typeInfo element in the property's .propdesc file.
-        /// </remarks>
-        public bool IsTreeProperty { get; set; }
-
-        /// <summary>
-        /// Include this property in any full text query that is performed. 
-        /// </summary>
-        /// <remarks>
-        /// This value is set by the includeInFullTextQuery attribute of the typeInfo element in the property's .propdesc file.
-        /// </remarks>
-        public bool IncludeInFullTextQuery { get; set; }
-
-        /// <summary>
-        /// This property is meant to be viewed by the user.  
-        /// </summary>
-        /// <remarks>
-        /// This influences whether the property shows up in the "Choose Columns" dialog, for example.
-        /// This value is set by the isViewable attribute of the typeInfo element in the property's .propdesc file.
-        /// </remarks>
-        public bool IsViewable { get; set; }
-
-        /// <summary>
-        /// This property is included in the list of properties that can be queried.   
-        /// </summary>
-        /// <remarks>
-        /// A queryable property must also be viewable.
-        /// This influences whether the property shows up in the query builder UI.
-        /// This value is set by the isQueryable attribute of the typeInfo element in the property's .propdesc file.
-        /// </remarks>
-        public bool IsQueryable { get; set; }
 
         /// <summary>
         /// Used with an innate property (that is, a value calculated from other property values) to indicate that it can be deleted.  
@@ -246,9 +139,123 @@ namespace CustomWindowsProperties
         public bool CanBePurged { get; set; }
 
         /// <summary>
+        /// The property can have multiple values.   
+        /// </summary>
+        /// <remarks>
+        /// These values are stored as a VT_VECTOR in the PROPVARIANT structure.
+        /// This value is set by the multipleValues attribute of the typeInfo element in the property's .propdesc file.
+        /// </remarks>
+        public bool MultipleValues { get; set; }
+
+        /// <summary>
+        /// The property is a group heading. 
+        /// </summary>
+        /// <remarks>
+        /// This value is set by the isGroup attribute of the typeInfo element in the property's .propdesc file.
+        /// </remarks>
+        public bool IsGroup { get; set; }
+
+        /// <summary>
+        /// Gets a value that describes how the property values are displayed when 
+        /// multiple items are selected in the user interface (UI).
+        /// </summary>
+        public PropertyAggregationType AggregationType { get; set; }
+
+        /// <summary>
+        /// The user can group by this property. 
+        /// </summary>
+        /// <remarks>
+        /// This value is set by the canGroupBy attribute of the typeInfo element in the property's .propdesc file.
+        /// </remarks>
+      //  public bool CanGroupBy { get; set; }
+
+        /// <summary>
+        /// The user can stack by this property. 
+        /// </summary>
+        /// <remarks>
+        /// This value is set by the canStackBy attribute of the typeInfo element in the property's .propdesc file.
+        /// </remarks>
+        //public bool CanStackBy { get; set; }
+
+        /// <summary>
+        /// This property contains a hierarchy. 
+        /// </summary>
+        /// <remarks>
+        /// This value is set by the isTreeProperty attribute of the typeInfo element in the property's .propdesc file.
+        /// </remarks>
+        public bool IsTreeProperty { get; set; }
+
+        /// <summary>
+        /// This property is meant to be viewed by the user.  
+        /// </summary>
+        /// <remarks>
+        /// This influences whether the property shows up in the "Choose Columns" dialog, for example.
+        /// This value is set by the isViewable attribute of the typeInfo element in the property's .propdesc file.
+        /// </remarks>
+        public bool IsViewable { get; set; }
+
+        // To do source of value
+        public bool SearchRawValue { get; set; }
+
+        /// <summary>
+        /// Gets the condition type to use when displaying the property in 
+        /// the query builder user interface (UI). This influences the list 
+        /// of predicate conditions (for example, equals, less than, and 
+        /// contains) that are shown for this property.
+        /// </summary>
+        /// <remarks>For more information, see the <c>conditionType</c> attribute 
+        /// of the <c>typeInfo</c> element in the property's .propdesc file.</remarks>
+        public PropertyConditionType ConditionType { get; set; }
+
+        /// <summary>
+        /// Gets the default condition operation to use 
+        /// when displaying the property in the query builder user 
+        /// interface (UI). This influences the list of predicate conditions 
+        /// (for example, equals, less than, and contains) that are shown 
+        /// for this property.
+        /// </summary>
+        /// <remarks>For more information, see the <c>conditionType</c> attribute of the 
+        /// <c>typeInfo</c> element in the property's .propdesc file.</remarks>
+        public PropertyConditionOperation ConditionOperation { get; set; }
+
+        // DISPLAY
+
+            //To do lots of things about how the value is set
+
+        /// <summary>
+        /// Gets the current data type used to display the property.
+        /// </summary>
+        public PropertyDisplayType DisplayType { get; set; }
+
+        /// <summary>
+        /// Gets the default user interface (UI) column width for this property.
+        /// </summary>
+        public uint DefaultColumWidth { get; set; }
+
+        // OTHER
+
+        /// <summary>
         /// This property is owned by the system.
         /// </summary>
         public bool IsSystemProperty { get; set; }
+
+        /// <summary>
+        /// Gets the .NET system type for a value of this property, or
+        /// null if the value is empty.
+        /// </summary>
+        public Type ValueType { get; set; }
+
+        /// <summary>
+        /// Gets the column state flag, which describes how the property 
+        /// should be treated by interfaces or APIs that use this flag.
+        /// </summary>
+        //public PropertyColumnStateOptions ColumnState { get; set; }
+
+
+        /// <summary>
+        /// Gets the current set of flags governing the property's view.
+        /// </summary>
+        public PropertyViewOptions ViewFlags { get; set; }
 
 
         internal PropertyView(ShellPropertyDescription propertyDescription)
@@ -258,13 +265,11 @@ namespace CustomWindowsProperties
             FormatId = propertyDescription.PropertyKey.FormatId;
             PropertyId = propertyDescription.PropertyKey.PropertyId;
 
-            // Display information
-            DisplayType = propertyDescription.DisplayType;
-            DefaultColumWidth = propertyDescription.DefaultColumWidth;
-
-            // To do are these just pre-Windows 7?
-            ColumnState = propertyDescription.ColumnState;
-
+            // Search information
+            // Not held in property description, so set the defaults 
+            EnableFullTextSearch = false;
+            EnableSearchQueries = false;
+       
             // Label information
             DisplayName = propertyDescription.DisplayName;
             EditInvitation = propertyDescription.EditInvitation;
@@ -279,36 +284,51 @@ namespace CustomWindowsProperties
             CanBePurged = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.CanBePurged);
             IsGroup = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IsGroup);
             AggregationType = propertyDescription.AggregationTypes;
-            CanGroupBy = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.CanGroupBy);
-            CanStackBy = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.CanStackBy);
+            //CanGroupBy = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.CanGroupBy);
+            //CanStackBy = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.CanStackBy);
             IsTreeProperty = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IsTreeProperty);
-            IncludeInFullTextQuery = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IncludeInFullTextQuery);
             IsViewable = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IsViewable);
-            IsQueryable = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IsQueryable);
             IsSystemProperty = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IsSystemProperty);
+            ConditionType = propertyDescription.ConditionType;
+            ConditionOperation = propertyDescription.ConditionOperation;
+            
+            // Display information
+            DisplayType = propertyDescription.DisplayType;
+            DefaultColumWidth = propertyDescription.DefaultColumWidth;
+            // To do are these just pre-Windows 7?
+            //ColumnState = propertyDescription.ColumnState;
 
             // To do. See if these are still relevant
             ViewFlags = propertyDescription.ViewFlags;
 
             // GetRelativeDescription: is it in the shell property?
 
-            // Windows does not appear to hold this value
-            Description = null;
         }
 
         internal void SetDefaultValues ()
         {
+            EnableFullTextSearch = false;
+            EnableSearchQueries = false;
+
+            DisplayName = null;
+            EditInvitation = null;
+            SortDescription = PropertySortDescription.General;
+
             Type = PropertyTypes.Any;
+            GroupingRange = PropertyGroupingRange.Discrete;
             IsInnate = false;
-            //CanBePurged
+            CanBePurged = false;
             MultipleValues = false;
             IsGroup = false;
             AggregationType = PropertyAggregationType.Default;
             IsTreeProperty = false;
             IsViewable = false;
-            IsQueryable = false;
-            IncludeInFullTextQuery = false;
+            ConditionType = PropertyConditionType.None;
+            ConditionOperation = PropertyConditionOperation.Equal;
             //SearchRawValue = false;
+
+            DisplayType = PropertyDisplayType.String;
+            DefaultColumWidth = 20;
         }
 
         /*
@@ -319,26 +339,77 @@ namespace CustomWindowsProperties
             <labelInfo label="Directory Level"/>
         </propertyDescription>
          */
-        internal string GetXmlPropertyDescription ()
+        internal XmlElement GetXmlPropertyDescription (XmlDocument doc)
         {
+            var desc = doc.CreateElement("propertyDescription");
+            desc.SetAttribute("name", CanonicalName);
+            desc.SetAttribute("formatID", FormatId.ToString("B").ToUpper());
+            desc.SetAttribute("propID", PropertyId.ToString());
+
+            var search = doc.CreateElement("searchInfo");
+            search.SetAttribute("inInvertedIndex", EnableFullTextSearch.ToString());
+            search.SetAttribute("isColumn", EnableSearchQueries.ToString());
+            // To do and can't index type and maybe is column sparse
+            desc.AppendChild(search);
+
+            var label = doc.CreateElement("labelInfo");
+            label.SetAttribute("label", DisplayName);
+            label.SetAttribute("sortDescription", SortDescription.ToString());
+            if (EditInvitation != null && EditInvitation.Length > 0)
+                label.SetAttribute("invitationText", EditInvitation);
+            //label.SetAttribute("hideLabel", HideLabel);
+            desc.AppendChild(label);
+
+            var type = doc.CreateElement("typeInfo");
+            type.SetAttribute("type", Type.ToString());
+            if (GroupingRange != PropertyGroupingRange.Discrete)
+                type.SetAttribute("groupingRange", GroupingRange.ToString());
+            if (IsInnate)
+                type.SetAttribute("isInnate", IsInnate.ToString());
+            if (IsInnate && CanBePurged)
+                type.SetAttribute("canBePurged", CanBePurged.ToString());
+            if (MultipleValues)
+                type.SetAttribute("multipleValues", MultipleValues.ToString());
+            if (IsGroup)
+                type.SetAttribute("isGroup", IsGroup.ToString());
+            if (AggregationType != PropertyAggregationType.Default)
+                type.SetAttribute("aggregationType", AggregationType.ToString());
+            if (IsTreeProperty)
+                type.SetAttribute("isTreeProperty", IsTreeProperty.ToString());
+            if (IsViewable)
+                type.SetAttribute("isViewable", IsViewable.ToString());
+            //if (SearchRawValue)
+            //    type.SetAttribute("searchRawValue", SearchRawValue.ToString());
+            if (ConditionType != PropertyConditionType.String)
+                type.SetAttribute("conditionType", ConditionType.ToString());
+            if (ConditionOperation != PropertyConditionOperation.Equal)
+                type.SetAttribute("defaultOperation", ConditionOperation.ToString());
+            desc.AppendChild(type);
+
+            var display = doc.CreateElement("displayInfo");
+            display.SetAttribute("displayType", DisplayType.ToString());
+            if (DefaultColumWidth != 20)
+                display.SetAttribute("defaultColumnWidth", DefaultColumWidth.ToString());
+
+
+
             // Pre Windows 7?
             // canStackBy=\"{CanStackBy}\" 
-            return $"<propertyDescription name=\"{CanonicalName}\" formatID=\"{FormatId.ToString("B").ToUpper()}\" propID=\"{PropertyId}\">" +
-                   $"<description>{Description}</description>" +
-                   $"<searchInfo inInvertedIndex=\"{EnableFullTextSearch}\" isColumn=\"{EnableSearchQueries}\"/>" +
-                   $"<typeInfo type=\"{Type}\" groupingRange=\"{GroupingRange}\" isInnate=\"{IsInnate}\"" +
-                    $" canBePurged=\"{CanBePurged}\" multipleValues=\"{MultipleValues}\"" + 
-                    $" isGroup=\"{IsGroup}\" aggregationType=\"{AggregationType}\"" + 
-                    $" isTreeProperty=\"{IsTreeProperty}\" isViewable=\"{IsViewable}\"" + 
-                    $" isQueryable=\"{IsQueryable}\" includeInFullTextQuery=\"{IncludeInFullTextQuery}\"" +
-                    $" searchRawValue=\"false\" conditionType=\"None\" defaultOperation=\"Equal\"" + 
-                   $"/>" +
-                   $"<labelInfo label=\"{DisplayName}\" sortDescription=\"{SortDescription}\"" + 
-                    $" invitationText=\"{EditInvitation}\" hideLabel=\"false\"/>" +
-                   $"<displayInfo defaultColumnWidth=\"{DefaultColumWidth}\" displayType=\"{DisplayType}\"" +
-                    $" alignment=\"Left\" relativeDescriptionType=\"General\" defaultSortDirection=\"Ascending\"/>" +
-                   //$"<aliasInfo sortByAlias=\"{DisplayName}\" additionalSortByAliases=\"{SortDescription}\"" +
-                   "</ propertyDescription >";
+            //string S = $"<propertyDescription name=\"{CanonicalName}\" formatID=\"{FormatId.ToString("B").ToUpper()}\" propID=\"{PropertyId}\">" +
+            //       $"<searchInfo inInvertedIndex=\"{EnableFullTextSearch}\" isColumn=\"{EnableSearchQueries}\"/>" +
+            //       $"<typeInfo type=\"{Type}\" groupingRange=\"{GroupingRange}\" isInnate=\"{IsInnate}\"" +
+            //        $" canBePurged=\"{CanBePurged}\" multipleValues=\"{MultipleValues}\"" + 
+            //        $" isGroup=\"{IsGroup}\" aggregationType=\"{AggregationType}\"" + 
+            //        $" isTreeProperty=\"{IsTreeProperty}\" isViewable=\"{IsViewable}\"" + 
+            //        $" searchRawValue=\"false\" conditionType=\"{ConditionType}\" defaultOperation=\"{ConditionOperation}\"" + 
+            //       $"/>" +
+            //       $"<labelInfo label=\"{DisplayName}\" sortDescription=\"{SortDescription}\"" + 
+            //        $" invitationText=\"{EditInvitation}\" hideLabel=\"false\"/>" +
+            //       $"<displayInfo defaultColumnWidth=\"{DefaultColumWidth}\" displayType=\"{DisplayType}\"" +
+            //        $" alignment=\"Left\" relativeDescriptionType=\"General\" defaultSortDirection=\"Ascending\"/>" +
+            //       //$"<aliasInfo sortByAlias=\"{DisplayName}\" additionalSortByAliases=\"{SortDescription}\"" +
+            //       "</ propertyDescription >";
+            return desc;
         }
 
         internal void CopyFrom(PropertyView from, bool isSystem)
@@ -352,12 +423,12 @@ namespace CustomWindowsProperties
             DisplayType = from.DisplayType;
             DefaultColumWidth = from.DefaultColumWidth;
             AggregationType = from.AggregationType;
-            ColumnState = from.ColumnState;
+            
             GroupingRange = from.GroupingRange;
             SortDescription = from.SortDescription;
             // To do type flags
             ViewFlags = from.ViewFlags;
-            Description = from.Description;
+            
         }
     
     }
