@@ -27,6 +27,15 @@ namespace CustomWindowsProperties
         Object,
     }
 
+    public enum ColumnIndexType
+    {
+        NotIndexed,
+        OnDisk,
+        OnDiskAll,
+        OnDiskVector,
+        OnDemand,
+    }
+
     public enum EditControl
     {
         Default,

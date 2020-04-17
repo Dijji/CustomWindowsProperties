@@ -1,7 +1,9 @@
 ﻿// Copyright (c) 2020, Dijji, and released under Ms-PL.  This, with other relevant licenses, can be found in the root of this distribution.
 
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml;
 
 namespace CustomWindowsProperties
 {
@@ -23,23 +25,30 @@ namespace CustomWindowsProperties
 
         private void treeCustom_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-
+            var item = ((TreeView)sender).SelectedItem as TreeItem;
+            if (item != null)
+                treeItem = item;
         }
-
+    
         private void treeSystem_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var item = ((TreeView)sender).SelectedItem as TreeItem;
             if (item != null)
-                pview = item.Item as PropertyView;
+                treeItem = item;
         }
 
-        PropertyView pview = null;
+        TreeItem treeItem = null;
 
         private void Export_Clicked(object sender, RoutedEventArgs e)
         {
-            if (pview != null)
+            if (treeItem != null)
             {
-                var doc = view.GetPropertyViewsAsXml(new PropertyView[] { pview });
+                XmlDocument doc;
+                var pview = treeItem.Item as PropertyView;
+                if (pview != null)
+                    doc = view.GetPropertyViewsAsXml(new PropertyView[] { pview });
+                else
+                    doc = view.GetPropertyViewsAsXml(treeItem.Children.Select(t => t.Item).Cast<PropertyView>());
                 doc.Save(@"d:\documents\schema.xml");
             }
         }

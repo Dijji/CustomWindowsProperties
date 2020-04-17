@@ -29,22 +29,53 @@ namespace CustomWindowsProperties
         // SEARCH
 
         /// <summary>
-        /// inInvertedIndex. 
         /// Indicates whether the property value should be stored in the inverted index. 
         /// This lets end users perform full-text queries over the values of this property.
         /// The default is "false".
         /// </summary>
-        public bool EnableFullTextSearch { get; set; }
+        public bool InInvertedIndex { get; set; }
 
         /// <summary>
-        /// isColumn
         /// Indicates whether the property should also be stored in the Windows search database as a column,
         /// so that independent software vendors (ISVs) can create predicate-based queries
         /// (for example, "Select * Where "System.Title"='qqq'").
         /// Set to "true" to enable end users (or developers) to create predicate based queries on the property
         /// The default is "false".
         /// </summary>
-        public bool EnableSearchQueries { get; set; }
+        public bool IsColumn { get; set; }
+
+        /// <summary>
+        /// The default is "true". If the property is multi-valued, this attribute is always "true".
+        /// </summary>
+        public bool IsColumnSparse { get; set; }
+
+        /// <summary>
+        /// To optimize sorting and grouping, the Windows search engine can create secondary indexes
+        /// for properties that have isColumn="true" and is only useful in such cases. 
+        /// If the property tends to be sorted frequently by users, this attribute should be specified. 
+        /// The default value is "OnDemand". The following values are valid.
+        /// NotIndexed: Never build a value index.
+        /// OnDisk: Build a value index by default for this property.
+        /// OnDiskAll: Build a value index by default for this property, and if it is a vector property,
+        /// also a value index for all concatenated vector values.
+        /// OnDiskVector: Build a value index by default for the concatenated vector values.
+        /// OnDemand: Only build value indices by demand, that is, only first time they are used for a query.
+        /// </summary>
+        public ColumnIndexType ColumnIndexType { get; set; }
+
+        /// <summary>
+        /// The maximum size, in bytes, allowed for a certain property that is stored in the Windows
+        /// search database. The default is: 512 bytes
+        /// Note that this maximum size is measured in bytes, not characters.
+        /// The maximum number of characters depends on their encoding.
+        /// </summary>
+        public uint MaxSize { get; set; }
+
+        /// <summary>
+        /// A list of mnemonic values that can be used to refer to the property in search queries.
+        /// The list is delimited with the '|' character.
+        /// </summary>
+        public string Mnemonics { get; set; }
 
         // LABEL
 
@@ -242,9 +273,13 @@ namespace CustomWindowsProperties
 
             // Search information
             // Not held in property description, so set the defaults 
-            EnableFullTextSearch = false;
-            EnableSearchQueries = false;
-       
+            InInvertedIndex = false;
+            IsColumn = false;
+            IsColumnSparse = true;
+            ColumnIndexType = ColumnIndexType.OnDemand;
+            MaxSize = 512;
+            Mnemonics = null;
+
             // Label information
             DisplayName = propertyDescription.DisplayName;
             EditInvitation = propertyDescription.EditInvitation;
@@ -283,8 +318,12 @@ namespace CustomWindowsProperties
 
         internal void SetDefaultValues ()
         {
-            EnableFullTextSearch = false;
-            EnableSearchQueries = false;
+            InInvertedIndex = false;
+            IsColumn = false;
+            IsColumnSparse = true;
+            ColumnIndexType = ColumnIndexType.OnDemand;
+            MaxSize = 512;
+            Mnemonics = null;
 
             DisplayName = null;
             EditInvitation = null;
@@ -322,11 +361,23 @@ namespace CustomWindowsProperties
             desc.SetAttribute("formatID", FormatId?.ToString("B").ToUpper());
             desc.SetAttribute("propID", PropertyId.ToString());
 
-            var search = doc.CreateElement("searchInfo");
-            search.SetAttribute("inInvertedIndex", EnableFullTextSearch.ToString());
-            search.SetAttribute("isColumn", EnableSearchQueries.ToString());
-            // To do and can't index type and maybe is column sparse
-            desc.AppendChild(search);
+            // Unfortunately, we have no search information for system properties
+            if (!IsSystemProperty)
+            {
+                var search = doc.CreateElement("searchInfo");
+                search.SetAttribute("inInvertedIndex", InInvertedIndex.ToString());
+                if (IsColumn)
+                {
+                    search.SetAttribute("isColumn", IsColumn.ToString());
+                    search.SetAttribute("isColumnSparse", IsColumnSparse.ToString());
+                    search.SetAttribute("columnIndexType", ColumnIndexType.ToString());
+                }
+                if (MaxSize != 512)
+                    search.SetAttribute("maxSize", MaxSize.ToString());
+                if (Mnemonics != null && Mnemonics.Length > 0)
+                    search.SetAttribute("mnemonics", Mnemonics);
+                desc.AppendChild(search);
+            }
 
             var label = doc.CreateElement("labelInfo");
             label.SetAttribute("label", DisplayName);
@@ -401,8 +452,15 @@ namespace CustomWindowsProperties
             PropertyId = null;
 
             // Search
-            EnableFullTextSearch = from.EnableFullTextSearch;
-            EnableSearchQueries = from.EnableSearchQueries;
+            if (!isSystem)
+            {
+                InInvertedIndex = from.InInvertedIndex;
+                IsColumn = from.IsColumn;
+                IsColumnSparse = from.IsColumnSparse;
+                ColumnIndexType = from.ColumnIndexType;
+                MaxSize = from.MaxSize;
+                Mnemonics = from.Mnemonics;
+            }
 
             // Label
             DisplayName = from.DisplayName;

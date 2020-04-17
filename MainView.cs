@@ -71,6 +71,17 @@ namespace CustomWindowsProperties
                         //      GroupProperties.Add(ti.Name);
                         root.RemoveChild(propGroup);
                     }
+
+                    // Move properties with names of the form System.* to their own subtree
+                    var systemProps = new TreeItem("System.*");
+                    treeItems.Insert(0, systemProps);
+
+                    foreach (var ti in root.Children.Where(x => x.Children.Count == 0).ToList())
+                    {
+                        root.RemoveChild(ti);
+                        systemProps.AddChild(ti);
+                    }
+
                 }
                 else
                     treeItems.Add(root);
