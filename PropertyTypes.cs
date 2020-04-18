@@ -48,7 +48,7 @@ namespace CustomWindowsProperties
         Text,
         IconList,
     }
-    
+
 
     internal class PropertyUtils
     {

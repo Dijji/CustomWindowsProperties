@@ -14,7 +14,7 @@
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <local:MyVirtualizingStackPanel/>
+                        <local:CustomVirtualizingStackPanel/>
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
@@ -30,45 +30,41 @@
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="5*"/>
-                <RowDefinition Height="5*"/>
-            </Grid.RowDefinitions>
-            <TreeView Grid.Row="0" VirtualizingStackPanel.IsVirtualizing="True"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TreeView Grid.Row="0" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
                       ItemsSource="{Binding Path=CustomPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectTreeViewItemStyle}"
-                      SelectedItemChanged="treeCustom_SelectedItemChanged">
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
-                        <Grid>
-                            <TextBlock Text="{Binding Path=Name}" />
-                        </Grid>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
-            <TreeView Grid.Row="1" VirtualizingStackPanel.IsVirtualizing="True"
+                      SelectedItemChanged="CustomTree_SelectedItemChanged">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
+                    <Grid>
+                        <TextBlock Text="{Binding Path=Name}" />
+                    </Grid>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <Button Content="Choose Data Folder" Margin="20,0,0,0" Height="25" Click="ChooseDataFolder_Clicked"/>
+            <Button Content="Export" Margin="20,0,0,0" Height="25" 
+                    IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
+        </StackPanel>
+        <TreeView Grid.Row="2" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
                       ItemsSource="{Binding Path=SystemPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectTreeViewItemStyle}"
-                      SelectedItemChanged="treeSystem_SelectedItemChanged">
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
-                        <Grid>
-                            <TextBlock Text="{Binding Path=Name}" />
-                        </Grid>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
-        </Grid>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="5*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="5*"/>
-            </Grid.RowDefinitions>
-            <StackPanel Grid.Row="1" Orientation="Horizontal">
-                <Button Content="Export" Height="25" Click="Export_Clicked"/>
-            </StackPanel>
-        </Grid>
+                      SelectedItemChanged="SystemTree_SelectedItemChanged">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
+                    <Grid>
+                        <TextBlock Text="{Binding Path=Name}" />
+                    </Grid>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <TextBlock x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>
     </Grid>
 </Window>

@@ -12,17 +12,14 @@ namespace CustomWindowsProperties
         string name = null;
         bool isSelected = false;
         TreeItem parent = null;
-        ObservableCollection<TreeItem> children = new ObservableCollection<TreeItem>();
+        readonly ObservableCollection<TreeItem> children = new ObservableCollection<TreeItem>();
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event NameChangedEventHandler NameChanged;
 
         protected void OnPropertyChanged(String info)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
         public TreeItem(string name, object item = null)
@@ -52,6 +49,17 @@ namespace CustomWindowsProperties
             }
         }
 
+        public string Path
+        {
+            get
+            {
+                if (Parent == null)
+                    return Name;
+                else
+                    return Parent.Path + "." + Name;
+            }
+        }
+
         public string EditableName
         {
             get
@@ -60,10 +68,7 @@ namespace CustomWindowsProperties
             }
             set
             {
-                if (NameChanged != null)
-                {
-                    NameChanged(this, new NameChangedEventArgs(value));
-                }
+                NameChanged?.Invoke(this, new NameChangedEventArgs(value));
             }
         }
 

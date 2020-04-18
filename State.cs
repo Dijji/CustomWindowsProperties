@@ -2,30 +2,111 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Xml.Serialization;
 
 namespace CustomWindowsProperties
 {
-    public class State
+    internal class State
     {
-        private List<TreeItem> allProperties = new List<TreeItem>();
-        private List<string> groupProperties = new List<string>();
+        private Options options = null;
+        //private List<TreeItem> allProperties = new List<TreeItem>();
+        //private List<string> groupProperties = new List<string>();
         //private SavedState savedState = new SavedState();
 
-        public List<PropertyView> SystemProperties { get; } = new List<PropertyView>();
-        public List<PropertyView> CustomProperties { get; } = new List<PropertyView>();
-        public List<PropertyView> GroupProperties { get; } = new List<PropertyView>();
+        public List<PropertyConfig> SystemProperties { get; } = new List<PropertyConfig>();
+        public List<PropertyConfig> CustomProperties { get; } = new List<PropertyConfig>();
+        public List<PropertyConfig> GroupProperties { get; } = new List<PropertyConfig>();
 
 
-        public void PopulateProperties()
+        public Dictionary<string, PropertyConfig> InstalledProperties { get; } = new Dictionary<string, PropertyConfig>();
+
+        public Dictionary<string, PropertyConfig> EditedProperties { get; } = new Dictionary<string, PropertyConfig>();
+
+
+        public string DataFolder
         {
+            get { return Options.DataFolder; }
+            set { Options.DataFolder = value; SaveOptions(); }
+        }
+
+
+        private Options Options
+        {
+            get
+            {
+                if (options == null)
+                    options = new Options();
+                return options;
+            }
+        }
+
+        private string OptionsFileName
+        {
+            get
+            {
+                return ApplicationDataFolder + Path.DirectorySeparatorChar + "Options.xml";
+            }
+        }
+
+        private string ApplicationDataFolder
+        {
+            get
+            {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "CustomWindowsProperties");
+            }
+        }
+
+        public void LoadOptions()
+        {
+            if (File.Exists(OptionsFileName))
+            {
+                try
+                {
+                    XmlSerializer x = new XmlSerializer(typeof(Options));
+                    using (TextReader reader = new StreamReader(OptionsFileName))
+                    {
+                        options = (Options)x.Deserialize(reader);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error reading saved options");
+                }
+            }
+        }
+
+
+        public void SaveOptions()
+        {
+            try
+            {
+                if (!Directory.Exists(ApplicationDataFolder))
+                    Directory.CreateDirectory(ApplicationDataFolder);
+
+                XmlSerializer x = new XmlSerializer(typeof(Options));
+                using (TextWriter writer = new StreamWriter(OptionsFileName))
+                {
+                    x.Serialize(writer, Options);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error saving chosen options");
+            }
+        }
+
+        public void Populate()
+        {
+            LoadOptions();
             PopulatePropertyList(SystemProperties, PropertySystemNativeMethods.PropDescEnumFilter.PDEF_SYSTEM);
             PopulatePropertyList(CustomProperties, PropertySystemNativeMethods.PropDescEnumFilter.PDEF_NONSYSTEM);
         }
 
-        private void PopulatePropertyList(List<PropertyView> propertyList,
+        private void PopulatePropertyList(List<PropertyConfig> propertyList,
                 PropertySystemNativeMethods.PropDescEnumFilter filter)
         {
             propertyList.Clear();
@@ -39,8 +120,7 @@ namespace CustomWindowsProperties
                             filter, ref guid, out propertyDescriptionList);
                 if (hr >= 0)
                 {
-                    uint count;
-                    propertyDescriptionList.GetCount(out count);
+                    propertyDescriptionList.GetCount(out uint count);
                     guid = new Guid(ShellIIDGuid.IPropertyDescription);
 
                     for (uint i = 0; i < count; i++)
@@ -50,9 +130,11 @@ namespace CustomWindowsProperties
                         if (propertyDescription != null)
                         {
                             var shellProperty = new ShellPropertyDescription(propertyDescription);
-                            propertyList.Add(new PropertyView(shellProperty));
+                            var pc = new PropertyConfig(shellProperty);
                             shellProperty.Dispose(); // Releases propertyDescription
                             propertyDescription = null;
+                            propertyList.Add(pc);
+                            InstalledProperties.Add(pc.CanonicalName, pc);
                         }
                     }
                 }

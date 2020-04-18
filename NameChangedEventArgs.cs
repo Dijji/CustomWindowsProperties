@@ -4,7 +4,7 @@ namespace CustomWindowsProperties
 {
     public class NameChangedEventArgs : EventArgs
     {
-        private string newName;
+        private readonly string newName;
 
         public NameChangedEventArgs(string newName)
         {

@@ -2,49 +2,54 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Xml;
+using System.Runtime.CompilerServices;
+using FolderSelect;
 
 namespace CustomWindowsProperties
 {
-    class MainView
+    class MainView : INotifyPropertyChanged
     {
+        private State state;
+        private TreeItem selectedTreeItem;
+
         public List<TreeItem> SystemPropertyTree { get; } = new List<TreeItem>();
         public List<TreeItem> CustomPropertyTree { get; } = new List<TreeItem>();
-        public string Publisher { get; set; } = "Publisher";
-        public string Product { get; set; } = "Product";
 
-        public XmlDocument GetPropertyViewsAsXml(IEnumerable<PropertyView> properties)
+        public event PropertyChangedEventHandler PropertyChanged;
+        public TreeItem SelectedTreeItem
         {
-            var doc = new XmlDocument();
-            var root = doc.CreateElement("schema");
-            root.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-            root.SetAttribute("xmlns", "http://schemas.microsoft.com/windows/2006/propertydescription");
-            root.SetAttribute("schemaVersion", "1.0");
-            doc.AppendChild(root);
-
-            var list = doc.CreateElement("propertyDescriptionList");
-            list.SetAttribute("publisher", Publisher);
-            list.SetAttribute("product", Product);
-            root.AppendChild(list);
-
-            foreach (var property in properties)
-                list.AppendChild(property.GetXmlPropertyDescription(doc));
-
-            return doc;
+            get { return selectedTreeItem; }
+            set { selectedTreeItem = value; OnPropertyChanged(nameof(CanExport)); }
         }
 
-        public void PopulatePropertyTrees(State state)
+        public bool CanExport { get { return state.DataFolder != null && SelectedTreeItem != null; } }
+
+        public void Populate(State state)
         {
+            this.state = state;
             PopulatePropertyTree(state.SystemProperties, SystemPropertyTree, true);
             PopulatePropertyTree(state.CustomProperties, CustomPropertyTree, false);
         }
 
-        private void PopulatePropertyTree(List<PropertyView> properties, List<TreeItem> treeItems, bool isSystem)
+        public bool ChooseDataFolder()
+        {
+            var fsd = new FolderSelectDialog
+            {
+                Title = "Choose folder for storing data files",
+                InitialDirectory = state.DataFolder ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
+            if (fsd.ShowDialog(IntPtr.Zero))
+            {
+                state.DataFolder = fsd.FileName;
+                OnPropertyChanged(nameof(CanExport));
+            }
+            return false;
+        }
+
+        private void PopulatePropertyTree(List<PropertyConfig> properties, List<TreeItem> treeItems, bool isSystem)
         {
             Dictionary<string, TreeItem> dict = new Dictionary<string, TreeItem>();
             List<TreeItem> roots = new List<TreeItem>();
@@ -90,11 +95,11 @@ namespace CustomWindowsProperties
 
         // Top level entry point for the algorithm that builds the property name tree from an unordered sequence
         // of property names
-        private TreeItem AddTreeItem(Dictionary<string, TreeItem> dict, List<TreeItem> roots, PropertyView pv)
+        private TreeItem AddTreeItem(Dictionary<string, TreeItem> dict, List<TreeItem> roots, PropertyConfig pc)
         {
-            Debug.Assert(pv.CanonicalName.Contains('.')); // Because the algorithm assumes that this is the case
-            TreeItem ti = AddTreeItemInner(dict, roots, pv.CanonicalName, pv.DisplayName);
-            ti.Item = pv;
+            Debug.Assert(pc.CanonicalName.Contains('.')); // Because the algorithm assumes that this is the case
+            TreeItem ti = AddTreeItemInner(dict, roots, pc.CanonicalName, pc.DisplayName);
+            ti.Item = pc.CanonicalName;
 
             return ti;
         }
@@ -104,19 +109,19 @@ namespace CustomWindowsProperties
         private TreeItem AddTreeItemInner(Dictionary<string, TreeItem> dict, List<TreeItem> roots,
             string name, string displayName = null)
         {
-            TreeItem ti, parent;
+            TreeItem ti;
             string parentName = FirstPartsOf(name);
 
             if (parentName != null)
             {
-                if (!dict.TryGetValue(parentName, out parent))
+                if (!dict.TryGetValue(parentName, out TreeItem parent))
                 {
                     parent = AddTreeItemInner(dict, roots, parentName);
                     dict.Add(parentName, parent);
                 }
 
                 if (displayName != null)
-                    ti = new TreeItem(String.Format("{0} ({1})", LastPartOf(name), displayName));
+                    ti = new TreeItem($"{LastPartOf(name)} ({displayName})");
                 else
                     ti = new TreeItem(LastPartOf(name));
 
@@ -144,6 +149,12 @@ namespace CustomWindowsProperties
         {
             int index = name.LastIndexOf('.');
             return index >= 0 ? name.Substring(index + 1) : name;
+        }
+
+
+        private void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

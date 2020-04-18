@@ -1,12 +1,12 @@
 ﻿// Copyright (c) 2020, Dijji, and released under Ms-PL.  This, with other relevant licenses, can be found in the root of this distribution.
 
 using System;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
 using System.Xml;
 
 namespace CustomWindowsProperties
 {
-    public class PropertyView
+    public class PropertyConfig
     {
         // BASICS
 
@@ -15,7 +15,7 @@ namespace CustomWindowsProperties
         /// regardless of its localized name.
         /// </summary>
         public string CanonicalName { get; set; }
-      
+
         /// <summary>
         /// A unique GUID for the property
         /// </summary>
@@ -101,7 +101,9 @@ namespace CustomWindowsProperties
         /// <returns>The sort description for this property.</returns>
         /// <remarks>The string retrieved by this method is determined by flags set in the 
         /// <c>sortDescription</c> attribute of the <c>labelInfo</c> element in the property's .propdesc file.</remarks>
+#pragma warning disable IDE0060 // Remove unused parameter
         public string GetSortDescriptionLabel(bool descending)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             return null;
         }
@@ -113,7 +115,7 @@ namespace CustomWindowsProperties
         /// </summary>
         public string EditInvitation { get; set; }
 
-      
+
         // TYPE
 
         public PropertyTypes Type { get; set; }
@@ -125,7 +127,7 @@ namespace CustomWindowsProperties
         /// the <c>groupingRange</c> attribute of the <c>typeInfo</c> element in the 
         /// property's .propdesc file.</remarks>
         public PropertyGroupingRange GroupingRange { get; set; }
-      
+
         /// <summary>
         /// This property cannot be written to. 
         /// </summary>
@@ -226,7 +228,7 @@ namespace CustomWindowsProperties
 
         // DISPLAY
 
-            //To do lots of things about how the value is set
+        //To do lots of things about how the value is set
 
         /// <summary>
         /// Gets the current data type used to display the property.
@@ -264,7 +266,7 @@ namespace CustomWindowsProperties
         public PropertyViewOptions ViewFlags { get; set; }
 
 
-        internal PropertyView(ShellPropertyDescription propertyDescription)
+        internal PropertyConfig(ShellPropertyDescription propertyDescription)
         {
             // Basics
             CanonicalName = propertyDescription.CanonicalName;
@@ -300,7 +302,7 @@ namespace CustomWindowsProperties
             IsSystemProperty = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IsSystemProperty);
             ConditionType = propertyDescription.ConditionType;
             ConditionOperation = propertyDescription.ConditionOperation;
-            
+
             // Display information
             DisplayType = propertyDescription.DisplayType;
             DefaultColumWidth = propertyDescription.DefaultColumWidth;
@@ -316,7 +318,7 @@ namespace CustomWindowsProperties
 
         }
 
-        internal void SetDefaultValues ()
+        internal void SetDefaultValues()
         {
             InInvertedIndex = false;
             IsColumn = false;
@@ -346,6 +348,29 @@ namespace CustomWindowsProperties
             DefaultColumWidth = 20;
         }
 
+        public static string Publisher { get; set; } = "Publisher";
+        public static string Product { get; set; } = "Product";
+
+        public static XmlDocument GetPropertyViewsAsXml(IEnumerable<PropertyConfig> properties)
+        {
+            var doc = new XmlDocument();
+            var root = doc.CreateElement("schema");
+            root.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            root.SetAttribute("xmlns", "http://schemas.microsoft.com/windows/2006/propertydescription");
+            root.SetAttribute("schemaVersion", "1.0");
+            doc.AppendChild(root);
+
+            var list = doc.CreateElement("propertyDescriptionList");
+            list.SetAttribute("publisher", Publisher);
+            list.SetAttribute("product", Product);
+            root.AppendChild(list);
+
+            foreach (var property in properties)
+                list.AppendChild(property.GetXmlPropertyDescription(doc));
+
+            return doc;
+        }
+
         /*
          <propertyDescription name="Microsoft.SDKSample.DirectoryLevel" formatID="{581CF603-2925-4acf-BB5A-3D3EB39EACD3}" propID="3">
             <description>Number of directory levels to this item.</description>
@@ -354,7 +379,7 @@ namespace CustomWindowsProperties
             <labelInfo label="Directory Level"/>
         </propertyDescription>
          */
-        internal XmlElement GetXmlPropertyDescription (XmlDocument doc)
+        internal XmlElement GetXmlPropertyDescription(XmlDocument doc)
         {
             var desc = doc.CreateElement("propertyDescription");
             desc.SetAttribute("name", CanonicalName);
@@ -443,7 +468,7 @@ namespace CustomWindowsProperties
             //       "</ propertyDescription >";
         }
 
-        internal void CopyFrom(PropertyView from, bool isSystem)
+        internal void CopyFrom(PropertyConfig from, bool isSystem)
         {
             // Basics
             if (!isSystem)
