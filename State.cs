@@ -79,7 +79,6 @@ namespace CustomWindowsProperties
             }
         }
 
-
         public void SaveOptions()
         {
             try
@@ -96,6 +95,45 @@ namespace CustomWindowsProperties
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error saving chosen options");
+            }
+        }
+
+        public PropertyConfig LoadPropertyConfig(string fullFileName)
+        {
+            if (File.Exists(fullFileName))
+            {
+                try
+                {
+                    XmlSerializer x = new XmlSerializer(typeof(PropertyConfig));
+                    using (TextReader reader = new StreamReader(fullFileName))
+                    {
+                        return (PropertyConfig)x.Deserialize(reader);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error reading saved property configuration");
+                }
+            }
+
+            return null;
+        }
+
+        public void SavePropertyConfig(PropertyConfig config)
+        {
+            try
+            {
+                string fileName = DataFolder + Path.DirectorySeparatorChar + config.CanonicalName + ".xml";
+
+                XmlSerializer x = new XmlSerializer(typeof(PropertyConfig));
+                using (TextWriter writer = new StreamWriter(fileName))
+                {
+                    x.Serialize(writer, config);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, $"Error saving property configuration {config.CanonicalName}");
             }
         }
 

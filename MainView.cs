@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
+using System.Xml;
 using FolderSelect;
 
 namespace CustomWindowsProperties
@@ -47,6 +49,48 @@ namespace CustomWindowsProperties
                 OnPropertyChanged(nameof(CanExport));
             }
             return false;
+        }
+
+        public string ExportPropDesc()
+        {
+            TreeItem treeItem = SelectedTreeItem;
+            if (treeItem != null)
+            {
+                XmlDocument doc;
+                string configName;
+                IEnumerable<TreeItem> items;
+                if (treeItem.Children.Count == 0)
+                {
+                    items = new TreeItem[] { treeItem };
+                    configName = treeItem.Item as string;
+                }
+                else
+                {
+                    items = treeItem.Children;
+                    configName = treeItem.Path;
+                }
+
+                doc = PropertyConfig.GetPropDesc(
+                            items.
+                            Select(t => t.Item).Cast<string>().Where(s => s != null).
+                            Select(s => state.InstalledProperties[s]));
+
+                var fileName = $"{FixFileName(configName)}.propdesc";
+                doc.Save(state.DataFolder + $@"\{fileName}");
+                
+                // Testing
+                //if (treeItem.Item != null)
+                //{
+                //    var pc = state.InstalledProperties[treeItem.Item as string];
+                //    state.SavePropertyConfig(pc);
+                //    var pc2 = state.LoadPropertyConfig($@"{state.DataFolder}\{pc.CanonicalName}.xml");
+                //    pc2.CanonicalName = pc2.CanonicalName + "2";
+                //    state.SavePropertyConfig(pc2); // Round-trip for comparison at leisure
+                //}
+                
+                return fileName;
+            }
+            return null;
         }
 
         private void PopulatePropertyTree(List<PropertyConfig> properties, List<TreeItem> treeItems, bool isSystem)
@@ -151,6 +195,11 @@ namespace CustomWindowsProperties
             return index >= 0 ? name.Substring(index + 1) : name;
         }
 
+        // To do Need a better home for this
+        private static string FixFileName(string fileName)
+        {
+            return Regex.Replace(fileName, @"[\/?:*""><|]+", "_", RegexOptions.Compiled);
+        }
 
         private void OnPropertyChanged([CallerMemberName] string name = null)
         {

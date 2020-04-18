@@ -6,6 +6,7 @@ using System.Xml;
 
 namespace CustomWindowsProperties
 {
+    [Serializable]
     public class PropertyConfig
     {
         // BASICS
@@ -265,6 +266,10 @@ namespace CustomWindowsProperties
         /// </summary>
         public PropertyViewOptions ViewFlags { get; set; }
 
+        // For serialisation
+        public PropertyConfig()
+        {
+        }
 
         internal PropertyConfig(ShellPropertyDescription propertyDescription)
         {
@@ -351,7 +356,7 @@ namespace CustomWindowsProperties
         public static string Publisher { get; set; } = "Publisher";
         public static string Product { get; set; } = "Product";
 
-        public static XmlDocument GetPropertyViewsAsXml(IEnumerable<PropertyConfig> properties)
+        public static XmlDocument GetPropDesc(IEnumerable<PropertyConfig> properties)
         {
             var doc = new XmlDocument();
             var root = doc.CreateElement("schema");
