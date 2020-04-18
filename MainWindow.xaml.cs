@@ -24,13 +24,32 @@ namespace CustomWindowsProperties
         private void CustomTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (((TreeView)sender).SelectedItem is TreeItem item)
-                view.SelectedTreeItem = item;
+            {
+                var pc = view.SetSelectedItem(item, false);
+                if (pc != null)
+                {
+                    PropertyEditor.DataContext = null;
+                    PropertyEditor.DataContext = view.EditedProperty;
+                    PropertyDisplay.DataContext = pc;
+                }
+            }
         }
 
         private void SystemTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (((TreeView)sender).SelectedItem is TreeItem item)
-                view.SelectedTreeItem = item;
+            {
+                var pc = view.SetSelectedItem(item, true);
+                if (pc != null)
+                {
+                    if (!view.IsFrozen)
+                    {
+                        PropertyEditor.DataContext = null;
+                        PropertyEditor.DataContext = view.EditedProperty;
+                    }
+                    PropertyDisplay.DataContext = pc;
+                }
+            }
         }
 
         private void Export_Clicked(object sender, RoutedEventArgs e)
@@ -51,6 +70,11 @@ namespace CustomWindowsProperties
         private void DisplayStatus(string text)
         {
             StatusBar.Text = text;
+        }
+
+        private void ToggleFrozen_Clicked(object sender, RoutedEventArgs e)
+        {
+            view.ToggleFrozen();
         }
     }
 }

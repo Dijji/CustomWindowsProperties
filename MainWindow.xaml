@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomWindowsProperties"
         mc:Ignorable="d"
-        Title="Custom Windows Properties" Height="450" Width="800">
+        Title="Custom Windows Properties" Height="600" Width="1000">
     <Window.Resources>
         <Style x:Key="SelectTreeViewItemStyle"
                TargetType="{x:Type TreeViewItem}">
@@ -28,7 +28,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="10*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
@@ -48,9 +48,26 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
+        <StackPanel x:Name="PropertyEditor" Grid.Row="0" Grid.Column="1" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Basics:" VerticalAlignment="Center"/>
+                <Label Content="Name:" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding CanonicalName}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
             <Button Content="Choose Data Folder" Margin="20,0,0,0" Height="25" Click="ChooseDataFolder_Clicked"/>
             <Button Content="Export" Margin="20,0,0,0" Height="25" 
+                    IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+            <Button Content="Install" Margin="10,0,0,0" Height="25" 
+                    IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
+            <Button Content="Remove" Margin="10,0,0,0" Height="25" 
+                    IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
+            <Button Content="{Binding FrozenCaption}" Margin="10,0,0,0" Height="25" 
+                    Click="ToggleFrozen_Clicked"/>
+            <Button Content="Copy" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
         </StackPanel>
         <TreeView Grid.Row="2" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
@@ -65,6 +82,17 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
+        <StackPanel x:Name="PropertyDisplay" Grid.Row="2" Grid.Column="1" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Basics:" VerticalAlignment="Center"/>
+                <Label Content="Name:" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding CanonicalName}" VerticalAlignment="Center"/>
+                <Label Content="FormatId:" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding FormatId}" VerticalAlignment="Center"/>
+                <Label Content="PropertyId:" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding PropertyId}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
         <TextBlock x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>
     </Grid>
 </Window>

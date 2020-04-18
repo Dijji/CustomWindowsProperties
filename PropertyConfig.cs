@@ -476,7 +476,7 @@ namespace CustomWindowsProperties
         internal void CopyFrom(PropertyConfig from, bool isSystem)
         {
             // Basics
-            if (!isSystem)
+            //if (!isSystem)
                 CanonicalName = from.CanonicalName;
             FormatId = null;
             PropertyId = null;

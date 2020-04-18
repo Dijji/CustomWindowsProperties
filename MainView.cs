@@ -15,19 +15,40 @@ namespace CustomWindowsProperties
     class MainView : INotifyPropertyChanged
     {
         private State state;
-        private TreeItem selectedTreeItem;
 
         public List<TreeItem> SystemPropertyTree { get; } = new List<TreeItem>();
         public List<TreeItem> CustomPropertyTree { get; } = new List<TreeItem>();
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public TreeItem SelectedTreeItem
-        {
-            get { return selectedTreeItem; }
-            set { selectedTreeItem = value; OnPropertyChanged(nameof(CanExport)); }
-        }
+        public TreeItem SelectedTreeItem { get; private set; }
+
+        public PropertyConfig EditedProperty { get; set; } = new PropertyConfig();
+
+        public bool IsFrozen { get; set; } = false;
+
+        public string FrozenCaption { get { return IsFrozen ? "Unfreeze" : "Freeze"; } }
 
         public bool CanExport { get { return state.DataFolder != null && SelectedTreeItem != null; } }
+
+        public PropertyConfig SetSelectedItem (TreeItem treeItem, bool isSystem )
+        {
+            SelectedTreeItem = treeItem;
+            OnPropertyChanged(nameof(CanExport));
+            if (SelectedTreeItem != null && SelectedTreeItem.Item != null)
+            {
+                var pc = state.InstalledProperties[SelectedTreeItem.Item as string];
+                if (!isSystem || !IsFrozen)
+                    EditedProperty.CopyFrom(pc, true);
+                return pc;
+            }
+            return null;
+        }
+    
+        public void ToggleFrozen ()
+        {
+            IsFrozen = !IsFrozen;
+            OnPropertyChanged(nameof(FrozenCaption));
+        }
 
         public void Populate(State state)
         {
