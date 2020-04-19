@@ -16,45 +16,60 @@ namespace CustomWindowsProperties
     {
         private State state;
 
-        public List<TreeItem> SystemPropertyTree { get; } = new List<TreeItem>();
-        public List<TreeItem> CustomPropertyTree { get; } = new List<TreeItem>();
+        public List<TreeItem> InstalledPropertyTree { get; } = new List<TreeItem>();
+        public List<TreeItem> EditorPropertyTree { get; } = new List<TreeItem>();
 
         public event PropertyChangedEventHandler PropertyChanged;
         public TreeItem SelectedTreeItem { get; private set; }
 
         public PropertyConfig EditedProperty { get; set; } = new PropertyConfig();
 
-        public bool IsFrozen { get; set; } = false;
+        public bool IsEditedInstalled
+        {
+            get
+            {
+                if (EditedProperty.CanonicalName != null)
+                    return state.InstalledProperties.ContainsKey(EditedProperty.CanonicalName);
+                else
+                    return false;
+            }
+        }
 
-        public string FrozenCaption { get { return IsFrozen ? "Unfreeze" : "Freeze"; } }
+        public bool IsManualCopy { get; set; } = false;
+
+        public string CopyCaption { get { return IsManualCopy ? "Auto Copy" : "Manual Copy"; } }
 
         public bool CanExport { get { return state.DataFolder != null && SelectedTreeItem != null; } }
 
-        public PropertyConfig SetSelectedItem (TreeItem treeItem, bool isSystem )
+        public PropertyConfig SetSelectedItem (TreeItem treeItem, bool isInstalled )
         {
             SelectedTreeItem = treeItem;
             OnPropertyChanged(nameof(CanExport));
             if (SelectedTreeItem != null && SelectedTreeItem.Item != null)
             {
-                var pc = state.InstalledProperties[SelectedTreeItem.Item as string];
-                if (!isSystem || !IsFrozen)
+                var pc = SelectedTreeItem.Item as PropertyConfig;
+                if (!isInstalled || !IsManualCopy)
+                {
                     EditedProperty.CopyFrom(pc, true);
+                    OnPropertyChanged(nameof(IsEditedInstalled));
+                }
                 return pc;
             }
             return null;
         }
     
-        public void ToggleFrozen ()
+        public void ToggleManualCopy ()
         {
-            IsFrozen = !IsFrozen;
-            OnPropertyChanged(nameof(FrozenCaption));
+            IsManualCopy = !IsManualCopy;
+            OnPropertyChanged(nameof(CopyCaption));
         }
 
         public void Populate(State state)
         {
             this.state = state;
-            PopulatePropertyTree(state.SystemProperties, SystemPropertyTree, true);
-            PopulatePropertyTree(state.CustomProperties, CustomPropertyTree, false);
+            PopulatePropertyTree(state.SystemProperties.Concat(state.CustomProperties),
+                InstalledPropertyTree, true);
+            PopulatePropertyTree(state.EditorProperties, EditorPropertyTree, false);
         }
 
         public bool ChooseDataFolder()
@@ -83,7 +98,7 @@ namespace CustomWindowsProperties
                 if (treeItem.Children.Count == 0)
                 {
                     items = new TreeItem[] { treeItem };
-                    configName = treeItem.Item as string;
+                    configName = ((PropertyConfig)treeItem.Item).CanonicalName;
                 }
                 else
                 {
@@ -92,9 +107,7 @@ namespace CustomWindowsProperties
                 }
 
                 doc = PropertyConfig.GetPropDesc(
-                            items.
-                            Select(t => t.Item).Cast<string>().Where(s => s != null).
-                            Select(s => state.InstalledProperties[s]));
+                        items.Select(t => t.Item).Cast<PropertyConfig>().Where(s => s != null));
 
                 var fileName = $"{FixFileName(configName)}.propdesc";
                 doc.Save(state.DataFolder + $@"\{fileName}");
@@ -114,7 +127,7 @@ namespace CustomWindowsProperties
             return null;
         }
 
-        private void PopulatePropertyTree(List<PropertyConfig> properties, List<TreeItem> treeItems, bool isSystem)
+        private void PopulatePropertyTree(IEnumerable<PropertyConfig> properties, List<TreeItem> treeItems, bool isInstalled)
         {
             Dictionary<string, TreeItem> dict = new Dictionary<string, TreeItem>();
             List<TreeItem> roots = new List<TreeItem>();
@@ -129,7 +142,7 @@ namespace CustomWindowsProperties
             TreeItem propGroup = null;
             foreach (TreeItem root in roots)
             {
-                if (isSystem && root.Name == "System")
+                if (isInstalled && root.Name == "System")
                 {
                     treeItems.Insert(0, root);
 
@@ -164,7 +177,7 @@ namespace CustomWindowsProperties
         {
             Debug.Assert(pc.CanonicalName.Contains('.')); // Because the algorithm assumes that this is the case
             TreeItem ti = AddTreeItemInner(dict, roots, pc.CanonicalName, pc.DisplayName);
-            ti.Item = pc.CanonicalName;
+            ti.Item = pc;
 
             return ti;
         }

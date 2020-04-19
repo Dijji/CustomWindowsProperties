@@ -37,9 +37,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TreeView Grid.Row="0" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
-                      ItemsSource="{Binding Path=CustomPropertyTree}" FontSize="12"
+                      ItemsSource="{Binding Path=EditorPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectTreeViewItemStyle}"
-                      SelectedItemChanged="CustomTree_SelectedItemChanged">
+                      SelectedItemChanged="EditorTree_SelectedItemChanged">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
                     <Grid>
@@ -52,7 +52,11 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="Basics:" VerticalAlignment="Center"/>
                 <Label Content="Name:" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding CanonicalName}" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding CanonicalName}" MinWidth="150" VerticalAlignment="Center"/>
+                <Label Content="Installed:" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding IsEditedInstalled}" VerticalAlignment="Center"
+                           DataContext="{Binding RelativeSource={RelativeSource FindAncestor, 
+                           AncestorType={x:Type Window}}, Path=DataContext}"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
@@ -61,19 +65,21 @@
                     IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+            <Button Content="Save" Margin="10,0,0,0" Height="25" 
+                    IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
             <Button Content="Install" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
-            <Button Content="Remove" Margin="10,0,0,0" Height="25" 
+            <Button Content="Uninstall" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
-            <Button Content="{Binding FrozenCaption}" Margin="10,0,0,0" Height="25" 
-                    Click="ToggleFrozen_Clicked"/>
+            <Button Content="{Binding CopyCaption}" Margin="10,0,0,0" Height="25" 
+                    Click="ToggleManualCopy_Clicked"/>
             <Button Content="Copy" Margin="10,0,0,0" Height="25" 
-                    IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
+                    IsEnabled="{Binding IsManualCopy}" Click="Export_Clicked"/>
         </StackPanel>
         <TreeView Grid.Row="2" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
-                      ItemsSource="{Binding Path=SystemPropertyTree}" FontSize="12"
+                      ItemsSource="{Binding Path=InstalledPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectTreeViewItemStyle}"
-                      SelectedItemChanged="SystemTree_SelectedItemChanged">
+                      SelectedItemChanged="InstalledTree_SelectedItemChanged">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
                     <Grid>

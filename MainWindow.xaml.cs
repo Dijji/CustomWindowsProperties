@@ -21,7 +21,7 @@ namespace CustomWindowsProperties
             DataContext = view;
         }
 
-        private void CustomTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void EditorTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (((TreeView)sender).SelectedItem is TreeItem item)
             {
@@ -35,14 +35,14 @@ namespace CustomWindowsProperties
             }
         }
 
-        private void SystemTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void InstalledTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (((TreeView)sender).SelectedItem is TreeItem item)
             {
                 var pc = view.SetSelectedItem(item, true);
                 if (pc != null)
                 {
-                    if (!view.IsFrozen)
+                    if (!view.IsManualCopy)
                     {
                         PropertyEditor.DataContext = null;
                         PropertyEditor.DataContext = view.EditedProperty;
@@ -72,9 +72,9 @@ namespace CustomWindowsProperties
             StatusBar.Text = text;
         }
 
-        private void ToggleFrozen_Clicked(object sender, RoutedEventArgs e)
+        private void ToggleManualCopy_Clicked(object sender, RoutedEventArgs e)
         {
-            view.ToggleFrozen();
+            view.ToggleManualCopy();
         }
     }
 }

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Xml.Serialization;
@@ -18,7 +19,7 @@ namespace CustomWindowsProperties
 
         public List<PropertyConfig> SystemProperties { get; } = new List<PropertyConfig>();
         public List<PropertyConfig> CustomProperties { get; } = new List<PropertyConfig>();
-        public List<PropertyConfig> GroupProperties { get; } = new List<PropertyConfig>();
+        public List<PropertyConfig> EditorProperties { get; } = new List<PropertyConfig>();
 
 
         public Dictionary<string, PropertyConfig> InstalledProperties { get; } = new Dictionary<string, PropertyConfig>();
@@ -142,6 +143,7 @@ namespace CustomWindowsProperties
             LoadOptions();
             PopulatePropertyList(SystemProperties, PropertySystemNativeMethods.PropDescEnumFilter.PDEF_SYSTEM);
             PopulatePropertyList(CustomProperties, PropertySystemNativeMethods.PropDescEnumFilter.PDEF_NONSYSTEM);
+            LoadEditorProperties();
         }
 
         private void PopulatePropertyList(List<PropertyConfig> propertyList,
@@ -190,82 +192,14 @@ namespace CustomWindowsProperties
             }
         }
 
-        /*
-        public void LoadSavedState(string savedStateFile)
+        private void LoadEditorProperties ()
         {
-            var fiDefault = GetDefaultSavedStateInfo();
-
-            // If a state file has been specified, use it 
-            if (savedStateFile != null)
+            var di = new DirectoryInfo(DataFolder);
+            foreach (var fi in di.GetFiles().Where(f => f.Extension == ".xml"))
             {
-                var fi = new FileInfo(savedStateFile);
-                if (!fi.Exists)
-                    throw new AssocMgrException
-                    {
-                        Description = String.Format(LocalizedMessages.MissingDefinitionsFile, savedStateFile),
-                        Exception = null,
-                        ErrorCode = WindowsErrorCodes.ERROR_FILE_NOT_FOUND
-                    };
-
-                savedState = LoadSavedState(fi); 
-
-                // If it's not just the default one, remember that we used a non-default file
-                if (String.Compare(savedStateFile, fiDefault.FullName, true) != 0)
-                    nonDefaultStateFileLoaded = true;
-            }
-            else if (fiDefault.Exists)
-            {
-                savedState = LoadSavedState(fiDefault); 
+                var pc = LoadPropertyConfig(fi.FullName);
+                EditorProperties.Add(pc);
             }
         }
-
-        public void StoreSavedState()
-        {
-            StoreSavedStateAsDefault(savedState);
-        }
-
-        private FileInfo GetDefaultSavedStateInfo()
-        {
-            DirectoryInfo di = ObtainDataDirectory();
-            return new FileInfo(di.FullName + @"\SavedState.xml");
-        }
-
-        private SavedState LoadSavedState(FileInfo fi)
-        {
-            try
-            {
-                XmlSerializer x = new XmlSerializer(typeof(SavedState));
-                using (TextReader reader = new StreamReader(fi.FullName))
-                {
-                    return (SavedState)x.Deserialize(reader);
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex is AssocMgrException)
-                    throw ex;
-                else
-                    throw new AssocMgrException { Description = LocalizedMessages.XmlParseError, Exception = ex, ErrorCode = WindowsErrorCodes.ERROR_XML_PARSE_ERROR };
-            }
-        }
-
-        private void StoreSavedStateAsDefault(SavedState state)
-        {
-            var fi = GetDefaultSavedStateInfo();
-            try
-            {
-                XmlSerializer x = new XmlSerializer(typeof(SavedState));
-                using (TextWriter writer = new StreamWriter(fi.FullName))
-                {
-                    x.Serialize(writer, state);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new AssocMgrException { Description = LocalizedMessages.XmlWriteError, Exception = ex, ErrorCode = WindowsErrorCodes.ERROR_XML_PARSE_ERROR };
-            }
-       }
-       */
-
     }
 }
