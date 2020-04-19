@@ -48,11 +48,13 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <StackPanel x:Name="PropertyEditor" Grid.Row="0" Grid.Column="1" Orientation="Vertical">
+        <StackPanel x:Name="PropertyEditor" Grid.Row="0" Grid.Column="1" Orientation="Vertical"
+                    GotFocus="Editor_GotFocus" LostFocus="Editor_LostFocus">
             <StackPanel Orientation="Horizontal">
                 <Label Content="Basics:" VerticalAlignment="Center"/>
                 <Label Content="Name:" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding CanonicalName}" MinWidth="150" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding CanonicalName}" MinWidth="150" VerticalAlignment="Center"
+                         Tag="CanonicalName"/>
                 <Label Content="Installed:" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding IsEditedInstalled}" VerticalAlignment="Center"
                            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, 
@@ -88,7 +90,8 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <StackPanel x:Name="PropertyDisplay" Grid.Row="2" Grid.Column="1" Orientation="Vertical">
+        <StackPanel x:Name="PropertyDisplay" Grid.Row="2" Grid.Column="1" Orientation="Vertical"
+                    Visibility="{Binding PropertyDisplayVisibility}">
             <StackPanel Orientation="Horizontal">
                 <Label Content="Basics:" VerticalAlignment="Center"/>
                 <Label Content="Name:" VerticalAlignment="Center"/>
@@ -99,6 +102,8 @@
                 <TextBlock Text="{Binding PropertyId}" VerticalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
+        <TextBlock Grid.Row="2" Grid.Column="1" 
+                   Text="{Binding HelpText}" Visibility="{Binding HelpVisibility}"/>
         <TextBlock x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>
     </Grid>
 </Window>

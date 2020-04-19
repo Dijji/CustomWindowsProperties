@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Xml;
 using FolderSelect;
 
@@ -41,6 +42,12 @@ namespace CustomWindowsProperties
 
         public bool CanExport { get { return state.DataFolder != null && SelectedTreeItem != null; } }
 
+        public Visibility PropertyDisplayVisibility { get { return HelpText == null ? Visibility.Visible : Visibility.Hidden; } }
+
+        public Visibility HelpVisibility { get { return HelpText != null ? Visibility.Visible : Visibility.Hidden; } }
+
+        public string HelpText { get; set; }
+
         public PropertyConfig SetSelectedItem (TreeItem treeItem, bool isInstalled )
         {
             SelectedTreeItem = treeItem;
@@ -62,6 +69,18 @@ namespace CustomWindowsProperties
         {
             IsManualCopy = !IsManualCopy;
             OnPropertyChanged(nameof(CopyCaption));
+        }
+
+        public void EditorFocusChanged (string tag)
+        {
+            if (tag == null)
+                HelpText = null;
+            else
+                HelpText = $"Help for {tag}";
+
+            OnPropertyChanged(nameof(PropertyDisplayVisibility));
+            OnPropertyChanged(nameof(HelpVisibility));
+            OnPropertyChanged(nameof(HelpText));
         }
 
         public void Populate(State state)

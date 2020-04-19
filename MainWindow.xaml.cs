@@ -76,5 +76,15 @@ namespace CustomWindowsProperties
         {
             view.ToggleManualCopy();
         }
+
+        private void Editor_GotFocus(object sender, RoutedEventArgs e)
+        {
+            view.EditorFocusChanged(((FrameworkElement)e.OriginalSource).Tag as string);
+        }
+
+        private void Editor_LostFocus(object sender, RoutedEventArgs e)
+        {
+            view.EditorFocusChanged(null);
+        }
     }
 }
