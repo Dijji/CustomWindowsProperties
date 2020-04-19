@@ -49,61 +49,85 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <StackPanel x:Name="PropertyEditor" Grid.Row="0" Grid.Column="1" Orientation="Vertical"
-                    GotFocus="Editor_GotFocus" LostFocus="Editor_LostFocus">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Basics:" VerticalAlignment="Center"/>
-                <Label Content="Name:" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding CanonicalName}" MinWidth="150" VerticalAlignment="Center"
-                         Tag="CanonicalName"/>
-                <Label Content="Installed:" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding IsEditedInstalled}" VerticalAlignment="Center"
+        <ScrollViewer Grid.Row="0" Grid.Column="1"
+            HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+            <Grid x:Name="PropertyEditor" 
+                  GotFocus="Editor_GotFocus" LostFocus="Editor_LostFocus">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Basics" FontWeight="Bold"  VerticalAlignment="Center"/>
+                <Label Grid.Row="0" Grid.Column="1" Content="Name:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding CanonicalName}" MinWidth="150" VerticalAlignment="Center"
+                         Tag="CanonicalName" HorizontalAlignment="Left"/>
+                <Label Grid.Row="1" Grid.Column="1" Content="Installed:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding IsEditedInstalled}" VerticalAlignment="Center"
                            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, 
                            AncestorType={x:Type Window}}, Path=DataContext}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Search:" VerticalAlignment="Center"/>
-                <Label Content="InInvertedIndex:" VerticalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding InInvertedIndex}" VerticalAlignment="Center"
+                <Label Grid.Row="2" Grid.Column="0"  Content="Search" FontWeight="Bold"  VerticalAlignment="Center"/>
+                <Label Grid.Row="2" Grid.Column="1" Content="InInvertedIndex:" VerticalAlignment="Center"/>
+                <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding InInvertedIndex}" VerticalAlignment="Center"
                           Tag="InInvertedIndex"/>
-                <Label Content="IsColumn:" VerticalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding IsColumn}" VerticalAlignment="Center"
+                <Label Grid.Row="3" Grid.Column="1" Content="IsColumn:" VerticalAlignment="Center"/>
+                <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding IsColumn}" VerticalAlignment="Center"
                           Tag="IsColumn"/>
-                <Label Content="IsColumnSparse:" VerticalAlignment="Center"
+                <Label Grid.Row="5" Grid.Column="1" Content="IsColumnSparse:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                <CheckBox IsChecked="{Binding IsColumnSparse}" VerticalAlignment="Center"
+                <CheckBox Grid.Row="5" Grid.Column="2" IsChecked="{Binding IsColumnSparse}" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"
                           Tag="IsColumnSparse"/>
-                <Label Content="ColumnIndexType:" VerticalAlignment="Center"
+                <Label Grid.Row="6" Grid.Column="1" Content="ColumnIndexType:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                <ComboBox VerticalAlignment="Center" MinWidth="30"
+                <ComboBox Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"
+                          MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding ColumnIndexType}" Tag="ColumnIndexType"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:ColumnIndexType}}}"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                <Label Content="MaxSize:" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding MaxSize}" MinWidth="0" VerticalAlignment="Center"
-                         Tag="MaxSize"/>
-                <Label Content="Mnemonics:" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding Mnemonics}" MinWidth="90" VerticalAlignment="Center"
-                         Tag="Mnemonics"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Label:" VerticalAlignment="Center"/>
-                <Label Content="DisplayName:" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding DisplayName}" MinWidth="150" VerticalAlignment="Center"
-                         Tag="DisplayName"/>
-                <Label Content="SortDescription:" VerticalAlignment="Center"/>
-                <ComboBox VerticalAlignment="Center" MinWidth="30"
+                <Label Grid.Row="7" Grid.Column="1" Content="MaxSize:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding MaxSize}" MinWidth="50" VerticalAlignment="Center"
+                         Tag="MaxSize" HorizontalAlignment="Left"/>
+                <Label Grid.Row="8" Grid.Column="1" Content="Mnemonics:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Mnemonics}" MinWidth="150" VerticalAlignment="Center"
+                         Tag="Mnemonics" HorizontalAlignment="Left"/>
+                <Label Grid.Row="9" Grid.Column="0" Content="Label" FontWeight="Bold" VerticalAlignment="Center"/>
+                <Label Grid.Row="9" Grid.Column="1" Content="DisplayName:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="9" Grid.Column="2" Text="{Binding DisplayName}" MinWidth="150" VerticalAlignment="Center"
+                         Tag="DisplayName" HorizontalAlignment="Left"/>
+                <Label Grid.Row="10" Grid.Column="1" Content="SortDescription:" VerticalAlignment="Center"/>
+                <ComboBox Grid.Row="10" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding SortDescription}" Tag="SortDescription"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertySortDescription}}}"/>
-                <Label Content="EditInvitation:" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding EditInvitation}" MinWidth="150" VerticalAlignment="Center"
-                         Tag="EditInvitation"/>
-                <Label Content="HideLabel:" VerticalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding HideLabel}" VerticalAlignment="Center"
+                <Label Grid.Row="11" Grid.Column="1" Content="EditInvitation:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="11" Grid.Column="2" Text="{Binding EditInvitation}" MinWidth="150" VerticalAlignment="Center"
+                         Tag="EditInvitation" HorizontalAlignment="Left"/>
+                <Label Grid.Row="12" Grid.Column="1" Content="HideLabel:" VerticalAlignment="Center"/>
+                <CheckBox Grid.Row="12" Grid.Column="2" IsChecked="{Binding HideLabel}" VerticalAlignment="Center"
                           Tag="HideLabel"/>
-            </StackPanel>
-        </StackPanel>
+                
+            </Grid>
+        </ScrollViewer>
+        
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
             <Button Content="Choose Data Folder" Margin="20,0,0,0" Height="25" Click="ChooseDataFolder_Clicked"/>
             <Button Content="Export" Margin="20,0,0,0" Height="25" 
@@ -116,10 +140,8 @@
                     IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
             <Button Content="Uninstall" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
-            <Button Content="{Binding CopyCaption}" Margin="10,0,0,0" Height="25" 
-                    Click="ToggleManualCopy_Clicked"/>
-            <Button Content="Copy" Margin="10,0,0,0" Height="25" 
-                    IsEnabled="{Binding IsManualCopy}" Click="Export_Clicked"/>
+            <Button Content="Copy ^" Margin="10,0,0,0" Height="25" 
+                    IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
         </StackPanel>
         <TreeView Grid.Row="2" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
                       ItemsSource="{Binding Path=InstalledPropertyTree}" FontSize="12"
@@ -133,7 +155,8 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <Grid Grid.Row="2" Grid.Column="1" Visibility="{Binding PropertyDisplayVisibility}">
+        <Grid Grid.Row="2" Grid.Column="1" 
+              Visibility="{Binding IsInstalledPropertyVisible,Converter={StaticResource VisibleIfTrue}}">
             <StackPanel x:Name="PropertyDisplay" Grid.Row="2" Grid.Column="1" Orientation="Vertical"
                     Visibility="{Binding PropertyDisplayVisibility}">
                 <StackPanel Orientation="Horizontal">
@@ -173,8 +196,8 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <TextBlock Grid.Row="2" Grid.Column="1" 
-                   Text="{Binding HelpText}" Visibility="{Binding HelpVisibility}"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding HelpText}" 
+                   Visibility="{Binding IsHelpVisible,Converter={StaticResource VisibleIfTrue}}"/>
         <TextBlock x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>
     </Grid>
 </Window>

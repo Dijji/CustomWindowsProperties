@@ -28,9 +28,7 @@ namespace CustomWindowsProperties
                 var pc = view.SetSelectedItem(item, false);
                 if (pc != null)
                 {
-                    PropertyEditor.DataContext = null;
-                    PropertyEditor.DataContext = view.EditedProperty;
-                    PropertyDisplay.DataContext = pc;
+                    RefreshPropertyEditor();
                 }
             }
         }
@@ -42,11 +40,6 @@ namespace CustomWindowsProperties
                 var pc = view.SetSelectedItem(item, true);
                 if (pc != null)
                 {
-                    if (!view.IsManualCopy)
-                    {
-                        PropertyEditor.DataContext = null;
-                        PropertyEditor.DataContext = view.EditedProperty;
-                    }
                     PropertyDisplay.DataContext = pc;
                 }
             }
@@ -72,11 +65,6 @@ namespace CustomWindowsProperties
             StatusBar.Text = text;
         }
 
-        private void ToggleManualCopy_Clicked(object sender, RoutedEventArgs e)
-        {
-            view.ToggleManualCopy();
-        }
-
         private void Editor_GotFocus(object sender, RoutedEventArgs e)
         {
             view.EditorFocusChanged(((FrameworkElement)e.OriginalSource).Tag as string);
@@ -85,6 +73,12 @@ namespace CustomWindowsProperties
         private void Editor_LostFocus(object sender, RoutedEventArgs e)
         {
             view.EditorFocusChanged(null);
+        }
+
+        private void RefreshPropertyEditor()
+        {
+            PropertyEditor.DataContext = null;
+            PropertyEditor.DataContext = view.PropertyBeingEdited;
         }
     }
 }

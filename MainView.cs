@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Xml;
 using FolderSelect;
 
@@ -20,54 +19,89 @@ namespace CustomWindowsProperties
         public List<TreeItem> EditorPropertyTree { get; } = new List<TreeItem>();
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public TreeItem SelectedTreeItem { get; private set; }
 
-        public PropertyConfig EditedProperty { get; set; } = new PropertyConfig();
+        public PropertyConfig SelectedEditorProperty
+        {
+            get { return selectedEditorProperty; }
+            private set { selectedEditorProperty = value; }
+        }
+        private PropertyConfig selectedEditorProperty;
+
+        public PropertyConfig SelectedInstalledProperty
+        {
+            get { return selectedInstalledProperty; }
+            private set { selectedInstalledProperty = value; OnPropertyChanged(nameof(IsInstalledPropertyVisible)); }
+        }
+        private PropertyConfig selectedInstalledProperty;
+
+        public TreeItem SelectedTreeItem
+        {
+            get { return selectedTreeItem; }
+            private set { selectedTreeItem = value; OnPropertyChanged(nameof(CanExport)); }
+        }
+        private TreeItem selectedTreeItem;
+
+        public PropertyConfig PropertyBeingEdited { get; set; } = new PropertyConfig();
 
         public bool IsEditedInstalled
         {
             get
             {
-                if (EditedProperty.CanonicalName != null)
-                    return state.InstalledProperties.ContainsKey(EditedProperty.CanonicalName);
+                if (PropertyBeingEdited.CanonicalName != null)
+                    return state.InstalledProperties.ContainsKey(PropertyBeingEdited.CanonicalName);
                 else
                     return false;
             }
         }
 
-        public bool IsManualCopy { get; set; } = false;
-
-        public string CopyCaption { get { return IsManualCopy ? "Auto Copy" : "Manual Copy"; } }
-
         public bool CanExport { get { return state.DataFolder != null && SelectedTreeItem != null; } }
 
-        public Visibility PropertyDisplayVisibility { get { return HelpText == null ? Visibility.Visible : Visibility.Hidden; } }
+        public bool IsInstalledPropertyVisible
+        { get { return SelectedInstalledProperty != null && HelpText == null; } }
 
-        public Visibility HelpVisibility { get { return HelpText != null ? Visibility.Visible : Visibility.Hidden; } }
 
-        public string HelpText { get; set; }
+        public bool IsHelpVisible { get { return HelpText != null; } }
+
+        public string HelpText
+        {
+            get { return helpText; }
+            set
+            {
+                helpText = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsInstalledPropertyVisible));
+                OnPropertyChanged(nameof(IsHelpVisible));
+            }
+        }
+        private string helpText;
 
         public PropertyConfig SetSelectedItem(TreeItem treeItem, bool isInstalled)
         {
             SelectedTreeItem = treeItem;
             OnPropertyChanged(nameof(CanExport));
+
+            PropertyConfig selectedProperty;
             if (SelectedTreeItem != null && SelectedTreeItem.Item != null)
+                selectedProperty = SelectedTreeItem.Item as PropertyConfig;
+            else
+                selectedProperty = null;
+
+            if (isInstalled)
             {
-                var pc = SelectedTreeItem.Item as PropertyConfig;
-                if (!isInstalled || !IsManualCopy)
+                SelectedInstalledProperty = selectedProperty;
+            }
+            else
+            {
+                SelectedEditorProperty = selectedProperty;
+                if (!isInstalled && SelectedEditorProperty != null)
                 {
-                    EditedProperty.CopyFrom(pc, true);
+                    // to do checking of the edited property is dirty here
+                    // and if so, let the user back out
+                    PropertyBeingEdited.CopyFrom(selectedProperty, true);
                     OnPropertyChanged(nameof(IsEditedInstalled));
                 }
-                return pc;
             }
-            return null;
-        }
-
-        public void ToggleManualCopy()
-        {
-            IsManualCopy = !IsManualCopy;
-            OnPropertyChanged(nameof(CopyCaption));
+            return selectedProperty;
         }
 
         public void EditorFocusChanged(string tag)
@@ -76,15 +110,12 @@ namespace CustomWindowsProperties
                 HelpText = null;
             else
                 HelpText = $"Help for {tag}";
-
-            OnPropertyChanged(nameof(PropertyDisplayVisibility));
-            OnPropertyChanged(nameof(HelpVisibility));
-            OnPropertyChanged(nameof(HelpText));
         }
 
         public void Populate(State state)
         {
             this.state = state;
+            PropertyBeingEdited.SetDefaultValues();
             PopulatePropertyTree(state.SystemProperties.Concat(state.CustomProperties),
                 InstalledPropertyTree, true);
             PopulatePropertyTree(state.EditorProperties, EditorPropertyTree, false);
