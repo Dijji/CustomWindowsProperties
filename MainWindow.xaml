@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="Custom Windows Properties" Height="600" Width="1000">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibleIfTrue" />
         <Style x:Key="SelectTreeViewItemStyle"
                TargetType="{x:Type TreeViewItem}">
             <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
@@ -60,6 +61,48 @@
                            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, 
                            AncestorType={x:Type Window}}, Path=DataContext}"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Search:" VerticalAlignment="Center"/>
+                <Label Content="InInvertedIndex:" VerticalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding InInvertedIndex}" VerticalAlignment="Center"
+                          Tag="InInvertedIndex"/>
+                <Label Content="IsColumn:" VerticalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding IsColumn}" VerticalAlignment="Center"
+                          Tag="IsColumn"/>
+                <Label Content="IsColumnSparse:" VerticalAlignment="Center"
+                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
+                <CheckBox IsChecked="{Binding IsColumnSparse}" VerticalAlignment="Center"
+                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"
+                          Tag="IsColumnSparse"/>
+                <Label Content="ColumnIndexType:" VerticalAlignment="Center"
+                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
+                <ComboBox VerticalAlignment="Center" MinWidth="30"
+                       SelectedItem="{Binding ColumnIndexType}" Tag="ColumnIndexType"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:ColumnIndexType}}}"
+                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
+                <Label Content="MaxSize:" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding MaxSize}" MinWidth="0" VerticalAlignment="Center"
+                         Tag="MaxSize"/>
+                <Label Content="Mnemonics:" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Mnemonics}" MinWidth="90" VerticalAlignment="Center"
+                         Tag="Mnemonics"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Label:" VerticalAlignment="Center"/>
+                <Label Content="DisplayName:" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding DisplayName}" MinWidth="150" VerticalAlignment="Center"
+                         Tag="DisplayName"/>
+                <Label Content="SortDescription:" VerticalAlignment="Center"/>
+                <ComboBox VerticalAlignment="Center" MinWidth="30"
+                       SelectedItem="{Binding SortDescription}" Tag="SortDescription"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertySortDescription}}}"/>
+                <Label Content="EditInvitation:" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding EditInvitation}" MinWidth="150" VerticalAlignment="Center"
+                         Tag="EditInvitation"/>
+                <Label Content="HideLabel:" VerticalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding HideLabel}" VerticalAlignment="Center"
+                          Tag="HideLabel"/>
+            </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
             <Button Content="Choose Data Folder" Margin="20,0,0,0" Height="25" Click="ChooseDataFolder_Clicked"/>
@@ -90,18 +133,46 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <StackPanel x:Name="PropertyDisplay" Grid.Row="2" Grid.Column="1" Orientation="Vertical"
+        <Grid Grid.Row="2" Grid.Column="1" Visibility="{Binding PropertyDisplayVisibility}">
+            <StackPanel x:Name="PropertyDisplay" Grid.Row="2" Grid.Column="1" Orientation="Vertical"
                     Visibility="{Binding PropertyDisplayVisibility}">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Basics:" VerticalAlignment="Center"/>
-                <Label Content="Name:" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding CanonicalName}" VerticalAlignment="Center"/>
-                <Label Content="FormatId:" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding FormatId}" VerticalAlignment="Center"/>
-                <Label Content="PropertyId:" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding PropertyId}" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Basics:" VerticalAlignment="Center"/>
+                    <Label Content="Name:" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding CanonicalName}" VerticalAlignment="Center"/>
+                    <Label Content="FormatId:" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding FormatId}" VerticalAlignment="Center"/>
+                    <Label Content="PropertyId:" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding PropertyId}" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Search:" VerticalAlignment="Center"/>
+                    <Label Content="InInvertedIndex:" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding InInvertedIndex}" VerticalAlignment="Center"/>
+                    <Label Content="IsColumn:" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding IsColumn}" VerticalAlignment="Center"/>
+                    <Label Content="IsColumnSparse:" VerticalAlignment="Center"
+                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
+                    <TextBlock Text="{Binding IsColumnSparse}" VerticalAlignment="Center"
+                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
+                    <Label Content="ColumnIndexType:" VerticalAlignment="Center"
+                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
+                    <TextBlock Text="{Binding ColumnIndexType}" VerticalAlignment="Center"
+                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Label:" VerticalAlignment="Center"/>
+                    <Label Content="DisplayName:" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
+                    <Label Content="SortDescription:" VerticalAlignment="Center"/>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding SortDescription}"/>
+                    <Label Content="EditInvitation:" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding EditInvitation}" VerticalAlignment="Center"/>
+                    <Label Content="HideLabel:" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding HideLabel}" VerticalAlignment="Center"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </Grid>
         <TextBlock Grid.Row="2" Grid.Column="1" 
                    Text="{Binding HelpText}" Visibility="{Binding HelpVisibility}"/>
         <TextBlock x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>

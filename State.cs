@@ -192,7 +192,7 @@ namespace CustomWindowsProperties
             }
         }
 
-        private void LoadEditorProperties ()
+        private void LoadEditorProperties()
         {
             var di = new DirectoryInfo(DataFolder);
             foreach (var fi in di.GetFiles().Where(f => f.Extension == ".xml"))

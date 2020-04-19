@@ -2,12 +2,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Xml;
 
 namespace CustomWindowsProperties
 {
     [Serializable]
-    public class PropertyConfig
+    public class PropertyConfig : INotifyPropertyChanged
     {
         // BASICS
 
@@ -43,7 +45,8 @@ namespace CustomWindowsProperties
         /// Set to "true" to enable end users (or developers) to create predicate based queries on the property
         /// The default is "false".
         /// </summary>
-        public bool IsColumn { get; set; }
+        public bool IsColumn { get { return isColumn; } set { isColumn = value; OnPropertyChanged(); } }
+        private bool isColumn;
 
         /// <summary>
         /// The default is "true". If the property is multi-valued, this attribute is always "true".
@@ -93,6 +96,8 @@ namespace CustomWindowsProperties
         /// through the <c>sortDescription</c> attribute of the <c>labelInfo</c> 
         /// element in the property's .propdesc file.</remarks>
         public PropertySortDescription SortDescription { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Gets the localized display string that describes the current sort order.
@@ -473,16 +478,19 @@ namespace CustomWindowsProperties
             //       "</ propertyDescription >";
         }
 
-        internal void CopyFrom(PropertyConfig from, bool isSystem)
+        internal void CopyFrom(PropertyConfig from, bool isInstalled)
         {
+            // To do Remove this testing hack
+            isInstalled = false;
+
             // Basics
-            //if (!isSystem)
+            if (!isInstalled)
                 CanonicalName = from.CanonicalName;
             FormatId = null;
             PropertyId = null;
 
             // Search
-            if (!isSystem)
+            if (!isInstalled)
             {
                 InInvertedIndex = from.InInvertedIndex;
                 IsColumn = from.IsColumn;
@@ -514,6 +522,11 @@ namespace CustomWindowsProperties
             DisplayType = from.DisplayType;
             DefaultColumWidth = from.DefaultColumWidth;
             EditControl = from.EditControl;
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

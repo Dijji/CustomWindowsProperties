@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Xml;
 using FolderSelect;
@@ -48,7 +47,7 @@ namespace CustomWindowsProperties
 
         public string HelpText { get; set; }
 
-        public PropertyConfig SetSelectedItem (TreeItem treeItem, bool isInstalled )
+        public PropertyConfig SetSelectedItem(TreeItem treeItem, bool isInstalled)
         {
             SelectedTreeItem = treeItem;
             OnPropertyChanged(nameof(CanExport));
@@ -64,14 +63,14 @@ namespace CustomWindowsProperties
             }
             return null;
         }
-    
-        public void ToggleManualCopy ()
+
+        public void ToggleManualCopy()
         {
             IsManualCopy = !IsManualCopy;
             OnPropertyChanged(nameof(CopyCaption));
         }
 
-        public void EditorFocusChanged (string tag)
+        public void EditorFocusChanged(string tag)
         {
             if (tag == null)
                 HelpText = null;
@@ -128,9 +127,9 @@ namespace CustomWindowsProperties
                 doc = PropertyConfig.GetPropDesc(
                         items.Select(t => t.Item).Cast<PropertyConfig>().Where(s => s != null));
 
-                var fileName = $"{FixFileName(configName)}.propdesc";
+                var fileName = $"{Extensions.FixFileName(configName)}.propdesc";
                 doc.Save(state.DataFolder + $@"\{fileName}");
-                
+
                 // Testing
                 //if (treeItem.Item != null)
                 //{
@@ -140,7 +139,7 @@ namespace CustomWindowsProperties
                 //    pc2.CanonicalName = pc2.CanonicalName + "2";
                 //    state.SavePropertyConfig(pc2); // Round-trip for comparison at leisure
                 //}
-                
+
                 return fileName;
             }
             return null;
@@ -246,12 +245,6 @@ namespace CustomWindowsProperties
         {
             int index = name.LastIndexOf('.');
             return index >= 0 ? name.Substring(index + 1) : name;
-        }
-
-        // To do Need a better home for this
-        private static string FixFileName(string fileName)
-        {
-            return Regex.Replace(fileName, @"[\/?:*""><|]+", "_", RegexOptions.Compiled);
         }
 
         private void OnPropertyChanged([CallerMemberName] string name = null)
