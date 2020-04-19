@@ -155,47 +155,65 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <Grid Grid.Row="2" Grid.Column="1" 
-              Visibility="{Binding IsInstalledPropertyVisible,Converter={StaticResource VisibleIfTrue}}">
-            <StackPanel x:Name="PropertyDisplay" Grid.Row="2" Grid.Column="1" Orientation="Vertical"
-                    Visibility="{Binding PropertyDisplayVisibility}">
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Basics:" VerticalAlignment="Center"/>
-                    <Label Content="Name:" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding CanonicalName}" VerticalAlignment="Center"/>
-                    <Label Content="FormatId:" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding FormatId}" VerticalAlignment="Center"/>
-                    <Label Content="PropertyId:" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding PropertyId}" VerticalAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Search:" VerticalAlignment="Center"/>
-                    <Label Content="InInvertedIndex:" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding InInvertedIndex}" VerticalAlignment="Center"/>
-                    <Label Content="IsColumn:" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding IsColumn}" VerticalAlignment="Center"/>
-                    <Label Content="IsColumnSparse:" VerticalAlignment="Center"
+        <ScrollViewer Grid.Row="2" Grid.Column="1"
+            HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto"
+                      Visibility="{Binding IsInstalledPropertyVisible,Converter={StaticResource VisibleIfTrue}}">
+            <Grid x:Name="PropertyDisplay">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Basics" FontWeight="Bold"  VerticalAlignment="Center"/>
+                <Label Grid.Row="0" Grid.Column="1" Content="Name:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding CanonicalName}" VerticalAlignment="Center"/>
+                <Label Grid.Row="1" Grid.Column="1" Content="FormatId:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding FormatId}" VerticalAlignment="Center"/>
+                <Label Grid.Row="2" Grid.Column="1" Content="PropertyId:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding PropertyId}" VerticalAlignment="Center"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="Search" FontWeight="Bold" VerticalAlignment="Center"/>
+                <Label Grid.Row="3" Grid.Column="1" Content="unavailable" VerticalAlignment="Center"/>
+                <!--<Label Content="InInvertedIndex:" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding InInvertedIndex}" VerticalAlignment="Center"/>
+                <Label Content="IsColumn:" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding IsColumn}" VerticalAlignment="Center"/>
+                <Label Content="IsColumnSparse:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                    <TextBlock Text="{Binding IsColumnSparse}" VerticalAlignment="Center"
+                <TextBlock Text="{Binding IsColumnSparse}" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                    <Label Content="ColumnIndexType:" VerticalAlignment="Center"
+                <Label Content="ColumnIndexType:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                    <TextBlock Text="{Binding ColumnIndexType}" VerticalAlignment="Center"
-                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Label:" VerticalAlignment="Center"/>
-                    <Label Content="DisplayName:" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
-                    <Label Content="SortDescription:" VerticalAlignment="Center"/>
-                    <TextBlock VerticalAlignment="Center" Text="{Binding SortDescription}"/>
-                    <Label Content="EditInvitation:" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding EditInvitation}" VerticalAlignment="Center"/>
-                    <Label Content="HideLabel:" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding HideLabel}" VerticalAlignment="Center"/>
-                </StackPanel>
-            </StackPanel>
-        </Grid>
+                <TextBlock Text="{Binding ColumnIndexType}" VerticalAlignment="Center"
+                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>-->
+                <Label Grid.Row="4" Grid.Column="0" Content="Label" FontWeight="Bold" VerticalAlignment="Center"/>
+                <Label Grid.Row="4" Grid.Column="1" Content="DisplayName:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding DisplayName}" VerticalAlignment="Center"/>
+                <Label Grid.Row="5" Grid.Column="1" Content="SortDescription:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" Text="{Binding SortDescription}"/>
+                <Label Grid.Row="6" Grid.Column="1" Content="EditInvitation:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding EditInvitation}" VerticalAlignment="Center"/>
+                <Label Grid.Row="7" Grid.Column="1" Content="HideLabel:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="7" Grid.Column="2" Text="{Binding HideLabel}" VerticalAlignment="Center"/>
+            </Grid>
+        </ScrollViewer>
         <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding HelpText}" 
                    Visibility="{Binding IsHelpVisible,Converter={StaticResource VisibleIfTrue}}"/>
         <TextBlock x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>
