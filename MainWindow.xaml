@@ -49,85 +49,86 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <ScrollViewer Grid.Row="0" Grid.Column="1" 
+        <Border Grid.Row="0" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
+            <ScrollViewer Margin="5,0,0,0"
             HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Grid x:Name="PropertyEditor" 
+                <Grid x:Name="PropertyEditor" 
                   GotFocus="Editor_GotFocus" LostFocus="Editor_LostFocus">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Basics" FontWeight="Bold"  VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="Name:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding CanonicalName}" MinWidth="150" VerticalAlignment="Center"
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Basics" FontWeight="Bold"  VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Name:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding CanonicalName}" MinWidth="150" VerticalAlignment="Center"
                          Tag="CanonicalName" HorizontalAlignment="Left"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="Installed:" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding IsEditedInstalled}" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="Installed:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding IsEditedInstalled}" VerticalAlignment="Center"
                            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, 
                            AncestorType={x:Type Window}}, Path=DataContext}"/>
-                <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,10,0" Text="Search" FontWeight="Bold"  VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" Text="InInvertedIndex:" VerticalAlignment="Center"/>
-                <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding InInvertedIndex}" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,10,0" Text="Search" FontWeight="Bold"  VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="InInvertedIndex:" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding InInvertedIndex}" VerticalAlignment="Center"
                           Tag="InInvertedIndex"/>
-                <TextBlock Grid.Row="3" Grid.Column="1" Text="IsColumn:" VerticalAlignment="Center"/>
-                <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding IsColumn}" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="IsColumn:" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding IsColumn}" VerticalAlignment="Center"
                           Tag="IsColumn"/>
-                <TextBlock Grid.Row="5" Grid.Column="1" Text="IsColumnSparse:" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="5" Grid.Column="1" Text="IsColumnSparse:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                <CheckBox Grid.Row="5" Grid.Column="2" IsChecked="{Binding IsColumnSparse}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="5" Grid.Column="2" IsChecked="{Binding IsColumnSparse}" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"
                           Tag="IsColumnSparse"/>
-                <TextBlock Grid.Row="6" Grid.Column="1" Margin="0,0,10,0" Text="ColumnIndexType:" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="6" Grid.Column="1" Margin="0,0,10,0" Text="ColumnIndexType:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                <ComboBox Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"
+                    <ComboBox Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"
                           MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding ColumnIndexType}" Tag="ColumnIndexType"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:ColumnIndexType}}}"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                <TextBlock Grid.Row="7" Grid.Column="1" Text="MaxSize:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding MaxSize}" MinWidth="50" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="7" Grid.Column="1" Text="MaxSize:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding MaxSize}" MinWidth="50" VerticalAlignment="Center"
                          Tag="MaxSize" HorizontalAlignment="Left"/>
-                <TextBlock Grid.Row="8" Grid.Column="1" Text="Mnemonics:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Mnemonics}" MinWidth="150" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="8" Grid.Column="1" Text="Mnemonics:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Mnemonics}" MinWidth="150" VerticalAlignment="Center"
                          Tag="Mnemonics" HorizontalAlignment="Left"/>
-                <TextBlock Grid.Row="9" Grid.Column="0" Text="Label" FontWeight="Bold" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="9" Grid.Column="1" Text="DisplayName:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="9" Grid.Column="2" Text="{Binding DisplayName}" MinWidth="150" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="9" Grid.Column="0" Text="Label" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="9" Grid.Column="1" Text="DisplayName:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="9" Grid.Column="2" Text="{Binding DisplayName}" MinWidth="150" VerticalAlignment="Center"
                          Tag="DisplayName" HorizontalAlignment="Left"/>
-                <TextBlock Grid.Row="10" Grid.Column="1" Margin="0,0,10,0" Text="SortDescription:" VerticalAlignment="Center"/>
-                <ComboBox Grid.Row="10" Grid.Column="2" VerticalAlignment="Center" 
+                    <TextBlock Grid.Row="10" Grid.Column="1" Margin="0,0,10,0" Text="SortDescription:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="10" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding SortDescription}" Tag="SortDescription"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertySortDescription}}}"/>
-                <TextBlock Grid.Row="11" Grid.Column="1" Text="EditInvitation:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="11" Grid.Column="2" Text="{Binding EditInvitation}" MinWidth="150" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="11" Grid.Column="1" Text="EditInvitation:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="11" Grid.Column="2" Text="{Binding EditInvitation}" MinWidth="150" VerticalAlignment="Center"
                          Tag="EditInvitation" HorizontalAlignment="Left"/>
-                <TextBlock Grid.Row="12" Grid.Column="1" Text="HideTextBlock:" VerticalAlignment="Center"/>
-                <CheckBox Grid.Row="12" Grid.Column="2" IsChecked="{Binding HideTextBlock}" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="12" Grid.Column="1" Text="HideTextBlock:" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="12" Grid.Column="2" IsChecked="{Binding HideTextBlock}" VerticalAlignment="Center"
                           Tag="HideTextBlock"/>
-                
-            </Grid>
-        </ScrollViewer>
-        
+
+                </Grid>
+            </ScrollViewer>
+        </Border>
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
             <Button Content="Choose Data Folder" Margin="10,0,0,0" Height="25" Click="ChooseDataFolder_Clicked"/>
             <Button Content="Export" Margin="10,0,0,0" Height="25" 
@@ -155,43 +156,44 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <ScrollViewer Grid.Row="2" Grid.Column="1"
+        <Border Grid.Row="2" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
+            <ScrollViewer Margin="5,0,0,0"
             HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                       Visibility="{Binding IsInstalledPropertyVisible,Converter={StaticResource VisibleIfTrue}}">
-            <Grid x:Name="PropertyDisplay">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Basics" FontWeight="Bold"  VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="Name:" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding CanonicalName}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="FormatId:" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding FormatId}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" Text="PropertyId:" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding PropertyId}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,10,0" Text="Search" FontWeight="Bold" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="3" Grid.Column="1" Text="unavailable" VerticalAlignment="Center"/>
-                <!--<TextBlock Text="InInvertedIndex:" VerticalAlignment="Center"/>
+                <Grid x:Name="PropertyDisplay">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Basics" FontWeight="Bold"  VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Name:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding CanonicalName}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="FormatId:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding FormatId}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="PropertyId:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding PropertyId}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,10,0" Text="Search" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="unavailable" VerticalAlignment="Center"/>
+                    <!--<TextBlock Text="InInvertedIndex:" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding InInvertedIndex}" VerticalAlignment="Center"/>
                 <TextBlock Text="IsColumn:" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding IsColumn}" VerticalAlignment="Center"/>
@@ -203,17 +205,18 @@
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
                 <TextBlock Text="{Binding ColumnIndexType}" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>-->
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Label" FontWeight="Bold" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="4" Grid.Column="1" Text="DisplayName:" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding DisplayName}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="5" Grid.Column="1" Margin="0,0,10,0" Text="SortDescription:" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" Text="{Binding SortDescription}"/>
-                <TextBlock Grid.Row="6" Grid.Column="1" Text="EditInvitation:" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding EditInvitation}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="7" Grid.Column="1" Text="HideTextBlock:" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="7" Grid.Column="2" Text="{Binding HideTextBlock}" VerticalAlignment="Center"/>
-            </Grid>
-        </ScrollViewer>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Label" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="4" Grid.Column="1" Text="DisplayName:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding DisplayName}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="5" Grid.Column="1" Margin="0,0,10,0" Text="SortDescription:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" Text="{Binding SortDescription}"/>
+                    <TextBlock Grid.Row="6" Grid.Column="1" Text="EditInvitation:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding EditInvitation}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="7" Grid.Column="1" Text="HideTextBlock:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="7" Grid.Column="2" Text="{Binding HideTextBlock}" VerticalAlignment="Center"/>
+                </Grid>
+            </ScrollViewer>
+        </Border>
         <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding HelpText}" 
                    Visibility="{Binding IsHelpVisible,Converter={StaticResource VisibleIfTrue}}"/>
         <TextBlock x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>
