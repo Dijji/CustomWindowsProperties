@@ -126,6 +126,7 @@ namespace CustomWindowsProperties
         /// </summary>
         public string EditInvitation { get; set; }
 
+        public bool HideLabel { get; set; }
 
         // TYPE
 
@@ -207,7 +208,7 @@ namespace CustomWindowsProperties
         /// <summary>
         /// This property is meant to be viewed by the user.  
         /// </summary>
-        /// <remarks>
+        /// <remarks>   
         /// This influences whether the property shows up in the "Choose Columns" dialog, for example.
         /// This value is set by the isViewable attribute of the typeInfo element in the property's .propdesc file.
         /// </remarks>
@@ -301,6 +302,7 @@ namespace CustomWindowsProperties
             DisplayName = propertyDescription.DisplayName;
             EditInvitation = propertyDescription.EditInvitation;
             SortDescription = propertyDescription.SortDescription;
+            // To do source HideLabel
 
             // Type information
             Type = PropertyUtils.VarEnumToPropertyType(propertyDescription.VarEnumType);
@@ -344,8 +346,9 @@ namespace CustomWindowsProperties
             Mnemonics = null;
 
             DisplayName = null;
-            EditInvitation = null;
             SortDescription = PropertySortDescription.General;
+            EditInvitation = null;
+            HideLabel = false;
 
             Type = PropertyTypes.Any;
             GroupingRange = PropertyGroupingRange.Discrete;
@@ -425,7 +428,8 @@ namespace CustomWindowsProperties
             label.SetAttribute("sortDescription", SortDescription.ToString());
             if (EditInvitation != null && EditInvitation.Length > 0)
                 label.SetAttribute("invitationText", EditInvitation);
-            //label.SetAttribute("hideLabel", HideLabel);
+            if (HideLabel)
+                label.SetAttribute("hideLabel", HideLabel.ToString());
             desc.AppendChild(label);
 
             var type = doc.CreateElement("typeInfo");
@@ -510,6 +514,7 @@ namespace CustomWindowsProperties
             DisplayName = from.DisplayName;
             SortDescription = from.SortDescription;
             EditInvitation = from.EditInvitation;
+            HideLabel = from.HideLabel;
 
             // Type
             Type = from.Type;

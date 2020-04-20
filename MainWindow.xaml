@@ -32,9 +32,9 @@
             <ColumnDefinition Width="10*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="6*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="4*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TreeView Grid.Row="0" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
@@ -60,6 +60,27 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -122,19 +143,79 @@
                     <TextBlock Grid.Row="11" Grid.Column="1" Text="EditInvitation:" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="11" Grid.Column="2" Text="{Binding EditInvitation}" MinWidth="150" VerticalAlignment="Center"
                          Tag="EditInvitation" HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Row="12" Grid.Column="1" Text="HideTextBlock:" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="12" Grid.Column="2" IsChecked="{Binding HideTextBlock}" VerticalAlignment="Center"
-                          Tag="HideTextBlock"/>
-
+                    <TextBlock Grid.Row="12" Grid.Column="1" Text="HideLabel:" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="12" Grid.Column="2" IsChecked="{Binding HideLabel}" VerticalAlignment="Center"
+                          Tag="HideLabel"/>
+                    <TextBlock Grid.Row="15" Grid.Column="0" Text="Type" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="15" Grid.Column="1" Text="Type:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="15" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                       SelectedItem="{Binding Type}" Tag="Type"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyTypes}}}"/>
+                    <TextBlock Grid.Row="16" Grid.Column="1" Text="GroupingRange:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="16" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                       SelectedItem="{Binding GroupingRange}" Tag="GroupingRange"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyGroupingRange}}}"/>
+                    <TextBlock Grid.Row="17" Grid.Column="1" Text="IsInnate:" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="17" Grid.Column="2" IsChecked="{Binding IsInnate}" VerticalAlignment="Center"
+                          Tag="IsInnate"/>
+                    <TextBlock Grid.Row="18" Grid.Column="1" Text="CanBePurged:" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="18" Grid.Column="2" IsChecked="{Binding CanBePurged}" VerticalAlignment="Center"
+                          Tag="CanBePurged"/>
+                    <TextBlock Grid.Row="19" Grid.Column="1" Text="MultipleValues:" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="19" Grid.Column="2" IsChecked="{Binding MultipleValues}" VerticalAlignment="Center"
+                          Tag="MultipleValues"/>
+                    <TextBlock Grid.Row="20" Grid.Column="1" Text="IsGroup:" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="20" Grid.Column="2" IsChecked="{Binding IsGroup}" VerticalAlignment="Center"
+                          Tag="IsGroup"/>
+                    <TextBlock Grid.Row="21" Grid.Column="1" Text="AggregationType:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="21" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                       SelectedItem="{Binding AggregationType}" Tag="AggregationType"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyAggregationType}}}"/>
+                    <TextBlock Grid.Row="22" Grid.Column="1" Text="IsTreeProperty:" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="22" Grid.Column="2" IsChecked="{Binding IsTreeProperty}" VerticalAlignment="Center"
+                          Tag="IsTreeProperty"/>
+                    <TextBlock Grid.Row="23" Grid.Column="1" Text="IsViewable:" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="23" Grid.Column="2" IsChecked="{Binding IsViewable}" VerticalAlignment="Center"
+                          Tag="IsViewable"/>
+                    <TextBlock Grid.Row="24" Grid.Column="1" Text="SearchRawValue:" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="24" Grid.Column="2" IsChecked="{Binding SearchRawValue}" VerticalAlignment="Center"
+                          Tag="SearchRawValue"/>
+                    <TextBlock Grid.Row="25" Grid.Column="1" Text="ConditionType:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="25" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                       SelectedItem="{Binding ConditionType}" Tag="ConditionType"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyConditionType}}}"/>
+                    <TextBlock Grid.Row="26" Grid.Column="1" Margin="0,0,10,0" Text="ConditionOperation:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="26" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                       SelectedItem="{Binding ConditionOperation}" Tag="ConditionOperation"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyConditionOperation}}}"/>
+                    <TextBlock Grid.Row="28" Grid.Column="0" Text="Display" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="28" Grid.Column="1" Text="DisplayType:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="28" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                       SelectedItem="{Binding DisplayType}" Tag="DisplayType"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyDisplayType}}}"/>
+                    <TextBlock Grid.Row="29" Grid.Column="1" Text="DefaultColumWidth:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="29" Grid.Column="2" Margin="0,0,10,0" Text="{Binding DefaultColumWidth}" MinWidth="50" VerticalAlignment="Center"
+                         Tag="DefaultColumWidth" HorizontalAlignment="Left"/>
+                    <TextBlock Grid.Row="30" Grid.Column="1" Text="EditControl:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="30" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                       SelectedItem="{Binding EditControl}" Tag="EditControl"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:EditControl}}}"/> 
                 </Grid>
             </ScrollViewer>
         </Border>
-        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,5,0,5" Orientation="Horizontal">
             <Button Content="Choose Data Folder" Margin="10,0,0,0" Height="25" Click="ChooseDataFolder_Clicked"/>
             <Button Content="Export" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" Orientation="Horizontal">
             <Button Content="Save" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
             <Button Content="Install" Margin="10,0,0,0" Height="25" 
@@ -183,6 +264,15 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Basics" FontWeight="Bold"  VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="Name:" VerticalAlignment="Center"/>
@@ -212,8 +302,40 @@
                     <TextBlock Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" Text="{Binding SortDescription}"/>
                     <TextBlock Grid.Row="6" Grid.Column="1" Text="EditInvitation:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding EditInvitation}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="7" Grid.Column="1" Text="HideTextBlock:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="7" Grid.Column="2" Text="{Binding HideTextBlock}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="7" Grid.Column="1" Text="HideLabel:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="7" Grid.Column="2" Text="{Binding HideLabel}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Type" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="8" Grid.Column="1" Text="Type:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="8" Grid.Column="2" Text="{Binding Type}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="9" Grid.Column="1" Margin="0,0,10,0" Text="GroupingRange:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="9" Grid.Column="2" VerticalAlignment="Center" Text="{Binding GroupingRange}"/>
+                    <TextBlock Grid.Row="10" Grid.Column="1" Text="IsInnate:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="10" Grid.Column="2" Text="{Binding IsInnate}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="11" Grid.Column="1" Text="CanBePurged:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="11" Grid.Column="2" Text="{Binding CanBePurged}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="12" Grid.Column="1" Text="MultipleValues:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="12" Grid.Column="2" Text="{Binding MultipleValues}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="13" Grid.Column="1" Text="IsGroup:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="13" Grid.Column="2" VerticalAlignment="Center" Text="{Binding IsGroup}"/>
+                    <TextBlock Grid.Row="14" Grid.Column="1" Margin="0,0,10,0" Text="AggregationType:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="14" Grid.Column="2" Text="{Binding AggregationType}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="15" Grid.Column="1" Text="IsTreeProperty:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="15" Grid.Column="2" Text="{Binding IsTreeProperty}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="16" Grid.Column="1" Text="IsViewable:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="16" Grid.Column="2" Text="{Binding IsViewable}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="17" Grid.Column="1" Text="SearchRawValue:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="17" Grid.Column="2" VerticalAlignment="Center" Text="{Binding SearchRawValue}"/>
+                    <TextBlock Grid.Row="18" Grid.Column="1" Text="ConditionType:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="18" Grid.Column="2" Text="{Binding ConditionType}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="19" Grid.Column="1" Margin="0,0,10,0" Text="ConditionOperation:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="19" Grid.Column="2" Text="{Binding ConditionOperation}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="20" Grid.Column="0" Text="Display" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="20" Grid.Column="1" Text="DisplayType:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="20" Grid.Column="2" Text="{Binding DisplayType}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="21" Grid.Column="1" Margin="0,0,10,0" Text="DefaultColumWidth:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="21" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultColumWidth}"/>
+                    <TextBlock Grid.Row="22" Grid.Column="1" Text="EditControl:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="22" Grid.Column="2" Text="{Binding EditControl}" VerticalAlignment="Center"/>
                 </Grid>
             </ScrollViewer>
         </Border>
