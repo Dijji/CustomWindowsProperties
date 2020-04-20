@@ -217,7 +217,7 @@
                 </Grid>
             </ScrollViewer>
         </Border>
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding HelpText}" 
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding HelpText}" Margin="5,5,0,0"
                    Visibility="{Binding IsHelpVisible,Converter={StaticResource VisibleIfTrue}}"/>
         <TextBlock x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>
     </Grid>

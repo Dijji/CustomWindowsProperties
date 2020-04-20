@@ -41,16 +41,30 @@ namespace CustomWindowsProperties
         }
         private TreeItem selectedTreeItem;
 
-        public PropertyConfig PropertyBeingEdited { get; set; } = new PropertyConfig();
+        public PropertyConfig PropertyBeingEdited { get; set; }
 
-        public bool IsEditedInstalled
+        public MainView()
+        {
+            PropertyBeingEdited = new PropertyConfig();
+            PropertyBeingEdited.PropertyChanged += PropertyBeingEdited_PropertyChanged;
+        }
+
+        private void PropertyBeingEdited_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(PropertyConfig.CanonicalName))
+                OnPropertyChanged(nameof(IsEditedInstalled));
+        }
+
+        public string IsEditedInstalled
         {
             get
             {
-                if (PropertyBeingEdited.CanonicalName != null)
-                    return state.InstalledProperties.ContainsKey(PropertyBeingEdited.CanonicalName);
+                if (!Extensions.IsValidPropertyName(PropertyBeingEdited.CanonicalName))
+                    return "Invalid property name";
+                else if (state.InstalledProperties.ContainsKey(PropertyBeingEdited.CanonicalName))
+                    return "True";
                 else
-                    return false;
+                    return "False";
             }
         }
 

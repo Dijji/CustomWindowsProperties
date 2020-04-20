@@ -19,6 +19,7 @@ namespace CustomWindowsProperties
             view.Populate(state);
             InitializeComponent();
             DataContext = view;
+            RefreshPropertyEditor();
         }
 
         private void EditorTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

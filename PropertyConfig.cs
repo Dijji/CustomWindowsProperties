@@ -17,7 +17,12 @@ namespace CustomWindowsProperties
         /// The case-sensitive name of a property as it is known to the system, 
         /// regardless of its localized name.
         /// </summary>
-        public string CanonicalName { get; set; }
+        public string CanonicalName
+        {
+            get { return canonicalName; }
+            set { canonicalName = value; OnPropertyChanged(); }
+        }
+        private string canonicalName;
 
         /// <summary>
         /// A unique GUID for the property
@@ -330,6 +335,7 @@ namespace CustomWindowsProperties
 
         internal void SetDefaultValues()
         {
+            CanonicalName = "Sample.Name";
             InInvertedIndex = false;
             IsColumn = false;
             IsColumnSparse = true;
