@@ -30,7 +30,12 @@ namespace CustomWindowsProperties
         public PropertyConfig SelectedInstalledProperty
         {
             get { return selectedInstalledProperty; }
-            private set { selectedInstalledProperty = value; OnPropertyChanged(nameof(IsInstalledPropertyVisible)); }
+            private set
+            {
+                selectedInstalledProperty = value;
+                OnPropertyChanged(nameof(IsInstalledPropertyVisible));
+                OnPropertyChanged(nameof(CanCopy));
+            }
         }
         private PropertyConfig selectedInstalledProperty;
 
@@ -52,7 +57,11 @@ namespace CustomWindowsProperties
         private void PropertyBeingEdited_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(PropertyConfig.CanonicalName))
+            {
                 OnPropertyChanged(nameof(IsEditedInstalled));
+                OnPropertyChanged(nameof(CanInstall));
+                OnPropertyChanged(nameof(CanUninstall));
+            }
         }
 
         public string IsEditedInstalled
@@ -69,6 +78,13 @@ namespace CustomWindowsProperties
         }
 
         public bool CanExport { get { return state.DataFolder != null && SelectedTreeItem != null; } }
+
+        public bool CanInstall { get { return IsEditedInstalled == "False"; } }
+
+        public bool CanUninstall { get { return IsEditedInstalled == "True" &&
+                        !state.InstalledProperties[PropertyBeingEdited.CanonicalName].IsSystemProperty; } }
+
+        public bool CanCopy { get { return SelectedInstalledProperty != null; } }
 
         public bool IsInstalledPropertyVisible
         { get { return SelectedInstalledProperty != null && HelpText == null; } }

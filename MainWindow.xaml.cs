@@ -46,26 +46,6 @@ namespace CustomWindowsProperties
             }
         }
 
-        private void Export_Clicked(object sender, RoutedEventArgs e)
-        {
-            var outputFile = view.ExportPropDesc();
-            if (outputFile != null)
-            {
-                DisplayStatus($"Exported successfully to {outputFile}");
-            }
-        }
-
-        private void ChooseDataFolder_Clicked(object sender, RoutedEventArgs e)
-        {
-            if (view.ChooseDataFolder())
-                DisplayStatus($"Data folder is now {state.DataFolder}");
-        }
-
-        private void DisplayStatus(string text)
-        {
-            StatusBar.Text = text;
-        }
-
         private void Editor_GotFocus(object sender, RoutedEventArgs e)
         {
             view.EditorFocusChanged(((FrameworkElement)e.OriginalSource).Tag as string);
@@ -76,10 +56,46 @@ namespace CustomWindowsProperties
             view.EditorFocusChanged(null);
         }
 
+        private void ChooseDataFolder_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (view.ChooseDataFolder())
+                DisplayStatus($"Data folder is now {state.DataFolder}");
+        }
+
+        private void Export_Clicked(object sender, RoutedEventArgs e)
+        {
+            var outputFile = view.ExportPropDesc();
+            if (outputFile != null)
+            {
+                DisplayStatus($"Exported successfully to {outputFile}");
+            }
+        }
+
+        private void Install_Clicked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Uninstall_Clicked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Copy_Clicked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void RefreshPropertyEditor()
         {
             PropertyEditor.DataContext = null;
             PropertyEditor.DataContext = view.PropertyBeingEdited;
         }
+
+        private void DisplayStatus(string text)
+        {
+            StatusBar.Text = text;
+        }
+
     }
 }
