@@ -490,14 +490,16 @@ namespace CustomWindowsProperties
 
         internal void CopyFrom(PropertyConfig from, bool isInstalled)
         {
-            // To do Remove this testing hack
-            isInstalled = false;
+            // If we don't copy a value, set it to the default
+            SetDefaultValues();
 
             // Basics
             if (!isInstalled)
+            {
                 CanonicalName = from.CanonicalName;
-            FormatId = null;
-            PropertyId = null;
+                FormatId = from.FormatId;
+                PropertyId = from.PropertyId;
+            }
 
             // Search
             if (!isInstalled)
@@ -526,6 +528,7 @@ namespace CustomWindowsProperties
             AggregationType = from.AggregationType;
             IsTreeProperty = from.IsTreeProperty;
             IsViewable = from.IsViewable;
+            SearchRawValue = from.SearchRawValue;
             ConditionType = from.ConditionType;
             ConditionOperation = from.ConditionOperation;
 

@@ -76,14 +76,19 @@ namespace CustomWindowsProperties
             view.SaveEditedProperty();
         }
 
+        private void Delete_Clicked(object sender, RoutedEventArgs e)
+        {
+            view.DeleteEditedProperty();
+        }
+
         private void Install_Clicked(object sender, RoutedEventArgs e)
         {
-
+            view.InstallEditedProperty();
         }
 
         private void Uninstall_Clicked(object sender, RoutedEventArgs e)
         {
-
+            view.UninstallEditedProperty();
         }
 
         private void Copy_Clicked(object sender, RoutedEventArgs e)

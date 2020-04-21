@@ -138,12 +138,56 @@ namespace CustomWindowsProperties
             }
         }
 
+        public void DeletePropertyConfig(string canonicalName)
+        {
+            try
+            {
+                string fileName = DataFolder + Path.DirectorySeparatorChar + canonicalName + ".xml";
+                if (File.Exists(fileName))
+                    File.Delete(fileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, $"Error deleting property configuration {canonicalName}");
+            }
+        }
+
+
+
         public void Populate()
         {
             LoadOptions();
             PopulatePropertyList(SystemProperties, PropertySystemNativeMethods.PropDescEnumFilter.PDEF_SYSTEM);
             PopulatePropertyList(CustomProperties, PropertySystemNativeMethods.PropDescEnumFilter.PDEF_NONSYSTEM);
             LoadEditorProperties();
+        }
+
+        public void AddEditorProperty(PropertyConfig config)
+        {
+            EditorProperties.Add(config);
+            EditedProperties[config.CanonicalName] = config;
+        }
+
+        public void RemoveEditorProperty(string canonicalName)
+        {
+            var index = EditorProperties.FindIndex(p => p.CanonicalName == canonicalName);
+            if (index != -1)
+                EditorProperties.RemoveAt(index);
+            EditedProperties.Remove(canonicalName);
+        }
+
+        public void AddInstalledProperty(PropertyConfig config)
+        {
+            CustomProperties.Add(config);
+            InstalledProperties[config.CanonicalName] = config;
+        }
+
+        public void RemoveInstalledProperty(string canonicalName)
+        {
+            var index = CustomProperties.FindIndex(p => p.CanonicalName == canonicalName);
+            if (index != -1)
+                CustomProperties.RemoveAt(index);
+            InstalledProperties.Remove(canonicalName);
         }
 
         private void PopulatePropertyList(List<PropertyConfig> propertyList,

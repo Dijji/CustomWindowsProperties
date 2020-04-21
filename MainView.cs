@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -14,9 +15,14 @@ namespace CustomWindowsProperties
     class MainView : INotifyPropertyChanged
     {
         private State state;
+        private Dictionary<string, TreeItem> dictEditorTree = null;
+        private List<TreeItem> rootsEditorTree = null;
+        private Dictionary<string, TreeItem> dictInstalledTree = null;
+        private List<TreeItem> rootsInstalledTree = null;
 
-        public List<TreeItem> InstalledPropertyTree { get; } = new List<TreeItem>();
-        public List<TreeItem> EditorPropertyTree { get; } = new List<TreeItem>();
+
+        public ObservableCollection<TreeItem> InstalledPropertyTree { get; } = new ObservableCollection<TreeItem>();
+        public ObservableCollection<TreeItem> EditorPropertyTree { get; } = new ObservableCollection<TreeItem>();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -77,6 +83,9 @@ namespace CustomWindowsProperties
         }
 
         public bool CanExport { get { return state.DataFolder != null && SelectedTreeItem != null; } }
+
+        public bool CanDelete { get { return IsEditedInstalled == "False" &&
+                        state.EditedProperties.ContainsKey(PropertyBeingEdited.CanonicalName); } }
 
         public bool CanInstall { get { return IsEditedInstalled == "False"; } }
 
@@ -152,9 +161,10 @@ namespace CustomWindowsProperties
         {
             this.state = state;
             PropertyBeingEdited.SetDefaultValues();
-            PopulatePropertyTree(state.SystemProperties.Concat(state.CustomProperties),
+            (dictInstalledTree, rootsInstalledTree) = PopulatePropertyTree(state.SystemProperties.Concat(state.CustomProperties),
                 InstalledPropertyTree, true);
-            PopulatePropertyTree(state.EditorProperties, EditorPropertyTree, false);
+            (dictEditorTree, rootsEditorTree) = PopulatePropertyTree(state.EditorProperties,
+                EditorPropertyTree, false);
         }
 
         public bool ChooseDataFolder()
@@ -212,18 +222,80 @@ namespace CustomWindowsProperties
             return null;
         }
 
-        public void SaveEditedProperty()
+        public void DeleteEditedProperty ()
         {
-            state.SavePropertyConfig(PropertyBeingEdited);
-            // To do Update editor tree, if necessary
+            var canonicalName = PropertyBeingEdited.CanonicalName;
+
+            // Property is in the editor tree, but not installed
+            state.DeletePropertyConfig(canonicalName);
+            state.RemoveEditorProperty(canonicalName);
+            RemoveTreeItem(dictEditorTree, rootsEditorTree, canonicalName);
         }
 
+      
+        public PropertyConfig SaveEditedProperty()
+        {
+            state.SavePropertyConfig(PropertyBeingEdited);
+            if (state.EditedProperties.TryGetValue(PropertyBeingEdited.CanonicalName, out PropertyConfig config))
+            {
+                // Property is already known about, just update its values
+                config.CopyFrom(PropertyBeingEdited, false);
+                return config;
+            }
+            else
+            {
+                // Property is new, need to clone it and add it in
+                PropertyConfig newConfig = new PropertyConfig();
+                newConfig.CopyFrom(PropertyBeingEdited, false);
+                state.AddEditorProperty(newConfig);
+                AddTreeItem(dictEditorTree, rootsEditorTree, newConfig);
+                return newConfig;
+            }
+        }
+        public void InstallEditedProperty()
+        {
+            // Save as XML and update state and tree as necessary
+            var config = SaveEditedProperty();
+            
+            // Save as propdesc
+            var doc = PropertyConfig.GetPropDesc(new PropertyConfig[] { PropertyBeingEdited });
+            var fileName = $"{PropertyBeingEdited.CanonicalName}.propdesc";
+            doc.Save(state.DataFolder + $@"\{fileName}");
+
+            // Attempt installation
+            bool succeeded = false;
+
+            if (succeeded)
+            {
+                // Property is new, need to clone it and add it in
+                PropertyConfig newConfig = new PropertyConfig();
+                newConfig.CopyFrom(config, false);
+                state.AddInstalledProperty(newConfig);
+                AddTreeItem(dictInstalledTree, rootsInstalledTree, newConfig);
+            }
+        }
+
+        public void UninstallEditedProperty()
+        {
+            string canonicalName = PropertyBeingEdited.CanonicalName;
+
+            // Attempt uninstall
+            bool succeeded = false;
+
+            if (succeeded)
+            {
+                state.RemoveInstalledProperty(canonicalName);
+                RemoveTreeItem(dictInstalledTree, rootsInstalledTree, canonicalName);
+            }
+        }
+      
         public void CopyInstalledPropertyToEditor ()
         {
             PropertyBeingEdited.CopyFrom(SelectedInstalledProperty, true);
         }
 
-        private void PopulatePropertyTree(IEnumerable<PropertyConfig> properties, List<TreeItem> treeItems, bool isInstalled)
+        private (Dictionary< string,TreeItem>, List<TreeItem>)  PopulatePropertyTree(
+            IEnumerable<PropertyConfig> properties, ObservableCollection<TreeItem> treeItems, bool isInstalled)
         {
             Dictionary<string, TreeItem> dict = new Dictionary<string, TreeItem>();
             List<TreeItem> roots = new List<TreeItem>();
@@ -265,6 +337,7 @@ namespace CustomWindowsProperties
                 else
                     treeItems.Add(root);
             }
+            return (dict, roots);
         }
 
         // Top level entry point for the algorithm that builds the property name tree from an unordered sequence
@@ -312,6 +385,41 @@ namespace CustomWindowsProperties
 
             return ti;
         }
+
+        private void RemoveTreeItem(Dictionary<string, TreeItem> dict, List<TreeItem> roots, string canonicalName)
+        {
+            dict.Remove(canonicalName);
+            RemoveTreeItemInner(roots, canonicalName);
+        }
+
+        // Returns true if the sought after tree item has been found and removed
+        private bool RemoveTreeItemInner(ICollection<TreeItem> treeItems, string canonicalName)
+        {
+            TreeItem toRemove = null;
+            foreach (var treeItem in treeItems)
+            {
+                if (treeItem.Children.Count == 0)
+                {
+                    var config = treeItem.Item as PropertyConfig;
+                    if (config != null && config.CanonicalName == canonicalName)
+                    {
+                        toRemove = treeItem;
+                        break;
+                    }
+                }
+                else if (RemoveTreeItemInner(treeItem.Children, canonicalName))
+                    return true;
+                
+            }
+            if (toRemove != null)
+            {
+                treeItems.Remove(toRemove);
+                return true;
+            }
+            else
+                return false;
+        }
+        
 
         private string FirstPartsOf(string name)
         {
