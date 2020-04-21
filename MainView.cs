@@ -58,12 +58,11 @@ namespace CustomWindowsProperties
         {
             if (e.PropertyName == nameof(PropertyConfig.CanonicalName))
             {
-                OnPropertyChanged(nameof(IsEditedInstalled));
-                OnPropertyChanged(nameof(CanInstall));
-                OnPropertyChanged(nameof(CanUninstall));
+                RefreshEditedInstalledStatus();
             }
         }
 
+      
         public string IsEditedInstalled
         {
             get
@@ -132,6 +131,13 @@ namespace CustomWindowsProperties
                 }
             }
             return selectedProperty;
+        }
+
+        public void RefreshEditedInstalledStatus()
+        {
+            OnPropertyChanged(nameof(IsEditedInstalled));
+            OnPropertyChanged(nameof(CanInstall));
+            OnPropertyChanged(nameof(CanUninstall));
         }
 
         public void EditorFocusChanged(string tag)
@@ -204,6 +210,17 @@ namespace CustomWindowsProperties
                 return fileName;
             }
             return null;
+        }
+
+        public void SaveEditedProperty()
+        {
+            state.SavePropertyConfig(PropertyBeingEdited);
+            // To do Update editor tree, if necessary
+        }
+
+        public void CopyInstalledPropertyToEditor ()
+        {
+            PropertyBeingEdited.CopyFrom(SelectedInstalledProperty, true);
         }
 
         private void PopulatePropertyTree(IEnumerable<PropertyConfig> properties, List<TreeItem> treeItems, bool isInstalled)

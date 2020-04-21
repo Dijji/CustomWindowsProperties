@@ -217,7 +217,7 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" Orientation="Horizontal">
             <Button Content="Save" Margin="10,0,0,0" Height="25" 
-                    IsEnabled="{Binding CanInstall}" Click="Export_Clicked"/>
+                    IsEnabled="{Binding CanInstall}" Click="Save_Clicked"/>
             <Button Content="Install" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanInstall}" Click="Install_Clicked"/>
             <Button Content="Uninstall" Margin="10,0,0,0" Height="25" 

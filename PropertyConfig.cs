@@ -337,7 +337,7 @@ namespace CustomWindowsProperties
 
         internal void SetDefaultValues()
         {
-            CanonicalName = "Sample.Name";
+            CanonicalName = "name goes here";
             InInvertedIndex = false;
             IsColumn = false;
             IsColumnSparse = true;

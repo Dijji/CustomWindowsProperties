@@ -71,6 +71,11 @@ namespace CustomWindowsProperties
             }
         }
 
+        private void Save_Clicked(object sender, RoutedEventArgs e)
+        {
+            view.SaveEditedProperty();
+        }
+
         private void Install_Clicked(object sender, RoutedEventArgs e)
         {
 
@@ -83,13 +88,15 @@ namespace CustomWindowsProperties
 
         private void Copy_Clicked(object sender, RoutedEventArgs e)
         {
-
+            view.CopyInstalledPropertyToEditor();
+            RefreshPropertyEditor();
         }
 
         private void RefreshPropertyEditor()
         {
             PropertyEditor.DataContext = null;
             PropertyEditor.DataContext = view.PropertyBeingEdited;
+            view.RefreshEditedInstalledStatus(); 
         }
 
         private void DisplayStatus(string text)
