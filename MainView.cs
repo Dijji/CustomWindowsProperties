@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Xml;
 using FolderSelect;
@@ -312,7 +311,7 @@ namespace CustomWindowsProperties
             return succeeded;
         }
 
-      
+
         public bool UninstallEditedProperty()
         {
             var canonicalName = PropertyBeingEdited.CanonicalName;
@@ -392,7 +391,7 @@ namespace CustomWindowsProperties
 
             return dict;
         }
-            
+
         // Top level entry point for the algorithm that builds the property name tree from an unordered sequence
         // of property names
         private TreeItem AddTreeItem(Dictionary<string, TreeItem> dict, ObservableCollection<TreeItem> roots, PropertyConfig pc)

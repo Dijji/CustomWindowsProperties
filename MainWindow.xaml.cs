@@ -110,7 +110,7 @@ namespace CustomWindowsProperties
         private void Install_Clicked(object sender, RoutedEventArgs e)
         {
             try
-            { 
+            {
                 if (view.InstallEditedProperty())
                     DisplayStatus($"Property {EditedPropertyName} installed");
             }
@@ -123,7 +123,7 @@ namespace CustomWindowsProperties
         private void Uninstall_Clicked(object sender, RoutedEventArgs e)
         {
             try
-            { 
+            {
                 if (view.UninstallEditedProperty())
                     DisplayStatus($"Property {EditedPropertyName} uninstalled");
             }

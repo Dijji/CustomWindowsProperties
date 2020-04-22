@@ -190,36 +190,53 @@ namespace CustomWindowsProperties
             InstalledProperties.Remove(canonicalName);
         }
 
-        public bool RegisterCustomProperty (string canonicalName)
+        public bool RegisterCustomProperty(string canonicalName)
         {
             var fileName = $"{DataFolder}{Path.DirectorySeparatorChar}{canonicalName}.propdesc";
             if (!File.Exists(fileName))
                 return false;
 
-            // To do consider copyng the file into a more protected area away from the editor
+            // Copy the file into a more protected common area away from the editor
+            var targetFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                "CustomWindowsProperties");
+            if (!Directory.Exists(targetFolder))
+                Directory.CreateDirectory(targetFolder);
+            var targetFileName = $"{targetFolder}{Path.DirectorySeparatorChar}{canonicalName}.propdesc";
+            File.Copy(fileName, targetFileName, true);
 
-            var result = PropertySystemNativeMethods.PSRegisterPropertySchema(fileName);
+            var result = PropertySystemNativeMethods.PSRegisterPropertySchema(targetFileName);
 
-            if (result < 0)
+            if (result == 0)
+                return true;
+            else if (result == 0x000401A0) // INPLACE_S_TRUNCATED 
+                MessageBox.Show("Property configuration was rejected by Windows. There may be more information in the Application event log.",
+                     "Error installing property");
+            else
                 MessageBox.Show($"Property registration failed with error code 0x{result:x}", "Error installing property");
 
-            return (result > 0);
+            return false;
         }
 
         public bool UnregisterCustomProperty(string canonicalName)
         {
-            var fileName = $"{DataFolder}{Path.DirectorySeparatorChar}{canonicalName}.propdesc";
-            if (!File.Exists(fileName))
+            // The file is held in a more protected common area away from the editor
+            var targetFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                "CustomWindowsProperties");
+            var targetFileName = $"{targetFolder}{Path.DirectorySeparatorChar}{canonicalName}.propdesc";
+            if (!File.Exists(targetFileName))
                 return false;
 
-            // To do consider copyng the file into a more protected area away from the editor
+            var result = PropertySystemNativeMethods.PSUnregisterPropertySchema(targetFileName);
 
-            var result = PropertySystemNativeMethods.PSUnregisterPropertySchema(fileName);
+            if (result == 0)
+            {
+                File.Delete(targetFileName);
+                return true;
+            }
 
-            if (result < 0)
-                MessageBox.Show($"Property unregistration failed with error code 0x{result:x}", "Error uninstalling property");
+            MessageBox.Show($"Property unregistration failed with error code 0x{result:x}", "Error uninstalling property");
 
-            return (result > 0);
+            return false;
         }
 
 
