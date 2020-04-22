@@ -16,6 +16,8 @@ namespace CustomWindowsProperties
     class MainView : INotifyPropertyChanged
     {
         private State state;
+
+        // Dictionaries of the parents in the trees (does not include the terminals)
         private Dictionary<string, TreeItem> dictEditorTree = null;
         private Dictionary<string, TreeItem> dictInstalledTree = null;
 
@@ -72,7 +74,9 @@ namespace CustomWindowsProperties
         {
             get
             {
-                if (!Extensions.IsValidPropertyName(PropertyBeingEdited.CanonicalName))
+                // Name has to be valid structurally and not part of the parent tree of another property
+                if (!Extensions.IsValidPropertyName(PropertyBeingEdited.CanonicalName) ||
+                    dictEditorTree.ContainsKey(PropertyBeingEdited.CanonicalName))
                     return "Invalid property name";
                 else if (state.InstalledProperties.ContainsKey(PropertyBeingEdited.CanonicalName))
                     return "True";
@@ -240,13 +244,15 @@ namespace CustomWindowsProperties
         {
             var canonicalName = PropertyBeingEdited.CanonicalName;
 
-            if (SelectedEditorProperty.CanonicalName != canonicalName)
+            if (SelectedEditorProperty != null &&
+                SelectedEditorProperty.CanonicalName != canonicalName)
                 MessageBox.Show("Save or discard changes first", "Cannot delete property");
 
             // Property is in the editor tree, but not installed
             state.DeletePropertyConfig(canonicalName);
             state.RemoveEditorProperty(canonicalName);
             RemoveTreeItem(dictEditorTree, EditorPropertyTree, canonicalName);
+            RefreshEditedStatus();
         }
 
 
@@ -274,6 +280,7 @@ namespace CustomWindowsProperties
 
                 state.AddEditorProperty(newConfig);
                 AddTreeItem(dictEditorTree, EditorPropertyTree, newConfig);
+                RefreshEditedStatus();
                 return newConfig;
             }
         }
@@ -297,6 +304,7 @@ namespace CustomWindowsProperties
                 newConfig.CopyFrom(config, false);
                 state.AddInstalledProperty(newConfig);
                 AddTreeItem(dictInstalledTree, InstalledPropertyTree, newConfig);
+                RefreshEditedStatus();
             }
         }
 
@@ -314,6 +322,7 @@ namespace CustomWindowsProperties
             {
                 state.RemoveInstalledProperty(canonicalName);
                 RemoveTreeItem(dictInstalledTree, InstalledPropertyTree, canonicalName);
+                RefreshEditedStatus();
             }
         }
 
@@ -407,6 +416,7 @@ namespace CustomWindowsProperties
                 else
                     ti = new TreeItem(LastPartOf(name));
 
+                ti.Tag = name;
                 parent.AddChild(ti);
             }
             else
@@ -414,6 +424,7 @@ namespace CustomWindowsProperties
                 if (!dict.TryGetValue(name, out ti))
                 {
                     ti = new TreeItem(name);
+                    ti.Tag = name;
                     roots.Add(ti);
                 }
             }
@@ -423,13 +434,12 @@ namespace CustomWindowsProperties
 
         private void RemoveTreeItem(Dictionary<string, TreeItem> dict, ObservableCollection<TreeItem> roots, string canonicalName)
         {
-            dict.Remove(canonicalName);
-            RemoveTreeItemInner(roots, canonicalName);
-            // To do remove parents, up to and including a route
+            // Takes care of the dictionary entries and the tree items
+            RemoveTreeItemInner(dict, roots, canonicalName);
         }
 
         // Returns true if the sought after tree item has been found and removed
-        private bool RemoveTreeItemInner(ICollection<TreeItem> treeItems, string canonicalName)
+        private bool RemoveTreeItemInner(Dictionary<string, TreeItem> dict, ICollection<TreeItem> treeItems, string canonicalName)
         {
             TreeItem toRemove = null;
             foreach (var treeItem in treeItems)
@@ -442,9 +452,18 @@ namespace CustomWindowsProperties
                         break;
                     }
                 }
-                else if (RemoveTreeItemInner(treeItem.Children, canonicalName))
-                    return true;
-
+                else if (RemoveTreeItemInner(dict, treeItem.Children, canonicalName))
+                {
+                    // If that parent is now empty, remove it too
+                    if (treeItem.Children.Count == 0)
+                    {
+                        // Remove it from the dictionary of parents
+                        dict.Remove(treeItem.Tag);
+                        toRemove = treeItem;
+                    }
+                    else
+                        return true;
+                }
             }
             if (toRemove != null)
             {

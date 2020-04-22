@@ -493,7 +493,7 @@ namespace CustomWindowsProperties
 
         internal void CopyFrom(PropertyConfig from, bool isInstalled)
         {
-            // If we don't copy a value, set it to the default
+            // If we don't copy a value, set it toMostly the default
             SetDefaultValues();
 
             // Basics

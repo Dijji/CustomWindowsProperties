@@ -30,6 +30,7 @@ namespace CustomWindowsProperties
 
         public string Name { get { return name; } }
         public object Item { get; set; }
+        public string Tag { get; set; }
         public TreeItem Parent { get { return parent; } }
         public ObservableCollection<TreeItem> Children { get { return children; } }
 

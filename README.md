@@ -11,11 +11,12 @@ Versions:
 - Add the help text for the properties, from a localised resource
 - Source all messages from localised resources
 - Look to see if any more display properties should be added
-- Extend error checking for canonical name: if A.B.C exists, then A.B is not an acceptable name
+- Document this subtlety for canonical name: if A.B.C exists, then A.B is not an acceptable name for a new terminal
 - Document how names work independently, no such thing as folder renaming
 - If two properties are added, with names differing only in the last part, then they should have the same format ID, but different property IDs
 - Detect when the edited property is dirty, so that we can warn about changes being lost as appropriate
 - React to changes in canonical name without having to move away from the field
+- Consider remembering tree selections and restoring them or bringing them into view after the tree is updated, where required
 
 Example markup:
 **Latest:** Version 1.6 is now the recommended [release](../../releases/tag/v1.6).  [documentation](../../wiki) has been updated 
