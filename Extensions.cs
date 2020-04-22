@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace CustomWindowsProperties
 {
@@ -13,7 +12,7 @@ namespace CustomWindowsProperties
                 return s.Substring(0, length);
         }
 
-        public static bool IsValidPropertyName (string name)
+        public static bool IsValidPropertyName(string name)
         {
             return Regex.IsMatch(name, @"\A([A-Z]([A-Z]|[a-z]|[0-9])*\.)+([A-Z]([A-Z]|[a-z]|[0-9])*)\z");
         }

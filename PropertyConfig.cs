@@ -27,7 +27,7 @@ namespace CustomWindowsProperties
         /// <summary>
         /// A unique GUID for the property
         /// </summary>
-        public Guid? FormatId { get; set; }
+        public Guid FormatId { get; set; }
 
         /// <summary>
         ///  Property identifier (PID)
@@ -337,7 +337,10 @@ namespace CustomWindowsProperties
 
         internal void SetDefaultValues()
         {
+            FormatId = Guid.Empty;
+            PropertyId = 0;
             CanonicalName = "name goes here";
+
             InInvertedIndex = false;
             IsColumn = false;
             IsColumnSparse = true;
@@ -402,7 +405,7 @@ namespace CustomWindowsProperties
         {
             var desc = doc.CreateElement("propertyDescription");
             desc.SetAttribute("name", CanonicalName);
-            desc.SetAttribute("formatID", FormatId?.ToString("B").ToUpper());
+            desc.SetAttribute("formatID", FormatId.ToString("B").ToUpper());
             desc.SetAttribute("propID", PropertyId.ToString());
 
             // Unfortunately, we have no search information for system properties

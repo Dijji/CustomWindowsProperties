@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Xml;
 using FolderSelect;
 
@@ -68,7 +69,7 @@ namespace CustomWindowsProperties
             }
         }
 
-      
+
         public string IsEditedInstalled
         {
             get
@@ -82,15 +83,27 @@ namespace CustomWindowsProperties
             }
         }
 
-        public bool CanExport { get { return state.DataFolder != null && SelectedTreeItem != null; } }
+        public bool CanExport { get { return HasDataFolder && SelectedTreeItem != null; } }
 
-        public bool CanDelete { get { return IsEditedInstalled == "False" &&
-                        state.EditedProperties.ContainsKey(PropertyBeingEdited.CanonicalName); } }
+        public bool CanDelete
+        {
+            get
+            {
+                return HasDataFolder && IsEditedInstalled == "False" &&
+                    state.EditedProperties.ContainsKey(PropertyBeingEdited.CanonicalName);
+            }
+        }
 
-        public bool CanInstall { get { return IsEditedInstalled == "False"; } }
+        public bool CanInstall { get { return HasDataFolder && IsEditedInstalled == "False"; } }
 
-        public bool CanUninstall { get { return IsEditedInstalled == "True" &&
-                        !state.InstalledProperties[PropertyBeingEdited.CanonicalName].IsSystemProperty; } }
+        public bool CanUninstall
+        {
+            get
+            {
+                return HasDataFolder && IsEditedInstalled == "True" &&
+                    !state.InstalledProperties[PropertyBeingEdited.CanonicalName].IsSystemProperty;
+            }
+        }
 
         public bool CanCopy { get { return SelectedInstalledProperty != null; } }
 
@@ -112,6 +125,8 @@ namespace CustomWindowsProperties
             }
         }
         private string helpText;
+
+        private bool HasDataFolder { get { return state.DataFolder != null; } }
 
         public PropertyConfig SetSelectedItem(TreeItem treeItem, bool isInstalled)
         {
@@ -222,9 +237,12 @@ namespace CustomWindowsProperties
             return null;
         }
 
-        public void DeleteEditedProperty ()
+        public void DeleteEditedProperty()
         {
             var canonicalName = PropertyBeingEdited.CanonicalName;
+
+            if (SelectedEditorProperty.CanonicalName != canonicalName)
+                MessageBox.Show("Save or discard changes first", "Cannot delete property");
 
             // Property is in the editor tree, but not installed
             state.DeletePropertyConfig(canonicalName);
@@ -232,7 +250,7 @@ namespace CustomWindowsProperties
             RemoveTreeItem(dictEditorTree, rootsEditorTree, canonicalName);
         }
 
-      
+
         public PropertyConfig SaveEditedProperty()
         {
             state.SavePropertyConfig(PropertyBeingEdited);
@@ -247,6 +265,14 @@ namespace CustomWindowsProperties
                 // Property is new, need to clone it and add it in
                 PropertyConfig newConfig = new PropertyConfig();
                 newConfig.CopyFrom(PropertyBeingEdited, false);
+
+                if (newConfig.FormatId == Guid.Empty)
+                {
+                    // To do reuse format ID from sibling, if available
+                    newConfig.FormatId = Guid.NewGuid();
+                    newConfig.PropertyId = 1;
+                }
+
                 state.AddEditorProperty(newConfig);
                 AddTreeItem(dictEditorTree, rootsEditorTree, newConfig);
                 return newConfig;
@@ -256,10 +282,10 @@ namespace CustomWindowsProperties
         {
             // Save as XML and update state and tree as necessary
             var config = SaveEditedProperty();
-            
+
             // Save as propdesc
-            var doc = PropertyConfig.GetPropDesc(new PropertyConfig[] { PropertyBeingEdited });
-            var fileName = $"{PropertyBeingEdited.CanonicalName}.propdesc";
+            var doc = PropertyConfig.GetPropDesc(new PropertyConfig[] { config });
+            var fileName = $"{config.CanonicalName}.propdesc";
             doc.Save(state.DataFolder + $@"\{fileName}");
 
             // Attempt installation
@@ -277,7 +303,10 @@ namespace CustomWindowsProperties
 
         public void UninstallEditedProperty()
         {
-            string canonicalName = PropertyBeingEdited.CanonicalName;
+            var canonicalName = PropertyBeingEdited.CanonicalName;
+
+            if (SelectedEditorProperty.CanonicalName != canonicalName)
+                MessageBox.Show("Save or discard changes first", "Cannot delete property");
 
             // Attempt uninstall
             bool succeeded = false;
@@ -288,13 +317,13 @@ namespace CustomWindowsProperties
                 RemoveTreeItem(dictInstalledTree, rootsInstalledTree, canonicalName);
             }
         }
-      
-        public void CopyInstalledPropertyToEditor ()
+
+        public void CopyInstalledPropertyToEditor()
         {
             PropertyBeingEdited.CopyFrom(SelectedInstalledProperty, true);
         }
 
-        private (Dictionary< string,TreeItem>, List<TreeItem>)  PopulatePropertyTree(
+        private (Dictionary<string, TreeItem>, List<TreeItem>) PopulatePropertyTree(
             IEnumerable<PropertyConfig> properties, ObservableCollection<TreeItem> treeItems, bool isInstalled)
         {
             Dictionary<string, TreeItem> dict = new Dictionary<string, TreeItem>();
@@ -400,8 +429,7 @@ namespace CustomWindowsProperties
             {
                 if (treeItem.Children.Count == 0)
                 {
-                    var config = treeItem.Item as PropertyConfig;
-                    if (config != null && config.CanonicalName == canonicalName)
+                    if (treeItem.Item is PropertyConfig config && config.CanonicalName == canonicalName)
                     {
                         toRemove = treeItem;
                         break;
@@ -409,7 +437,7 @@ namespace CustomWindowsProperties
                 }
                 else if (RemoveTreeItemInner(treeItem.Children, canonicalName))
                     return true;
-                
+
             }
             if (toRemove != null)
             {
@@ -419,7 +447,7 @@ namespace CustomWindowsProperties
             else
                 return false;
         }
-        
+
 
         private string FirstPartsOf(string name)
         {

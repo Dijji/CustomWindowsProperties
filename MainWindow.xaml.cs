@@ -1,5 +1,6 @@
 ﻿// Copyright (c) 2020, Dijji, and released under Ms-PL.  This, with other relevant licenses, can be found in the root of this distribution.
 
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,6 +13,8 @@ namespace CustomWindowsProperties
     {
         private readonly State state = new State();
         private readonly MainView view = new MainView();
+
+        private string EditedPropertyName { get { return view.PropertyBeingEdited.CanonicalName; } }
 
         public MainWindow()
         {
@@ -64,31 +67,70 @@ namespace CustomWindowsProperties
 
         private void Export_Clicked(object sender, RoutedEventArgs e)
         {
-            var outputFile = view.ExportPropDesc();
-            if (outputFile != null)
+            try
             {
-                DisplayStatus($"Exported successfully to {outputFile}");
+                var outputFile = view.ExportPropDesc();
+                if (outputFile != null)
+                {
+                    DisplayStatus($"Exported successfully to {outputFile}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error exporting propdesc");
             }
         }
 
         private void Save_Clicked(object sender, RoutedEventArgs e)
         {
-            view.SaveEditedProperty();
+            try
+            {
+                view.SaveEditedProperty();
+                DisplayStatus($"Property {EditedPropertyName} saved");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error saving property");
+            }
         }
 
         private void Delete_Clicked(object sender, RoutedEventArgs e)
         {
-            view.DeleteEditedProperty();
+            try
+            {
+                view.DeleteEditedProperty();
+                DisplayStatus($"Property {EditedPropertyName} deleted");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error deleting property");
+            }
         }
 
         private void Install_Clicked(object sender, RoutedEventArgs e)
         {
-            view.InstallEditedProperty();
+            try
+            { 
+                view.InstallEditedProperty();
+                DisplayStatus($"Property {EditedPropertyName} installed");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error installing property");
+            }
         }
 
         private void Uninstall_Clicked(object sender, RoutedEventArgs e)
         {
-            view.UninstallEditedProperty();
+            try
+            { 
+                view.UninstallEditedProperty();
+                DisplayStatus($"Property {EditedPropertyName} uninstalled");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error uninstalling property");
+            }
         }
 
         private void Copy_Clicked(object sender, RoutedEventArgs e)
@@ -101,7 +143,7 @@ namespace CustomWindowsProperties
         {
             PropertyEditor.DataContext = null;
             PropertyEditor.DataContext = view.PropertyBeingEdited;
-            view.RefreshEditedInstalledStatus(); 
+            view.RefreshEditedInstalledStatus();
         }
 
         private void DisplayStatus(string text)
