@@ -15,6 +15,7 @@ Versions:
 - Document how names work independently, no such thing as folder renaming
 - If two properties are added, with names differing only in the last part, then they should have the same format ID, but different property IDs
 - Detect when the edited property is dirty, so that we can warn about changes being lost as appropriate
+- React to changes in canonical name without having to move away from the field
 
 Example markup:
 **Latest:** Version 1.6 is now the recommended [release](../../releases/tag/v1.6).  [documentation](../../wiki) has been updated 

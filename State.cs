@@ -113,7 +113,7 @@ namespace CustomWindowsProperties
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error reading saved property configuration");
+                    MessageBox.Show(ex.Message, $"Error reading saved property {fullFileName}");
                 }
             }
 
@@ -242,7 +242,11 @@ namespace CustomWindowsProperties
             foreach (var fi in di.GetFiles().Where(f => f.Extension == ".xml"))
             {
                 var pc = LoadPropertyConfig(fi.FullName);
-                EditorProperties.Add(pc);
+                if (pc != null) // Occurs when property cannot be loaded
+                {
+                    EditorProperties.Add(pc);
+                    EditedProperties.Add(pc.CanonicalName, pc);
+                }
             }
         }
     }

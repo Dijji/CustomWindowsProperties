@@ -143,7 +143,7 @@ namespace CustomWindowsProperties
         {
             PropertyEditor.DataContext = null;
             PropertyEditor.DataContext = view.PropertyBeingEdited;
-            view.RefreshEditedInstalledStatus();
+            view.RefreshEditedStatus();
         }
 
         private void DisplayStatus(string text)
