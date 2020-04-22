@@ -111,8 +111,8 @@ namespace CustomWindowsProperties
         {
             try
             { 
-                view.InstallEditedProperty();
-                DisplayStatus($"Property {EditedPropertyName} installed");
+                if (view.InstallEditedProperty())
+                    DisplayStatus($"Property {EditedPropertyName} installed");
             }
             catch (Exception ex)
             {
@@ -124,8 +124,8 @@ namespace CustomWindowsProperties
         {
             try
             { 
-                view.UninstallEditedProperty();
-                DisplayStatus($"Property {EditedPropertyName} uninstalled");
+                if (view.UninstallEditedProperty())
+                    DisplayStatus($"Property {EditedPropertyName} uninstalled");
             }
             catch (Exception ex)
             {

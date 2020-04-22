@@ -189,6 +189,14 @@ namespace CustomWindowsProperties
             [Out, MarshalAs(UnmanagedType.Interface)] out IPropertyDescription ppv
         );
 
+        [DllImport("Propsys.dll", CharSet = CharSet.Unicode)]
+        static internal extern int PSRegisterPropertySchema(String pszPath);
+
+
+        [DllImport("Propsys.dll", CharSet = CharSet.Unicode)]
+        static internal extern int PSUnregisterPropertySchema(String pszPath);
+
+
         [DllImport("propsys.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern int PSGetPropertyKeyFromName(
             [In, MarshalAs(UnmanagedType.LPWStr)] string pszCanonicalName,

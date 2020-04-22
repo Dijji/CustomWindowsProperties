@@ -190,6 +190,39 @@ namespace CustomWindowsProperties
             InstalledProperties.Remove(canonicalName);
         }
 
+        public bool RegisterCustomProperty (string canonicalName)
+        {
+            var fileName = $"{DataFolder}{Path.DirectorySeparatorChar}{canonicalName}.propdesc";
+            if (!File.Exists(fileName))
+                return false;
+
+            // To do consider copyng the file into a more protected area away from the editor
+
+            var result = PropertySystemNativeMethods.PSRegisterPropertySchema(fileName);
+
+            if (result < 0)
+                MessageBox.Show($"Property registration failed with error code 0x{result:x}", "Error installing property");
+
+            return (result > 0);
+        }
+
+        public bool UnregisterCustomProperty(string canonicalName)
+        {
+            var fileName = $"{DataFolder}{Path.DirectorySeparatorChar}{canonicalName}.propdesc";
+            if (!File.Exists(fileName))
+                return false;
+
+            // To do consider copyng the file into a more protected area away from the editor
+
+            var result = PropertySystemNativeMethods.PSUnregisterPropertySchema(fileName);
+
+            if (result < 0)
+                MessageBox.Show($"Property unregistration failed with error code 0x{result:x}", "Error uninstalling property");
+
+            return (result > 0);
+        }
+
+
         private void PopulatePropertyList(List<PropertyConfig> propertyList,
                 PropertySystemNativeMethods.PropDescEnumFilter filter)
         {

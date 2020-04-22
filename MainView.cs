@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Xml;
 using FolderSelect;
@@ -284,7 +285,8 @@ namespace CustomWindowsProperties
                 return newConfig;
             }
         }
-        public void InstallEditedProperty()
+
+        public bool InstallEditedProperty()
         {
             // Save as XML and update state and tree as necessary
             var config = SaveEditedProperty();
@@ -295,7 +297,7 @@ namespace CustomWindowsProperties
             doc.Save(state.DataFolder + $@"\{fileName}");
 
             // Attempt installation
-            bool succeeded = false;
+            bool succeeded = state.RegisterCustomProperty(config.CanonicalName);
 
             if (succeeded)
             {
@@ -306,17 +308,22 @@ namespace CustomWindowsProperties
                 AddTreeItem(dictInstalledTree, InstalledPropertyTree, newConfig);
                 RefreshEditedStatus();
             }
+
+            return succeeded;
         }
 
-        public void UninstallEditedProperty()
+      
+        public bool UninstallEditedProperty()
         {
             var canonicalName = PropertyBeingEdited.CanonicalName;
 
             if (SelectedEditorProperty.CanonicalName != canonicalName)
+            {
                 MessageBox.Show("Save or discard changes first", "Cannot delete property");
+            }
 
             // Attempt uninstall
-            bool succeeded = false;
+            bool succeeded = state.UnregisterCustomProperty(canonicalName);
 
             if (succeeded)
             {
@@ -324,6 +331,8 @@ namespace CustomWindowsProperties
                 RemoveTreeItem(dictInstalledTree, InstalledPropertyTree, canonicalName);
                 RefreshEditedStatus();
             }
+
+            return succeeded;
         }
 
         public void CopyInstalledPropertyToEditor()
