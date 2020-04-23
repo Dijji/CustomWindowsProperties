@@ -7,15 +7,16 @@ It looks like this:
 ![](Screenshot.png)
 
 What it does:
-- Keep a catalog of custom properties, which are presented in the tree in the top left of the screen.
+- Keep a catalog of custom properties, which are presented in the tree in the top left of the screen. This catalog is kept in a data folder. The very first thing you will need to do on opening the app for the first time is to use the Choose Data Folder button to say what folder the app should use.
 - When a custom property is selected, show all of its properties in the panel on the top right, and allow them to be edited and saved.
-- Create a new by entering its new name and saving it.
+- Create a new custom property by entering its new name and saving it.
 - Delete a custom property from the catalog by selecting it and then clicking on the Delete button.
 - Shows all of the properties installed on the system, including pre-installed and custom properties, presenting them in the tree in the bottom left of the screen.
 - When an installed property is selected, show all of its properties that are made available by the system in the panel on the bottom right.
 - If an installed property has characteristics that you want in your custom property, use the Copy button to copy them to the editing area.
 - When you are ready, select a custom property and click the Install button. If the installation succeeds, your property will now appear in the installed properties tree at the bottom left.
 - To remove a custom property from the system, selected in the installed property tree, and then press the Uninstall button.
+- If you want to use your custom properties as part of an installation package, in the custom property tree, select either an individual property, or the immediate parent of a set of properties, and press the Export button. This will create a .propdesc file in the data folder containing the single property, or the set of child properties of the chosen parent.
 
 Versions:   
 0.1 - First working version, for testing functionality and usability
