@@ -295,7 +295,7 @@ namespace CustomWindowsProperties
             }
         }
 
-        public bool InstallEditedProperty()
+        public int InstallEditedProperty()
         {
             // Save as XML and update state and tree as necessary
             var config = SaveEditedProperty();
@@ -306,9 +306,9 @@ namespace CustomWindowsProperties
             doc.Save(fullFileName);
 
             // Attempt installation
-            bool succeeded = state.RegisterCustomProperty(fullFileName, config);
+            var result = state.RegisterCustomProperty(fullFileName, config);
 
-            if (succeeded)
+            if (result >= 0)
             {
                 // Property is new, need to clone it and add it in
                 PropertyConfig newConfig = new PropertyConfig();
@@ -318,7 +318,7 @@ namespace CustomWindowsProperties
                 RefreshEditedStatus();
             }
 
-            return succeeded;
+            return result;
         }
 
 

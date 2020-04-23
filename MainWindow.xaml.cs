@@ -112,8 +112,17 @@ namespace CustomWindowsProperties
         {
             try
             {
-                if (view.InstallEditedProperty())
-                    DisplayStatus($"Property {EditedPropertyName} installed");
+                switch (view.InstallEditedProperty())
+                {
+                    case 0:
+                        DisplayStatus($"Property {EditedPropertyName} installed");
+                        break;
+                    case 1:
+                        DisplayStatus($"Property {EditedPropertyName} installed with warnings of possible incompleteness");
+                        break;
+                    default:
+                        break;
+                }
             }
             catch (Exception ex)
             {

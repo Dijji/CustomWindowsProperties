@@ -190,7 +190,8 @@ namespace CustomWindowsProperties
             InstalledProperties.Remove(canonicalName);
         }
 
-        public bool RegisterCustomProperty(string fullFileName, PropertyConfig pc)
+        // Returns negative numbers for failure, positive for success
+        public int RegisterCustomProperty(string fullFileName, PropertyConfig pc)
         {
             FileInfo fi = new FileInfo(fullFileName);
             if (!fi.Exists)
@@ -207,16 +208,16 @@ namespace CustomWindowsProperties
             var result = PropertySystemNativeMethods.PSRegisterPropertySchema(targetFileName);
 
             if (result == 0)
-                return true;
+                return 0;
             else if (result == 0x000401A0) // INPLACE_S_TRUNCATED 
             {
                 // Check to see if the thing was altered or rejected
                 if (IsPropertyRegistered(pc))
                 {
-                    MessageBox.Show("Property configuration was installed by Windows, but not all sections could be used. " + 
-                        "There may be more information in the Application event log.",
-                     "Partial installation");
-                    return true;
+                    //MessageBox.Show("Property configuration was installed by Windows, but not all sections could be used. " + 
+                    //    "There may be more information in the Application event log.",
+                    // "Partial installation");
+                    return 1;
                 }
                 else
                     MessageBox.Show("Property configuration was rejected by Windows. There may be more information in the Application event log.",
@@ -225,7 +226,7 @@ namespace CustomWindowsProperties
             else
                 MessageBox.Show($"Property registration failed with error code 0x{result:x}", "Error installing property");
 
-            return false;
+            return -1;
         }
 
         private bool IsPropertyRegistered(PropertyConfig pc)
