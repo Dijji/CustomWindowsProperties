@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -21,6 +22,13 @@ namespace CustomWindowsProperties
         private Dictionary<string, TreeItem> dictEditorTree = null;
         private Dictionary<string, TreeItem> dictInstalledTree = null;
 
+        public void Test ()
+        {
+            var t = dictEditorTree["A"];
+            t = t.Children[0];
+            SetSelectedItem(t, false);
+            InstallEditedProperty();
+        }
 
         public ObservableCollection<TreeItem> InstalledPropertyTree { get; } = new ObservableCollection<TreeItem>();
         public ObservableCollection<TreeItem> EditorPropertyTree { get; } = new ObservableCollection<TreeItem>();
@@ -42,6 +50,7 @@ namespace CustomWindowsProperties
                 selectedInstalledProperty = value;
                 OnPropertyChanged(nameof(IsInstalledPropertyVisible));
                 OnPropertyChanged(nameof(CanCopy));
+                OnPropertyChanged(nameof(CanUninstall));
             }
         }
         private PropertyConfig selectedInstalledProperty;
@@ -102,8 +111,8 @@ namespace CustomWindowsProperties
         {
             get
             {
-                return HasDataFolder && IsEditedInstalled == "True" &&
-                    !state.InstalledProperties[PropertyBeingEdited.CanonicalName].IsSystemProperty;
+                return HasDataFolder && SelectedInstalledProperty != null &&
+                    !SelectedInstalledProperty.IsSystemProperty;
             }
         }
 
@@ -258,11 +267,11 @@ namespace CustomWindowsProperties
 
         public PropertyConfig SaveEditedProperty()
         {
-            state.SavePropertyConfig(PropertyBeingEdited);
             if (state.EditedProperties.TryGetValue(PropertyBeingEdited.CanonicalName, out PropertyConfig config))
             {
                 // Property is already known about, just update its values
                 config.CopyFrom(PropertyBeingEdited, false);
+                state.SavePropertyConfig(PropertyBeingEdited);
                 return config;
             }
             else
@@ -274,10 +283,11 @@ namespace CustomWindowsProperties
                 if (newConfig.FormatId == Guid.Empty)
                 {
                     // To do reuse format ID from sibling, if available
-                    newConfig.FormatId = Guid.NewGuid();
-                    newConfig.PropertyId = 1;
+                    PropertyBeingEdited.FormatId = newConfig.FormatId = Guid.NewGuid();
+                    PropertyBeingEdited.PropertyId = newConfig.PropertyId = 1;
                 }
 
+                state.SavePropertyConfig(PropertyBeingEdited);
                 state.AddEditorProperty(newConfig);
                 AddTreeItem(dictEditorTree, EditorPropertyTree, newConfig);
                 RefreshEditedStatus();
@@ -292,11 +302,11 @@ namespace CustomWindowsProperties
 
             // Save as propdesc
             var doc = PropertyConfig.GetPropDesc(new PropertyConfig[] { config });
-            var fileName = $"{config.CanonicalName}.propdesc";
-            doc.Save(state.DataFolder + $@"\{fileName}");
+            var fullFileName = $"{state.DataFolder}{Path.DirectorySeparatorChar}{config.CanonicalName}.propdesc";
+            doc.Save(fullFileName);
 
             // Attempt installation
-            bool succeeded = state.RegisterCustomProperty(config.CanonicalName);
+            bool succeeded = state.RegisterCustomProperty(fullFileName, config);
 
             if (succeeded)
             {
@@ -314,12 +324,7 @@ namespace CustomWindowsProperties
 
         public bool UninstallEditedProperty()
         {
-            var canonicalName = PropertyBeingEdited.CanonicalName;
-
-            if (SelectedEditorProperty.CanonicalName != canonicalName)
-            {
-                MessageBox.Show("Save or discard changes first", "Cannot delete property");
-            }
+            var canonicalName = SelectedInstalledProperty.CanonicalName;
 
             // Attempt uninstall
             bool succeeded = state.UnregisterCustomProperty(canonicalName);

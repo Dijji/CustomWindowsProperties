@@ -23,6 +23,7 @@ namespace CustomWindowsProperties
             InitializeComponent();
             DataContext = view;
             RefreshPropertyEditor();
+            //view.Test();
         }
 
         private void EditorTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -124,8 +125,9 @@ namespace CustomWindowsProperties
         {
             try
             {
+                var name = view.SelectedInstalledProperty.CanonicalName;
                 if (view.UninstallEditedProperty())
-                    DisplayStatus($"Property {EditedPropertyName} uninstalled");
+                    DisplayStatus($"Property {name} uninstalled");
             }
             catch (Exception ex)
             {

@@ -376,6 +376,7 @@ namespace CustomWindowsProperties
         public static XmlDocument GetPropDesc(IEnumerable<PropertyConfig> properties)
         {
             var doc = new XmlDocument();
+            doc.AppendChild(doc.CreateXmlDeclaration("1.0", null, null));
             var root = doc.CreateElement("schema");
             root.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
             root.SetAttribute("xmlns", "http://schemas.microsoft.com/windows/2006/propertydescription");

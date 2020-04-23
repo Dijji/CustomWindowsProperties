@@ -190,31 +190,60 @@ namespace CustomWindowsProperties
             InstalledProperties.Remove(canonicalName);
         }
 
-        public bool RegisterCustomProperty(string canonicalName)
+        public bool RegisterCustomProperty(string fullFileName, PropertyConfig pc)
         {
-            var fileName = $"{DataFolder}{Path.DirectorySeparatorChar}{canonicalName}.propdesc";
-            if (!File.Exists(fileName))
-                return false;
+            FileInfo fi = new FileInfo(fullFileName);
+            if (!fi.Exists)
+                throw new Exception($"Installed property configuration file {fullFileName} is missing");
 
             // Copy the file into a more protected common area away from the editor
             var targetFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                 "CustomWindowsProperties");
             if (!Directory.Exists(targetFolder))
                 Directory.CreateDirectory(targetFolder);
-            var targetFileName = $"{targetFolder}{Path.DirectorySeparatorChar}{canonicalName}.propdesc";
-            File.Copy(fileName, targetFileName, true);
+            var targetFileName = $"{targetFolder}{Path.DirectorySeparatorChar}{fi.Name}";
+            File.Copy(fullFileName, targetFileName, true);
 
             var result = PropertySystemNativeMethods.PSRegisterPropertySchema(targetFileName);
 
             if (result == 0)
                 return true;
             else if (result == 0x000401A0) // INPLACE_S_TRUNCATED 
-                MessageBox.Show("Property configuration was rejected by Windows. There may be more information in the Application event log.",
+            {
+                // Check to see if the thing was altered or rejected
+                if (IsPropertyRegistered(pc))
+                {
+                    MessageBox.Show("Property configuration was installed by Windows, but not all sections could be used. " + 
+                        "There may be more information in the Application event log.",
+                     "Partial installation");
+                    return true;
+                }
+                else
+                    MessageBox.Show("Property configuration was rejected by Windows. There may be more information in the Application event log.",
                      "Error installing property");
+            }
             else
                 MessageBox.Show($"Property registration failed with error code 0x{result:x}", "Error installing property");
 
             return false;
+        }
+
+        private bool IsPropertyRegistered(PropertyConfig pc)
+        {
+            try
+            {
+                var key = new PropertyKey(pc.FormatId, (int)pc.PropertyId);
+                var guid = new Guid(ShellIIDGuid.IPropertyDescription);
+
+                var hr = PropertySystemNativeMethods.PSGetPropertyDescription(
+                            ref key, ref guid, out IPropertyDescription propertyDescription);
+
+                return (hr >= 0);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public bool UnregisterCustomProperty(string canonicalName)
@@ -224,7 +253,7 @@ namespace CustomWindowsProperties
                 "CustomWindowsProperties");
             var targetFileName = $"{targetFolder}{Path.DirectorySeparatorChar}{canonicalName}.propdesc";
             if (!File.Exists(targetFileName))
-                return false;
+                throw new Exception($"Installed property configuration file {targetFileName} is missing");
 
             var result = PropertySystemNativeMethods.PSUnregisterPropertySchema(targetFileName);
 
