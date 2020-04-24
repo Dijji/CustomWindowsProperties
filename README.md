@@ -9,6 +9,7 @@ It looks like this:
 What it does:
 - Keep a catalog of custom properties, which are presented in the tree in the top left of the screen. This catalog is kept in a data folder. The very first thing you will need to do on opening the app for the first time is to use the Choose Data Folder button to say what folder the app should use.
 - When a custom property is selected, show all of its properties in the panel on the top right, and allow them to be edited and saved.
+- When an individual field is being edited, help text about that field is shown in the bottom panel.
 - Create a new custom property by entering its new name and saving it.
 - Delete a custom property from the catalog by selecting it and then clicking on the Delete button.
 - Shows all of the properties installed on the system, including pre-installed and custom properties, presenting them in the tree in the bottom left of the screen.
@@ -18,7 +19,7 @@ What it does:
 - To remove a custom property from the system, selected in the installed property tree, and then press the Uninstall button.
 - If you want to use your custom properties as part of an installation package, in the custom property tree, select either an individual property, or the immediate parent of a set of properties, and press the Export button. This will create a .propdesc file in the data folder containing the single property, or the set of child properties of the chosen parent.
 
-Versions:   
+## Versions:   
 0.1 - First working version, for testing functionality and usability
 
 ## Work list

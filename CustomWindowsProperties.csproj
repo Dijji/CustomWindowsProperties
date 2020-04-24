@@ -63,6 +63,12 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FolderSelectDialog\FolderSelectDialog.cs" />
     <Compile Include="FolderSelectDialog\Reflector.cs" />
+    <Compile Include="HelpText.cs" />
+    <Compile Include="LocalizedHelp.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocalizedHelp.resx</DependentUpon>
+    </Compile>
     <Compile Include="LocalizedMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -112,6 +118,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="LocalizedHelp.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedHelp.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="LocalizedMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LocalizedMessages.Designer.cs</LastGenOutput>

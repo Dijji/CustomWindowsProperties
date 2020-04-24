@@ -178,10 +178,7 @@ namespace CustomWindowsProperties
 
         public void EditorFocusChanged(string tag)
         {
-            if (tag == null)
-                HelpText = null;
-            else
-                HelpText = $"Help for {tag}";
+            HelpText = Help.Text(tag);
         }
 
         public void Populate(State state)
