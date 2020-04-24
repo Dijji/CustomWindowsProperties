@@ -15,20 +15,21 @@ namespace FolderSelect
     public class FolderSelectDialog
     {
         // Wrapped dialog
-        System.Windows.Forms.OpenFileDialog ofd = null;
+        readonly OpenFileDialog ofd = null;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         public FolderSelectDialog()
         {
-            ofd = new System.Windows.Forms.OpenFileDialog();
-
-            ofd.Filter = "Folders|\n";
-            ofd.AddExtension = false;
-            ofd.CheckFileExists = false;
-            ofd.DereferenceLinks = true;
-            ofd.Multiselect = false;
+            ofd = new System.Windows.Forms.OpenFileDialog
+            {
+                Filter = "Folders|\n",
+                AddExtension = false,
+                CheckFileExists = false,
+                DereferenceLinks = true,
+                Multiselect = false
+            };
         }
 
         #region Properties
@@ -48,7 +49,7 @@ namespace FolderSelect
         public string Title
         {
             get { return ofd.Title; }
-            set { ofd.Title = value == null ? "Select a folder" : value; }
+            set { ofd.Title = value ?? "Select a folder"; }
         }
 
         /// <summary>
@@ -111,10 +112,12 @@ namespace FolderSelect
             }
             else
             {
-                var fbd = new FolderBrowserDialog();
-                fbd.Description = this.Title;
-                fbd.SelectedPath = this.InitialDirectory;
-                fbd.ShowNewFolderButton = false;
+                var fbd = new FolderBrowserDialog
+                {
+                    Description = this.Title,
+                    SelectedPath = this.InitialDirectory,
+                    ShowNewFolderButton = false
+                };
                 if (fbd.ShowDialog(new WindowWrapper(hWndOwner)) != DialogResult.OK) return false;
                 ofd.FileName = fbd.SelectedPath;
                 flag = true;
@@ -148,7 +151,7 @@ namespace FolderSelect
             get { return _hwnd; }
         }
 
-        private IntPtr _hwnd;
+        private readonly IntPtr _hwnd;
     }
 
 }

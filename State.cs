@@ -241,7 +241,11 @@ namespace CustomWindowsProperties
 
                 return (hr >= 0);
             }
+#pragma warning disable CS0168 // Variable is declared but never used
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             catch (Exception ex)
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
+#pragma warning restore CS0168 // Variable is declared but never used
             {
                 return false;
             }

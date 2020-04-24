@@ -433,8 +433,10 @@ namespace CustomWindowsProperties
             {
                 if (!dict.TryGetValue(name, out ti))
                 {
-                    ti = new TreeItem(name);
-                    ti.Tag = name;
+                    ti = new TreeItem(name)
+                    {
+                        Tag = name
+                    };
                     roots.Add(ti);
                 }
             }
