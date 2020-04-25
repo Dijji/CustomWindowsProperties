@@ -25,6 +25,24 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="SelectExpandedTreeViewItemStyle"
+               TargetType="{x:Type TreeViewItem}">
+            <Setter Property="IsExpanded" Value="True"/>
+            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <local:CustomVirtualizingStackPanel/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected"  Value="True">
+                    <Setter Property="FontWeight" Value="Bold" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -39,7 +57,7 @@
         </Grid.RowDefinitions>
         <TreeView Grid.Row="0" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
                       ItemsSource="{Binding Path=EditorPropertyTree}" FontSize="12"
-                      ItemContainerStyle="{StaticResource SelectTreeViewItemStyle}"
+                      ItemContainerStyle="{StaticResource SelectExpandedTreeViewItemStyle}"
                       SelectedItemChanged="EditorTree_SelectedItemChanged">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
@@ -100,8 +118,15 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Basics" FontWeight="Bold"  VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="Name:" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding CanonicalName}" MinWidth="150" VerticalAlignment="Center"
-                         Tag="CanonicalName" HorizontalAlignment="Left"/>
+                    <AdornerDecorator Grid.Row="0" Grid.Column="2">
+                        <TextBox Text="{Binding CanonicalName, UpdateSourceTrigger=PropertyChanged}"
+                                 MinWidth="150" VerticalAlignment="Center"
+                                 Tag="CanonicalName" HorizontalAlignment="Left">
+                            <local:WatermarkService.Watermark>
+                                <TextBlock>Property name goes here</TextBlock>
+                            </local:WatermarkService.Watermark>
+                        </TextBox>
+                    </AdornerDecorator>
                     <TextBlock Grid.Row="1" Grid.Column="1" Text="Installed:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding IsEditedInstalled}" VerticalAlignment="Center"
                            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, 

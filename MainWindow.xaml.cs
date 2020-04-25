@@ -18,10 +18,17 @@ namespace CustomWindowsProperties
 
         public MainWindow()
         {
-            state.Populate();
-            view.Populate(state);
             InitializeComponent();
             DataContext = view;
+            try
+            {
+                state.Populate();
+                view.Populate(state);
+            }
+            catch (Exception ex)
+            {
+                DisplayStatus($"Error {ex.Message} occurred during initialisation");
+            }
             RefreshPropertyEditor();
             //view.Test();
         }

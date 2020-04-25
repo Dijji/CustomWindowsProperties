@@ -61,7 +61,13 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The case-sensitive name of a property as it is known to the system,  regardless of its localized name..
+        ///   Looks up a localized string similar to The case-sensitive name of a property as it is known to the system,  regardless of its localized name.
+        ///
+        ///Canonical names consist of any number of tokens, separated by dots, for example:
+        ///
+        ///Name1.NameB.Name7.Basil
+        ///
+        ///Each token in the name must begin with a capital letter, and otherwise consist of upper case and lower case letters, or numbers..
         /// </summary>
         internal static string CanonicalName {
             get {

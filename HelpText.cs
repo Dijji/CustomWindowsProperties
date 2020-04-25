@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CustomWindowsProperties
+﻿namespace CustomWindowsProperties
 {
     static class Help
     {
-        public static string Text (string tag)
+        public static string Text(string tag)
         {
             switch (tag)
             {

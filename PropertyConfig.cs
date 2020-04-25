@@ -339,7 +339,7 @@ namespace CustomWindowsProperties
         {
             FormatId = Guid.Empty;
             PropertyId = 0;
-            CanonicalName = "name goes here";
+            CanonicalName = string.Empty;
 
             InInvertedIndex = false;
             IsColumn = false;

@@ -22,7 +22,7 @@ namespace CustomWindowsProperties
         private Dictionary<string, TreeItem> dictEditorTree = null;
         private Dictionary<string, TreeItem> dictInstalledTree = null;
 
-        public void Test ()
+        public void Test()
         {
             var t = dictEditorTree["A"];
             t = t.Children[0];
@@ -84,9 +84,15 @@ namespace CustomWindowsProperties
             get
             {
                 // Name has to be valid structurally and not part of the parent tree of another property
-                if (!Extensions.IsValidPropertyName(PropertyBeingEdited.CanonicalName) ||
-                    dictEditorTree.ContainsKey(PropertyBeingEdited.CanonicalName))
+                var name = PropertyBeingEdited.CanonicalName;
+                if (!Extensions.IsValidPropertyName(name))
                     return "Invalid property name";
+                else if (NameContainsExistingName(name, EditorPropertyTree, true))
+                    return "Name clashes with edited property name";
+                else if (NameContainsExistingName(name, InstalledPropertyTree, false) &&
+                         !NameContainsExistingName(name, EditorPropertyTree, false))
+                    // All installed property names clash unless we installed it ourselves
+                    return "Name clashes with installed property name";
                 else if (state.InstalledProperties.ContainsKey(PropertyBeingEdited.CanonicalName))
                     return "True";
                 else
@@ -394,6 +400,36 @@ namespace CustomWindowsProperties
             return dict;
         }
 
+        private bool NameContainsExistingName(string name, ObservableCollection<TreeItem> roots, bool isEditor)
+        {
+            return NameContainsExistingNameInner(name, roots, isEditor);
+        }
+
+        private bool NameContainsExistingNameInner(string name, ICollection<TreeItem> treeItems, bool isEditor)
+        {
+            var part = FirstPartOf(name, out string remainder);
+            var item = treeItems.Where(t => t.Name == part).FirstOrDefault();
+            if (item != null)
+            {
+                if (isEditor)
+                {
+                    if ((item.Children.Count != 0 && remainder.Length == 0) ||  // Making a parent into a leaf
+                        (item.Children.Count == 0 && remainder.Length > 0))     // Making a leap into a parent
+                        return true;
+                }
+                else
+                {
+                    // Everything is a clash
+                    return true;
+                }
+
+                if (item.Children.Count > 0)
+                    return NameContainsExistingNameInner(remainder, item.Children, isEditor);
+            }
+
+            return false;
+        }
+
         // Top level entry point for the algorithm that builds the property name tree from an unordered sequence
         // of property names
         private TreeItem AddTreeItem(Dictionary<string, TreeItem> dict, ObservableCollection<TreeItem> roots, PropertyConfig pc)
@@ -486,6 +522,12 @@ namespace CustomWindowsProperties
                 return false;
         }
 
+        private string FirstPartOf(string name, out string remainder)
+        {
+            int index = name.IndexOf('.');
+            remainder = index > 0 ? name.Substring(index + 1) : string.Empty;
+            return index >= 0 ? name.Substring(0, index) : name;
+        }
 
         private string FirstPartsOf(string name)
         {
