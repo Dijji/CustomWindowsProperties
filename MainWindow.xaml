@@ -118,15 +118,24 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Basics" FontWeight="Bold"  VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="Name:" VerticalAlignment="Center"/>
-                    <AdornerDecorator Grid.Row="0" Grid.Column="2">
+                    <Grid Grid.Row="0" Grid.Column="2">
                         <TextBox Text="{Binding CanonicalName, UpdateSourceTrigger=PropertyChanged}"
-                                 MinWidth="150" VerticalAlignment="Center"
-                                 Tag="CanonicalName" HorizontalAlignment="Left">
-                            <local:WatermarkService.Watermark>
-                                <TextBlock>Property name goes here</TextBlock>
-                            </local:WatermarkService.Watermark>
-                        </TextBox>
-                    </AdornerDecorator>
+                                 MinWidth="150" VerticalAlignment="Center" x:Name="NameTextBox"
+                                 Tag="CanonicalName" HorizontalAlignment="Left"/>
+                        <TextBlock IsHitTestVisible="False" Text="Property name goes here"
+                                   VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="DarkGray">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=NameTextBox}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
                     <TextBlock Grid.Row="1" Grid.Column="1" Text="Installed:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding IsEditedInstalled}" VerticalAlignment="Center"
                            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, 
