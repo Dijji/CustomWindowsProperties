@@ -51,6 +51,7 @@ namespace CustomWindowsProperties
                 OnPropertyChanged(nameof(IsInstalledPropertyVisible));
                 OnPropertyChanged(nameof(CanCopy));
                 OnPropertyChanged(nameof(CanUninstall));
+                OnPropertyChanged(nameof(UninstallCaption));
             }
         }
         private PropertyConfig selectedInstalledProperty;
@@ -113,6 +114,9 @@ namespace CustomWindowsProperties
 
         public bool CanInstall { get { return HasDataFolder && IsEditedInstalled == "False"; } }
 
+        public string InstallCaption 
+            { get { return $"Install {(CanInstall ? PropertyBeingEdited.BoundedName : null)}"; } }
+
         public bool CanUninstall
         {
             get
@@ -121,6 +125,7 @@ namespace CustomWindowsProperties
                     !SelectedInstalledProperty.IsSystemProperty;
             }
         }
+        public string UninstallCaption { get { return $"Uninstall {SelectedInstalledProperty?.BoundedName}"; } }
 
         public bool CanCopy { get { return SelectedInstalledProperty != null; } }
 
@@ -179,7 +184,9 @@ namespace CustomWindowsProperties
             OnPropertyChanged(nameof(IsEditedInstalled));
             OnPropertyChanged(nameof(CanDelete));
             OnPropertyChanged(nameof(CanInstall));
+            OnPropertyChanged(nameof(InstallCaption));
             OnPropertyChanged(nameof(CanUninstall));
+            OnPropertyChanged(nameof(UninstallCaption));
         }
 
         public void EditorFocusChanged(string tag)

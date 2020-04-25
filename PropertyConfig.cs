@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace CustomWindowsProperties
 {
@@ -276,6 +277,16 @@ namespace CustomWindowsProperties
         /// Gets the current set of flags governing the property's view.
         /// </summary>
         public PropertyViewOptions ViewFlags { get; set; }
+
+        [XmlIgnore]
+        public string BoundedName
+        {
+            get
+            {
+                return CanonicalName.Length < 20 ? CanonicalName :
+                    $"{CanonicalName.Substring(0, 10)}...{CanonicalName.Substring(CanonicalName.Length - 10)}";
+            }
+        }
 
         // For serialisation
         public PropertyConfig()
