@@ -143,15 +143,15 @@
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,10,0" Text="Search" FontWeight="Bold"  VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="2" Grid.Column="1" Text="InInvertedIndex:" VerticalAlignment="Center"/>
                     <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding InInvertedIndex}" VerticalAlignment="Center"
-                          Tag="InInvertedIndex"/>
+                          Width="50" HorizontalAlignment="Left" Tag="InInvertedIndex"/>
                     <TextBlock Grid.Row="3" Grid.Column="1" Text="IsColumn:" VerticalAlignment="Center"/>
                     <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding IsColumn}" VerticalAlignment="Center"
-                          Tag="IsColumn"/>
+                          Width="50" HorizontalAlignment="Left" Tag="IsColumn"/>
                     <TextBlock Grid.Row="5" Grid.Column="1" Text="IsColumnSparse:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
                     <CheckBox Grid.Row="5" Grid.Column="2" IsChecked="{Binding IsColumnSparse}" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"
-                          Tag="IsColumnSparse"/>
+                          Width="50" HorizontalAlignment="Left" Tag="IsColumnSparse"/>
                     <TextBlock Grid.Row="6" Grid.Column="1" Margin="0,0,10,0" Text="ColumnIndexType:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
                     <ComboBox Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"
@@ -179,7 +179,7 @@
                          Tag="EditInvitation" HorizontalAlignment="Left"/>
                     <TextBlock Grid.Row="12" Grid.Column="1" Text="HideLabel:" VerticalAlignment="Center"/>
                     <CheckBox Grid.Row="12" Grid.Column="2" IsChecked="{Binding HideLabel}" VerticalAlignment="Center"
-                          Tag="HideLabel"/>
+                          Width="50" HorizontalAlignment="Left" Tag="HideLabel"/>
                     <TextBlock Grid.Row="15" Grid.Column="0" Text="Type" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="15" Grid.Column="1" Text="Type:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="15" Grid.Column="2" VerticalAlignment="Center" 
@@ -193,16 +193,16 @@
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyGroupingRange}}}"/>
                     <TextBlock Grid.Row="17" Grid.Column="1" Text="IsInnate:" VerticalAlignment="Center"/>
                     <CheckBox Grid.Row="17" Grid.Column="2" IsChecked="{Binding IsInnate}" VerticalAlignment="Center"
-                          Tag="IsInnate"/>
+                          Width="50" HorizontalAlignment="Left" Tag="IsInnate"/>
                     <TextBlock Grid.Row="18" Grid.Column="1" Text="CanBePurged:" VerticalAlignment="Center"/>
                     <CheckBox Grid.Row="18" Grid.Column="2" IsChecked="{Binding CanBePurged}" VerticalAlignment="Center"
-                          Tag="CanBePurged"/>
+                          Width="50" HorizontalAlignment="Left" Tag="CanBePurged"/>
                     <TextBlock Grid.Row="19" Grid.Column="1" Text="MultipleValues:" VerticalAlignment="Center"/>
                     <CheckBox Grid.Row="19" Grid.Column="2" IsChecked="{Binding MultipleValues}" VerticalAlignment="Center"
-                          Tag="MultipleValues"/>
+                          Width="50" HorizontalAlignment="Left" Tag="MultipleValues"/>
                     <TextBlock Grid.Row="20" Grid.Column="1" Text="IsGroup:" VerticalAlignment="Center"/>
                     <CheckBox Grid.Row="20" Grid.Column="2" IsChecked="{Binding IsGroup}" VerticalAlignment="Center"
-                          Tag="IsGroup"/>
+                          Width="50" HorizontalAlignment="Left" Tag="IsGroup"/>
                     <TextBlock Grid.Row="21" Grid.Column="1" Text="AggregationType:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="21" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
@@ -210,13 +210,13 @@
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyAggregationType}}}"/>
                     <TextBlock Grid.Row="22" Grid.Column="1" Text="IsTreeProperty:" VerticalAlignment="Center"/>
                     <CheckBox Grid.Row="22" Grid.Column="2" IsChecked="{Binding IsTreeProperty}" VerticalAlignment="Center"
-                          Tag="IsTreeProperty"/>
+                          Width="50" HorizontalAlignment="Left" Tag="IsTreeProperty"/>
                     <TextBlock Grid.Row="23" Grid.Column="1" Text="IsViewable:" VerticalAlignment="Center"/>
                     <CheckBox Grid.Row="23" Grid.Column="2" IsChecked="{Binding IsViewable}" VerticalAlignment="Center"
-                          Tag="IsViewable"/>
+                          Width="50" HorizontalAlignment="Left" Tag="IsViewable"/>
                     <TextBlock Grid.Row="24" Grid.Column="1" Text="SearchRawValue:" VerticalAlignment="Center"/>
                     <CheckBox Grid.Row="24" Grid.Column="2" IsChecked="{Binding SearchRawValue}" VerticalAlignment="Center"
-                          Tag="SearchRawValue"/>
+                          Width="50" HorizontalAlignment="Left" Tag="SearchRawValue"/>
                     <TextBlock Grid.Row="25" Grid.Column="1" Text="ConditionType:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="25" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
