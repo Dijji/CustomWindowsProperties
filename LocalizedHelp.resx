@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CanonicalName" xml:space="preserve">
-    <value>The case-sensitive name of a property as it is known to the system,  regardless of its localized name.
+    <value>The case-sensitive name of a property as it is known to the system, regardless of its localized name.
 
 Canonical names consist of any number of tokens, separated by dots, for example:
 

@@ -61,7 +61,7 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The case-sensitive name of a property as it is known to the system,  regardless of its localized name.
+        ///   Looks up a localized string similar to The case-sensitive name of a property as it is known to the system, regardless of its localized name.
         ///
         ///Canonical names consist of any number of tokens, separated by dots, for example:
         ///

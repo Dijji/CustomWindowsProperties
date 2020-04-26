@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomWindowsProperties"
         mc:Ignorable="d"
-        Title="Custom Windows Properties" Height="600" Width="800">
+        Title="Custom Windows Properties" Height="600" Width="1000">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibleIfTrue" />
         <Style x:Key="SelectTreeViewItemStyle"
@@ -48,6 +48,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="6*"/>
@@ -56,6 +57,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TreeView Grid.Row="0" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
+                  x:Name="treeViewEditor"
                       ItemsSource="{Binding Path=EditorPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectExpandedTreeViewItemStyle}"
                       SelectedItemChanged="EditorTree_SelectedItemChanged">
@@ -66,6 +68,18 @@
                     </Grid>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
+            <TreeView.CommandBindings>
+                <CommandBinding Command="Open" CanExecute="EditedInstall_CanExecute" Executed="EditedInstall_Executed"/>
+                <CommandBinding Command="SaveAs" CanExecute="EditedExport_CanExecute" Executed="EditedExport_Executed"/>
+                <CommandBinding Command="Delete" CanExecute="EditedDelete_CanExecute" Executed="EditedDelete_Executed"/>
+            </TreeView.CommandBindings>
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="Open" Header="Install"/>
+                    <MenuItem Command="SaveAs" Header="Export"/>
+                    <MenuItem Command="Delete" Header="Delete"/>
+                </ContextMenu>
+            </TreeView.ContextMenu>
         </TreeView>
         <Border Grid.Row="0" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
             <ScrollViewer Margin="5,0,0,0"
@@ -137,128 +151,135 @@
                         </TextBlock>
                     </Grid>
                     <TextBlock Grid.Row="1" Grid.Column="1" Text="Installed:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding IsEditedInstalled}" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding EditorInstalledText}" VerticalAlignment="Center"
                            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, 
                            AncestorType={x:Type Window}}, Path=DataContext}"/>
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,10,0" Text="Search" FontWeight="Bold"  VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="2" Grid.Column="1" Text="InInvertedIndex:" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding InInvertedIndex}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding InInvertedIndex, UpdateSourceTrigger=PropertyChanged}" 
+                              VerticalAlignment="Center"
                           Width="50" HorizontalAlignment="Left" Tag="InInvertedIndex"/>
                     <TextBlock Grid.Row="3" Grid.Column="1" Text="IsColumn:" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding IsColumn}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding IsColumn, UpdateSourceTrigger=PropertyChanged}" 
+                              VerticalAlignment="Center"
                           Width="50" HorizontalAlignment="Left" Tag="IsColumn"/>
                     <TextBlock Grid.Row="5" Grid.Column="1" Text="IsColumnSparse:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                    <CheckBox Grid.Row="5" Grid.Column="2" IsChecked="{Binding IsColumnSparse}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="5" Grid.Column="2" IsChecked="{Binding IsColumnSparse, UpdateSourceTrigger=PropertyChanged}" 
+                              VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"
                           Width="50" HorizontalAlignment="Left" Tag="IsColumnSparse"/>
                     <TextBlock Grid.Row="6" Grid.Column="1" Margin="0,0,10,0" Text="ColumnIndexType:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
                     <ComboBox Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"
                           MinWidth="100" HorizontalAlignment="Left"
-                       SelectedItem="{Binding ColumnIndexType}" Tag="ColumnIndexType"
+                       SelectedItem="{Binding ColumnIndexType, UpdateSourceTrigger=PropertyChanged}" Tag="ColumnIndexType"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:ColumnIndexType}}}"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
                     <TextBlock Grid.Row="7" Grid.Column="1" Text="MaxSize:" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding MaxSize}" MinWidth="50" VerticalAlignment="Center"
+                    <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding MaxSize, UpdateSourceTrigger=PropertyChanged}"
+                             MinWidth="50" VerticalAlignment="Center"
                          Tag="MaxSize" HorizontalAlignment="Left"/>
                     <TextBlock Grid.Row="8" Grid.Column="1" Text="Mnemonics:" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Mnemonics}" MinWidth="150" VerticalAlignment="Center"
+                    <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Mnemonics, UpdateSourceTrigger=PropertyChanged}"
+                             MinWidth="150" VerticalAlignment="Center"
                          Tag="Mnemonics" HorizontalAlignment="Left"/>
                     <TextBlock Grid.Row="9" Grid.Column="0" Text="Label" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="9" Grid.Column="1" Text="DisplayName:" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="9" Grid.Column="2" Text="{Binding DisplayName}" MinWidth="150" VerticalAlignment="Center"
+                    <TextBox Grid.Row="9" Grid.Column="2" Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                             MinWidth="150" VerticalAlignment="Center"
                          Tag="DisplayName" HorizontalAlignment="Left"/>
                     <TextBlock Grid.Row="10" Grid.Column="1" Margin="0,0,10,0" Text="SortDescription:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="10" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
-                       SelectedItem="{Binding SortDescription}" Tag="SortDescription"
+                       SelectedItem="{Binding SortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="SortDescription"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertySortDescription}}}"/>
                     <TextBlock Grid.Row="11" Grid.Column="1" Text="EditInvitation:" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="11" Grid.Column="2" Text="{Binding EditInvitation}" MinWidth="150" VerticalAlignment="Center"
+                    <TextBox Grid.Row="11" Grid.Column="2" Text="{Binding EditInvitation, UpdateSourceTrigger=PropertyChanged}"
+                             MinWidth="150" VerticalAlignment="Center"
                          Tag="EditInvitation" HorizontalAlignment="Left"/>
                     <TextBlock Grid.Row="12" Grid.Column="1" Text="HideLabel:" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="12" Grid.Column="2" IsChecked="{Binding HideLabel}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="12" Grid.Column="2" IsChecked="{Binding HideLabel, UpdateSourceTrigger=PropertyChanged}"
+                              VerticalAlignment="Center"
                           Width="50" HorizontalAlignment="Left" Tag="HideLabel"/>
                     <TextBlock Grid.Row="15" Grid.Column="0" Text="Type" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="15" Grid.Column="1" Text="Type:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="15" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
-                       SelectedItem="{Binding Type}" Tag="Type"
+                       SelectedItem="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Tag="Type"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyTypes}}}"/>
                     <TextBlock Grid.Row="16" Grid.Column="1" Text="GroupingRange:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="16" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
-                       SelectedItem="{Binding GroupingRange}" Tag="GroupingRange"
+                       SelectedItem="{Binding GroupingRange, UpdateSourceTrigger=PropertyChanged}" Tag="GroupingRange"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyGroupingRange}}}"/>
                     <TextBlock Grid.Row="17" Grid.Column="1" Text="IsInnate:" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="17" Grid.Column="2" IsChecked="{Binding IsInnate}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="17" Grid.Column="2" IsChecked="{Binding IsInnate, UpdateSourceTrigger=PropertyChanged}"
+                              VerticalAlignment="Center"
                           Width="50" HorizontalAlignment="Left" Tag="IsInnate"/>
                     <TextBlock Grid.Row="18" Grid.Column="1" Text="CanBePurged:" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="18" Grid.Column="2" IsChecked="{Binding CanBePurged}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="18" Grid.Column="2" IsChecked="{Binding CanBePurged, UpdateSourceTrigger=PropertyChanged}"
+                              VerticalAlignment="Center"
                           Width="50" HorizontalAlignment="Left" Tag="CanBePurged"/>
                     <TextBlock Grid.Row="19" Grid.Column="1" Text="MultipleValues:" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="19" Grid.Column="2" IsChecked="{Binding MultipleValues}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="19" Grid.Column="2" IsChecked="{Binding MultipleValues, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
                           Width="50" HorizontalAlignment="Left" Tag="MultipleValues"/>
                     <TextBlock Grid.Row="20" Grid.Column="1" Text="IsGroup:" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="20" Grid.Column="2" IsChecked="{Binding IsGroup}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="20" Grid.Column="2" IsChecked="{Binding IsGroup, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
                           Width="50" HorizontalAlignment="Left" Tag="IsGroup"/>
                     <TextBlock Grid.Row="21" Grid.Column="1" Text="AggregationType:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="21" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
-                       SelectedItem="{Binding AggregationType}" Tag="AggregationType"
+                       SelectedItem="{Binding AggregationType, UpdateSourceTrigger=PropertyChanged}" Tag="AggregationType"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyAggregationType}}}"/>
                     <TextBlock Grid.Row="22" Grid.Column="1" Text="IsTreeProperty:" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="22" Grid.Column="2" IsChecked="{Binding IsTreeProperty}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="22" Grid.Column="2" IsChecked="{Binding IsTreeProperty, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
                           Width="50" HorizontalAlignment="Left" Tag="IsTreeProperty"/>
                     <TextBlock Grid.Row="23" Grid.Column="1" Text="IsViewable:" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="23" Grid.Column="2" IsChecked="{Binding IsViewable}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="23" Grid.Column="2" IsChecked="{Binding IsViewable, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
                           Width="50" HorizontalAlignment="Left" Tag="IsViewable"/>
                     <TextBlock Grid.Row="24" Grid.Column="1" Text="SearchRawValue:" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="24" Grid.Column="2" IsChecked="{Binding SearchRawValue}" VerticalAlignment="Center"
+                    <CheckBox Grid.Row="24" Grid.Column="2" IsChecked="{Binding SearchRawValue, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
                           Width="50" HorizontalAlignment="Left" Tag="SearchRawValue"/>
                     <TextBlock Grid.Row="25" Grid.Column="1" Text="ConditionType:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="25" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
-                       SelectedItem="{Binding ConditionType}" Tag="ConditionType"
+                       SelectedItem="{Binding ConditionType, UpdateSourceTrigger=PropertyChanged}" Tag="ConditionType"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyConditionType}}}"/>
                     <TextBlock Grid.Row="26" Grid.Column="1" Margin="0,0,10,0" Text="ConditionOperation:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="26" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
-                       SelectedItem="{Binding ConditionOperation}" Tag="ConditionOperation"
+                       SelectedItem="{Binding ConditionOperation, UpdateSourceTrigger=PropertyChanged}" Tag="ConditionOperation"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyConditionOperation}}}"/>
                     <TextBlock Grid.Row="28" Grid.Column="0" Text="Display" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="28" Grid.Column="1" Text="DisplayType:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="28" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
-                       SelectedItem="{Binding DisplayType}" Tag="DisplayType"
+                       SelectedItem="{Binding DisplayType, UpdateSourceTrigger=PropertyChanged}" Tag="DisplayType"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyDisplayType}}}"/>
                     <TextBlock Grid.Row="29" Grid.Column="1" Text="DefaultColumWidth:" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="29" Grid.Column="2" Margin="0,0,10,0" Text="{Binding DefaultColumWidth}" MinWidth="50" VerticalAlignment="Center"
+                    <TextBox Grid.Row="29" Grid.Column="2" Margin="0,0,10,0" Text="{Binding DefaultColumnWidth, UpdateSourceTrigger=PropertyChanged}" 
+                             MinWidth="50" VerticalAlignment="Center"
                          Tag="DefaultColumWidth" HorizontalAlignment="Left"/>
                     <TextBlock Grid.Row="30" Grid.Column="1" Text="EditControl:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="30" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
-                       SelectedItem="{Binding EditControl}" Tag="EditControl"
+                       SelectedItem="{Binding EditControl, UpdateSourceTrigger=PropertyChanged}" Tag="EditControl"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:EditControl}}}"/> 
                 </Grid>
             </ScrollViewer>
         </Border>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,5,0,5" Orientation="Horizontal">
             <Button Content="Choose Data Folder" Margin="10,0,0,0" Height="25" Click="ChooseDataFolder_Clicked"/>
-            <Button Content="Export" Margin="10,0,0,0" Height="25" 
-                    IsEnabled="{Binding CanExport}" Click="Export_Clicked"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" Orientation="Horizontal">
             <Button Content="Save" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanInstall}" Click="Save_Clicked"/>
-            <Button Content="Delete" Margin="10,0,0,0" Height="25" 
-                    IsEnabled="{Binding CanDelete}" Click="Delete_Clicked"/>
-            <Button Content="{Binding InstallCaption}" Margin="10,0,0,0" Height="25" 
+            <Button Content="Discard" Margin="10,0,0,0" Height="25" 
+                    IsEnabled="{Binding CanDiscard}" Click="Discard_Clicked"/>
+            <Button Content="Install" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanInstall}" Click="Install_Clicked"/>
-            <Button Content="{Binding UninstallCaption}" Margin="10,0,0,0" Height="25" 
-                    IsEnabled="{Binding CanUninstall}" Click="Uninstall_Clicked"/>
-            <Button Content="Copy ^" Margin="10,0,0,0" Height="25" 
+            <Button Content="Copy ^" Margin="10,0,20,0" Height="25" HorizontalAlignment="Right"
                     IsEnabled="{Binding CanCopy}" Click="Copy_Clicked"/>
         </StackPanel>
         <TreeView Grid.Row="2" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
@@ -272,6 +293,14 @@
                     </Grid>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
+            <TreeView.CommandBindings>
+                <CommandBinding Command="Close" CanExecute="InstalledUninstall_CanExecute" Executed="InstalledUninstall_Executed"/>
+            </TreeView.CommandBindings>
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="Close" Header="Uninstall"/>
+                </ContextMenu>
+            </TreeView.ContextMenu>
         </TreeView>
         <Border Grid.Row="2" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
             <ScrollViewer Margin="5,0,0,0"
@@ -375,10 +404,21 @@
                 </Grid>
             </ScrollViewer>
         </Border>
-        <ScrollViewer Grid.Row="2" Grid.Column="1"
-                      Visibility="{Binding IsHelpVisible,Converter={StaticResource VisibleIfTrue}}">
-            <TextBlock Text="{Binding HelpText}" TextWrapping="Wrap" Margin="5,5,0,0" />
-        </ScrollViewer>
+        <Border  Grid.Row="0" Grid.Column="2" BorderBrush="Gray" BorderThickness="1">
+            <ScrollViewer>
+                <TextBlock Text="{Binding HelpText}" TextWrapping="Wrap" Margin="5,5,0,0" />
+            </ScrollViewer>
+        </Border>
+        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="5,0,0,0">
+            <TextBlock Text="Differences to:" FontSize="12"/>
+            <RadioButton Content="Saved" IsChecked="{Binding CompareSaved,Mode=TwoWay}" Margin="10,0,0,0" FontSize="12"/>
+            <RadioButton Content="Installed" Margin="10,0,0,0" FontSize="12"/>
+        </StackPanel>
+        <Border Grid.Row="2" Grid.Column="2" BorderBrush="Gray" BorderThickness="1">
+            <ScrollViewer>
+                <TextBlock Text="{Binding DifferencesText}" TextWrapping="Wrap" Margin="5,5,0,0" />
+            </ScrollViewer>
+        </Border>
         <TextBlock x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>
     </Grid>
 </Window>

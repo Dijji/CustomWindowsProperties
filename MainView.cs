@@ -8,9 +8,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Xml;
 using FolderSelect;
+using KellermanSoftware.CompareNetObjects;
 
 namespace CustomWindowsProperties
 {
@@ -77,24 +79,20 @@ namespace CustomWindowsProperties
             {
                 RefreshEditedStatus();
             }
+            var dirty = IsEditorDirty;
         }
 
 
-        public string IsEditedInstalled
+        public string EditorInstalledText
         {
             get
             {
                 // Name has to be valid structurally and not part of the parent tree of another property
-                var name = PropertyBeingEdited.CanonicalName;
-                if (!Extensions.IsValidPropertyName(name))
-                    return "Invalid property name";
-                else if (NameContainsExistingName(name, EditorPropertyTree, true))
-                    return "Name clashes with edited property name";
-                else if (NameContainsExistingName(name, InstalledPropertyTree, false) &&
-                         !NameContainsExistingName(name, EditorPropertyTree, false))
-                    // All installed property names clash unless we installed it ourselves
-                    return "Name clashes with installed property name";
-                else if (state.InstalledProperties.ContainsKey(PropertyBeingEdited.CanonicalName))
+                var canonicalName = PropertyBeingEdited.CanonicalName;
+                var error = ValidateName(canonicalName);
+                if (error != null)
+                    return error;
+                else if (state.InstalledProperties.ContainsKey(canonicalName))
                     return "True";
                 else
                     return "False";
@@ -103,19 +101,14 @@ namespace CustomWindowsProperties
 
         public bool CanExport { get { return HasDataFolder && SelectedTreeItem != null; } }
 
-        public bool CanDelete
-        {
-            get
-            {
-                return HasDataFolder && IsEditedInstalled == "False" &&
-                    state.EditedProperties.ContainsKey(PropertyBeingEdited.CanonicalName);
-            }
-        }
+        public bool CanDiscard { get { return false; } }
 
-        public bool CanInstall { get { return HasDataFolder && IsEditedInstalled == "False"; } }
+        public bool CanDelete { get { return CanBeDeleted(PropertyBeingEdited); } }
 
-        public string InstallCaption 
-            { get { return $"Install {(CanInstall ? PropertyBeingEdited.BoundedName : null)}"; } }
+        public bool CanInstall { get { return CanBeInstalled(PropertyBeingEdited); } }
+
+        public string InstallCaption
+        { get { return $"Install {(CanInstall ? PropertyBeingEdited.BoundedName : null)}"; } }
 
         public bool CanUninstall
         {
@@ -132,6 +125,61 @@ namespace CustomWindowsProperties
         public bool IsInstalledPropertyVisible
         { get { return SelectedInstalledProperty != null && HelpText == null; } }
 
+        public bool CompareSaved { get { return compareSaved; } set { compareSaved = value; CompareEditor(value); } }
+        private bool compareSaved = true;
+
+        private bool IsBulkUpdating { get; set; }
+
+        public bool IsEditorDirty { get { return isEditorDirty; } private set { isEditorDirty = value; OnPropertyChanged(nameof(CanDiscard)); } }
+        private bool isEditorDirty;
+        
+        private void CheckIfEditorDirty ()
+        {
+            if (!IsBulkUpdating)
+                IsEditorDirty = CompareEditor(true);
+        }
+
+        private bool CompareEditor (bool toSaved)
+        {
+            var baseline = toSaved ? SelectedEditorProperty : SelectedInstalledProperty;
+
+            if (baseline == null)
+            {
+                DifferencesText = null;
+                return true;
+            }
+
+            var compare = new CompareLogic();
+            compare.Config.MaxDifferences = int.MaxValue;
+            compare.Config.CompareChildren = false;
+            var result = compare.Compare(baseline, PropertyBeingEdited);
+            StringBuilder sb = null;
+            bool different = false;
+
+            if (!result.AreEqual)
+            {
+                sb = new StringBuilder();
+                sb.AppendLine("Differences are:");
+                foreach (var d in result.Differences)
+                {
+                    if (toSaved || !PropertyConfig.InstalledExclusions.Contains(d.PropertyName))
+                    {
+                        sb.AppendLine($"{d.PropertyName} changed from {d.Object1Value} to {d.Object2Value}");
+                        different = true;
+                    }
+                }
+            }
+
+            if (different)
+                DifferencesText = sb.ToString(); 
+            else
+                DifferencesText = "No differences";
+            
+            return different;
+        }
+
+        public string DifferencesText { get { return differencesText; } set { differencesText = value; OnPropertyChanged(); } }
+        private string differencesText;
 
         public bool IsHelpVisible { get { return HelpText != null; } }
 
@@ -148,7 +196,20 @@ namespace CustomWindowsProperties
         }
         private string helpText;
 
-        private bool HasDataFolder { get { return state.DataFolder != null; } }
+        public bool HasDataFolder { get { return state.DataFolder != null; } }
+
+        public bool CanBeInstalled(PropertyConfig config)
+        {
+            return HasDataFolder && config != null &&
+                ValidateName(config.CanonicalName) == null &&
+                !state.InstalledProperties.ContainsKey(config.CanonicalName);
+        }
+
+        public bool CanBeDeleted(PropertyConfig config)
+        {
+            return CanBeInstalled(config) &&
+                state.EditedProperties.ContainsKey(config.CanonicalName);
+        }
 
         public PropertyConfig SetSelectedItem(TreeItem treeItem, bool isInstalled)
         {
@@ -170,18 +231,35 @@ namespace CustomWindowsProperties
                 SelectedEditorProperty = selectedProperty;
                 if (SelectedEditorProperty != null)
                 {
-                    // to do checking of the edited property is dirty here
-                    // and if so, let the user back out
-                    PropertyBeingEdited.CopyFrom(selectedProperty, false);
-                    RefreshEditedStatus();
+                    LoadPropertyBeingEdited(SelectedEditorProperty, false);
                 }
             }
             return selectedProperty;
         }
+        
+
+        private bool LoadPropertyBeingEdited (PropertyConfig source, bool isInstalled)
+        {
+            if (IsEditorDirty)
+            {
+                var result = MessageBox.Show("Do you want to overwrite the changes",
+                    "Changes have been made in the editor", MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.Cancel)
+                    return false;
+            }
+
+            IsBulkUpdating = true;
+            PropertyBeingEdited.CopyFrom(source, isInstalled);
+            IsBulkUpdating = false;
+            IsEditorDirty = false;
+            RefreshEditedStatus();
+
+            return true;
+        }
 
         public void RefreshEditedStatus()
         {
-            OnPropertyChanged(nameof(IsEditedInstalled));
+            OnPropertyChanged(nameof(EditorInstalledText));
             OnPropertyChanged(nameof(CanDelete));
             OnPropertyChanged(nameof(CanInstall));
             OnPropertyChanged(nameof(InstallCaption));
@@ -191,13 +269,30 @@ namespace CustomWindowsProperties
 
         public void EditorFocusChanged(string tag)
         {
+            var dirty = IsEditorDirty;
             HelpText = Help.Text(tag);
+        }
+
+        private string ValidateName(string name)
+        {
+            // Name has to be valid structurally and not part of the parent tree of another property
+            if (!Extensions.IsValidPropertyName(name))
+                return "Invalid property name";
+            else if (NameContainsExistingName(name, EditorPropertyTree, true))
+                return "Name clashes with edited property name";
+            else if (NameContainsExistingName(name, InstalledPropertyTree, false) &&
+                     !NameContainsExistingName(name, EditorPropertyTree, false))
+                // All installed property names clash unless we installed it ourselves
+                return "Name clashes with installed property name";
+            else
+                return null;
         }
 
         public void Populate(State state)
         {
             this.state = state;
             PropertyBeingEdited.SetDefaultValues();
+            IsEditorDirty = false;
             dictInstalledTree = PopulatePropertyTree(state.SystemProperties.Concat(state.CustomProperties),
                 InstalledPropertyTree, true);
             dictEditorTree = PopulatePropertyTree(state.EditorProperties,
@@ -219,44 +314,48 @@ namespace CustomWindowsProperties
             return false;
         }
 
-        public string ExportPropDesc()
+        public bool CanBeExported (TreeItem treeItem)
         {
-            TreeItem treeItem = SelectedTreeItem;
-            if (treeItem != null)
+            // Must exist and be a leaf, or the immediate parent of leaves
+            return HasDataFolder && treeItem != null &&
+                (treeItem.Children.Count == 0 || treeItem.Children[0].Children.Count == 0);
+        }
+
+        public string ExportPropDesc(TreeItem treeItem)
+        {
+            XmlDocument doc;
+            string configName;
+            IEnumerable<TreeItem> items;
+
+            if (treeItem.Children.Count == 0)
             {
-                XmlDocument doc;
-                string configName;
-                IEnumerable<TreeItem> items;
-                if (treeItem.Children.Count == 0)
-                {
-                    items = new TreeItem[] { treeItem };
-                    configName = ((PropertyConfig)treeItem.Item).CanonicalName;
-                }
-                else
-                {
-                    items = treeItem.Children;
-                    configName = treeItem.Path;
-                }
-
-                doc = PropertyConfig.GetPropDesc(
-                        items.Select(t => t.Item).Cast<PropertyConfig>().Where(s => s != null));
-
-                var fileName = $"{Extensions.FixFileName(configName)}.propdesc";
-                doc.Save(state.DataFolder + $@"\{fileName}");
-
-                // Testing
-                //if (treeItem.Item != null)
-                //{
-                //    var pc = state.InstalledProperties[treeItem.Item as string];
-                //    state.SavePropertyConfig(pc);
-                //    var pc2 = state.LoadPropertyConfig($@"{state.DataFolder}\{pc.CanonicalName}.xml");
-                //    pc2.CanonicalName = pc2.CanonicalName + "2";
-                //    state.SavePropertyConfig(pc2); // Round-trip for comparison at leisure
-                //}
-
-                return fileName;
+                items = new TreeItem[] { treeItem };
+                configName = ((PropertyConfig)treeItem.Item).CanonicalName;
             }
-            return null;
+            else
+            {
+                items = treeItem.Children;
+                configName = treeItem.Path;
+            }
+
+            doc = PropertyConfig.GetPropDesc(
+                    items.Select(t => t.Item).Cast<PropertyConfig>().Where(s => s != null));
+
+            var fileName = $"{Extensions.FixFileName(configName)}.propdesc";
+            doc.Save(state.DataFolder + $@"\{fileName}");
+
+            // Testing
+            //if (treeItem.Item != null)
+            //{
+            //    var pc = state.InstalledProperties[treeItem.Item as string];
+            //    state.SavePropertyConfig(pc);
+            //    var pc2 = state.LoadPropertyConfig($@"{state.DataFolder}\{pc.CanonicalName}.xml");
+            //    pc2.CanonicalName = pc2.CanonicalName + "2";
+            //    state.SavePropertyConfig(pc2); // Round-trip for comparison at leisure
+            //}
+
+            return fileName;
+
         }
 
         public void DeleteEditedProperty()
@@ -282,6 +381,7 @@ namespace CustomWindowsProperties
                 // Property is already known about, just update its values
                 config.CopyFrom(PropertyBeingEdited, false);
                 state.SavePropertyConfig(PropertyBeingEdited);
+                IsEditorDirty = false;
                 return config;
             }
             else
@@ -300,16 +400,25 @@ namespace CustomWindowsProperties
                 state.SavePropertyConfig(PropertyBeingEdited);
                 state.AddEditorProperty(newConfig);
                 AddTreeItem(dictEditorTree, EditorPropertyTree, newConfig);
+                IsEditorDirty = false;
                 RefreshEditedStatus();
                 return newConfig;
             }
         }
+
+
 
         public int InstallEditedProperty()
         {
             // Save as XML and update state and tree as necessary
             var config = SaveEditedProperty();
 
+            return InstallProperty(config);
+        }
+
+
+        public int InstallProperty(PropertyConfig config)
+        {
             // Save as propdesc
             var doc = PropertyConfig.GetPropDesc(new PropertyConfig[] { config });
             var fullFileName = $"{state.DataFolder}{Path.DirectorySeparatorChar}{config.CanonicalName}.propdesc";
@@ -351,7 +460,7 @@ namespace CustomWindowsProperties
 
         public void CopyInstalledPropertyToEditor()
         {
-            PropertyBeingEdited.CopyFrom(SelectedInstalledProperty, true);
+            LoadPropertyBeingEdited(SelectedInstalledProperty, true);
         }
 
         private Dictionary<string, TreeItem> PopulatePropertyTree(

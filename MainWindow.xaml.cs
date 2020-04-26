@@ -3,6 +3,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace CustomWindowsProperties
 {
@@ -73,22 +74,7 @@ namespace CustomWindowsProperties
                 DisplayStatus($"Data folder is now {state.DataFolder}");
         }
 
-        private void Export_Clicked(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var outputFile = view.ExportPropDesc();
-                if (outputFile != null)
-                {
-                    DisplayStatus($"Exported successfully to {outputFile}");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error exporting propdesc");
-            }
-        }
-
+      
         private void Save_Clicked(object sender, RoutedEventArgs e)
         {
             try
@@ -100,6 +86,10 @@ namespace CustomWindowsProperties
             {
                 MessageBox.Show(ex.ToString(), "Error saving property");
             }
+        }
+
+        private void Discard_Clicked(object sender, RoutedEventArgs e)
+        {
         }
 
         private void Delete_Clicked(object sender, RoutedEventArgs e)
@@ -157,6 +147,62 @@ namespace CustomWindowsProperties
             RefreshPropertyEditor();
         }
 
+        private void EditedInstall_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            var config = (treeViewEditor.SelectedItem as TreeItem)?.Item as PropertyConfig;
+            e.CanExecute = view.CanBeInstalled(config);
+        }
+
+        private void EditedInstall_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
+        private void EditedExport_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            var treeItem = treeViewEditor.SelectedItem as TreeItem;
+            e.CanExecute = view.CanBeExported(treeItem);
+        }
+
+        private void EditedExport_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var treeItem = treeViewEditor.SelectedItem as TreeItem;
+            try
+            {
+                var outputFile = view.ExportPropDesc(treeItem);
+                if (outputFile != null)
+                {
+                    DisplayStatus($"Exported successfully to {outputFile}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error exporting propdesc");
+            }
+        }
+
+        private void EditedDelete_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            var config = (treeViewEditor.SelectedItem as TreeItem)?.Item as PropertyConfig;
+            e.CanExecute = view.CanBeDeleted(config);
+        }
+
+
+        private void EditedDelete_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
+        private void InstalledUninstall_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+
+        }
+
+        private void InstalledUninstall_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
         private void RefreshPropertyEditor()
         {
             PropertyEditor.DataContext = null;
@@ -168,6 +214,5 @@ namespace CustomWindowsProperties
         {
             StatusBar.Text = text;
         }
-
     }
 }

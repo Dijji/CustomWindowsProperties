@@ -42,7 +42,8 @@ namespace CustomWindowsProperties
         /// This lets end users perform full-text queries over the values of this property.
         /// The default is "false".
         /// </summary>
-        public bool InInvertedIndex { get; set; }
+        public bool InInvertedIndex { get { return inInvertedIndex; } set { inInvertedIndex = value; OnPropertyChanged(); } }
+        private bool inInvertedIndex;
 
         /// <summary>
         /// Indicates whether the property should also be stored in the Windows search database as a column,
@@ -57,7 +58,8 @@ namespace CustomWindowsProperties
         /// <summary>
         /// The default is "true". If the property is multi-valued, this attribute is always "true".
         /// </summary>
-        public bool IsColumnSparse { get; set; }
+        public bool IsColumnSparse { get { return isColumnSparse; } set { isColumnSparse = value; OnPropertyChanged(); } }
+        private bool isColumnSparse;
 
         /// <summary>
         /// To optimize sorting and grouping, the Windows search engine can create secondary indexes
@@ -71,7 +73,8 @@ namespace CustomWindowsProperties
         /// OnDiskVector: Build a value index by default for the concatenated vector values.
         /// OnDemand: Only build value indices by demand, that is, only first time they are used for a query.
         /// </summary>
-        public ColumnIndexType ColumnIndexType { get; set; }
+        public ColumnIndexType ColumnIndexType { get { return columnIndexType; } set { columnIndexType = value; OnPropertyChanged(); } }
+        private ColumnIndexType columnIndexType;
 
         /// <summary>
         /// The maximum size, in bytes, allowed for a certain property that is stored in the Windows
@@ -79,20 +82,23 @@ namespace CustomWindowsProperties
         /// Note that this maximum size is measured in bytes, not characters.
         /// The maximum number of characters depends on their encoding.
         /// </summary>
-        public uint MaxSize { get; set; }
-
+        public uint MaxSize { get { return maxSize; } set { maxSize = value; OnPropertyChanged(); } }
+        private uint maxSize;
+        
         /// <summary>
         /// A list of mnemonic values that can be used to refer to the property in search queries.
         /// The list is delimited with the '|' character.
         /// </summary>
-        public string Mnemonics { get; set; }
+        public string Mnemonics { get { return mnemonics; } set { mnemonics = value; OnPropertyChanged(); } }
+        private string mnemonics;
 
         // LABEL
 
         /// <summary>
         /// Gets the display name of the property as it is shown in any user interface (UI).
         /// </summary>
-        public string DisplayName { get; set; }
+        public string DisplayName { get { return displayName; } set { displayName = value; OnPropertyChanged(); } }
+        private string displayName;
 
         /// <summary>
         /// Gets the current sort description flags for the property, 
@@ -101,7 +107,8 @@ namespace CustomWindowsProperties
         /// <remarks>The settings retrieved by this method are set 
         /// through the <c>sortDescription</c> attribute of the <c>labelInfo</c> 
         /// element in the property's .propdesc file.</remarks>
-        public PropertySortDescription SortDescription { get; set; }
+        public PropertySortDescription SortDescription { get { return sortDescription; } set { sortDescription = value; OnPropertyChanged(); } }
+        private PropertySortDescription sortDescription;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -125,13 +132,16 @@ namespace CustomWindowsProperties
         /// <summary>
         /// Gets the text used in edit controls hosted in various dialog boxes.
         /// </summary>
-        public string EditInvitation { get; set; }
+        public string EditInvitation { get { return editInvitation; } set { editInvitation = value; OnPropertyChanged(); } }
+        private string editInvitation;
 
-        public bool HideLabel { get; set; }
+        public bool HideLabel { get { return hideLabel; } set { hideLabel = value; OnPropertyChanged(); } }
+        private bool hideLabel;
 
         // TYPE
 
-        public PropertyTypes Type { get; set; }
+        public PropertyTypes Type { get { return type; } set { type = value; OnPropertyChanged(); } }
+        private PropertyTypes type;
 
         /// <summary>
         /// Gets the method used when a view is grouped by this property.
@@ -139,7 +149,8 @@ namespace CustomWindowsProperties
         /// <remarks>The information retrieved by this method comes from 
         /// the <c>groupingRange</c> attribute of the <c>typeInfo</c> element in the 
         /// property's .propdesc file.</remarks>
-        public PropertyGroupingRange GroupingRange { get; set; }
+        public PropertyGroupingRange GroupingRange { get { return groupingRange; } set { groupingRange = value; OnPropertyChanged(); } }
+        private PropertyGroupingRange groupingRange;
 
         /// <summary>
         /// This property cannot be written to. 
@@ -147,7 +158,8 @@ namespace CustomWindowsProperties
         /// <remarks>
         /// This value is set by the isInnate attribute of the typeInfo element in the property's .propdesc file.
         /// </remarks>
-        public bool IsInnate { get; set; }
+        public bool IsInnate { get { return isInnate; } set { isInnate = value; OnPropertyChanged(); } }
+        private bool isInnate;
 
         /// <summary>
         /// Used with an innate property (that is, a value calculated from other property values) to indicate that it can be deleted.  
@@ -157,7 +169,8 @@ namespace CustomWindowsProperties
         /// This value is used by the Remove Properties user interface (UI) to determine whether to display a check box next to an property that allows that property to be selected for removal.
         /// Note that a property that is not innate can always be purged regardless of the presence or absence of this flag.
         /// </remarks>
-        public bool CanBePurged { get; set; }
+        public bool CanBePurged { get { return canBePurged; } set { canBePurged = value; OnPropertyChanged(); } }
+        private bool canBePurged;
 
         /// <summary>
         /// The property can have multiple values.   
@@ -166,7 +179,8 @@ namespace CustomWindowsProperties
         /// These values are stored as a VT_VECTOR in the PROPVARIANT structure.
         /// This value is set by the multipleValues attribute of the typeInfo element in the property's .propdesc file.
         /// </remarks>
-        public bool MultipleValues { get; set; }
+        public bool MultipleValues { get { return multipleValues; } set { multipleValues = value; OnPropertyChanged(); } }
+        private bool multipleValues;
 
         /// <summary>
         /// The property is a group heading. 
@@ -174,13 +188,15 @@ namespace CustomWindowsProperties
         /// <remarks>
         /// This value is set by the isGroup attribute of the typeInfo element in the property's .propdesc file.
         /// </remarks>
-        public bool IsGroup { get; set; }
+        public bool IsGroup { get { return isGroup; } set { isGroup = value; OnPropertyChanged(); } }
+        private bool isGroup;
 
         /// <summary>
         /// Gets a value that describes how the property values are displayed when 
         /// multiple items are selected in the user interface (UI).
         /// </summary>
-        public PropertyAggregationType AggregationType { get; set; }
+        public PropertyAggregationType AggregationType { get { return aggregationType; } set { aggregationType = value; OnPropertyChanged(); } }
+        private PropertyAggregationType aggregationType;
 
         /// <summary>
         /// The user can group by this property. 
@@ -204,7 +220,8 @@ namespace CustomWindowsProperties
         /// <remarks>
         /// This value is set by the isTreeProperty attribute of the typeInfo element in the property's .propdesc file.
         /// </remarks>
-        public bool IsTreeProperty { get; set; }
+        public bool IsTreeProperty { get { return isTreeProperty; } set { isTreeProperty = value; OnPropertyChanged(); } }
+        private bool isTreeProperty;
 
         /// <summary>
         /// This property is meant to be viewed by the user.  
@@ -213,10 +230,12 @@ namespace CustomWindowsProperties
         /// This influences whether the property shows up in the "Choose Columns" dialog, for example.
         /// This value is set by the isViewable attribute of the typeInfo element in the property's .propdesc file.
         /// </remarks>
-        public bool IsViewable { get; set; }
+        public bool IsViewable { get { return isViewable; } set { isViewable = value; OnPropertyChanged(); } }
+        private bool isViewable;
 
         // To do source of value
-        public bool SearchRawValue { get; set; }
+        public bool SearchRawValue { get { return searchRawValue; } set { searchRawValue = value; OnPropertyChanged(); } }
+        private bool searchRawValue;
 
         /// <summary>
         /// Gets the condition type to use when displaying the property in 
@@ -226,7 +245,8 @@ namespace CustomWindowsProperties
         /// </summary>
         /// <remarks>For more information, see the <c>conditionType</c> attribute 
         /// of the <c>typeInfo</c> element in the property's .propdesc file.</remarks>
-        public PropertyConditionType ConditionType { get; set; }
+        public PropertyConditionType ConditionType { get { return conditionType; } set { conditionType = value; OnPropertyChanged(); } }
+        private PropertyConditionType conditionType;
 
         /// <summary>
         /// Gets the default condition operation to use 
@@ -237,7 +257,8 @@ namespace CustomWindowsProperties
         /// </summary>
         /// <remarks>For more information, see the <c>conditionType</c> attribute of the 
         /// <c>typeInfo</c> element in the property's .propdesc file.</remarks>
-        public PropertyConditionOperation ConditionOperation { get; set; }
+        public PropertyConditionOperation ConditionOperation { get { return conditionOperation; } set { conditionOperation = value; OnPropertyChanged(); } }
+        private PropertyConditionOperation conditionOperation;
 
         // DISPLAY
 
@@ -246,18 +267,21 @@ namespace CustomWindowsProperties
         /// <summary>
         /// Gets the current data type used to display the property.
         /// </summary>
-        public PropertyDisplayType DisplayType { get; set; }
+        public PropertyDisplayType DisplayType { get { return displayType; } set { displayType = value; OnPropertyChanged(); } }
+        private PropertyDisplayType displayType;
 
         /// <summary>
         /// Gets the default user interface (UI) column width for this property.
         /// </summary>
-        public uint DefaultColumWidth { get; set; }
+        public uint DefaultColumnWidth { get { return defaultColumnWidth; } set { defaultColumnWidth = value; OnPropertyChanged(); } }
+        private uint defaultColumnWidth;
 
 
         /// <summary>
         /// The control used to edit the property.
         /// </summary>
-        public EditControl EditControl { get; set; }
+        public EditControl EditControl { get { return editControl; } set { editControl = value; OnPropertyChanged(); } }
+        private EditControl editControl;
 
         // OTHER
 
@@ -333,7 +357,7 @@ namespace CustomWindowsProperties
 
             // Display information
             DisplayType = propertyDescription.DisplayType;
-            DefaultColumWidth = propertyDescription.DefaultColumWidth;
+            DefaultColumnWidth = propertyDescription.DefaultColumWidth;
             // To do are these just pre-Windows 7?
             //ColumnState = propertyDescription.ColumnState;
 
@@ -378,7 +402,7 @@ namespace CustomWindowsProperties
             //SearchRawValue = false;
 
             DisplayType = PropertyDisplayType.String;
-            DefaultColumWidth = 20;
+            DefaultColumnWidth = 20;
         }
 
         public static string Publisher { get; set; } = "Publisher";
@@ -475,8 +499,8 @@ namespace CustomWindowsProperties
 
             var display = doc.CreateElement("displayInfo");
             display.SetAttribute("displayType", DisplayType.ToString());
-            if (DefaultColumWidth != 20)
-                display.SetAttribute("defaultColumnWidth", DefaultColumWidth.ToString());
+            if (DefaultColumnWidth != 20)
+                display.SetAttribute("defaultColumnWidth", DefaultColumnWidth.ToString());
             if (EditControl != EditControl.Default)
             {
                 var edit = doc.CreateElement("editControl");
@@ -502,6 +526,12 @@ namespace CustomWindowsProperties
             //       //$"<aliasInfo sortByAlias=\"{DisplayName}\" additionalSortByAliases=\"{SortDescription}\"" +
             //       "</ propertyDescription >";
         }
+
+        public static HashSet<string> InstalledExclusions = new HashSet<string>
+            { nameof(CanonicalName), nameof(FormatId), nameof(PropertyId),
+              nameof(InInvertedIndex), nameof(IsColumn), nameof(IsColumnSparse),
+              nameof(ColumnIndexType), nameof(MaxSize), nameof(Mnemonics),
+            };
 
         internal void CopyFrom(PropertyConfig from, bool isInstalled)
         {
@@ -549,7 +579,7 @@ namespace CustomWindowsProperties
 
             // Display
             DisplayType = from.DisplayType;
-            DefaultColumWidth = from.DefaultColumWidth;
+            DefaultColumnWidth = from.DefaultColumnWidth;
             EditControl = from.EditControl;
         }
 
