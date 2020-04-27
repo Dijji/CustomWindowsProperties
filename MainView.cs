@@ -266,15 +266,11 @@ namespace CustomWindowsProperties
             return fileName;
         }
 
-        public void DeleteEditedProperty()
+        public void DeleteProperty(PropertyConfig config)
         {
-            var canonicalName = EditorConfig.CanonicalName;
+            var canonicalName = config.CanonicalName;
 
-            if (SelectedEditorProperty != null &&
-                SelectedEditorProperty.CanonicalName != canonicalName)
-                MessageBox.Show("Save or discard changes first", "Cannot delete property");
-
-            // Property is in the editor tree, but not installed
+            // Caller must ensure that property is in the editor tree, but not installed
             state.DeletePropertyConfig(canonicalName);
             state.RemoveEditorProperty(canonicalName);
             PropertyTree.RemoveTreeItem(dictEditorTree, EditorPropertyTree, canonicalName);
@@ -350,9 +346,9 @@ namespace CustomWindowsProperties
             return result;
         }
 
-        public bool UninstallEditedProperty()
+        public bool UninstallProperty(PropertyConfig config)
         {
-            var canonicalName = SelectedInstalledProperty.CanonicalName;
+            var canonicalName = config.CanonicalName;
 
             // Attempt uninstall
             bool succeeded = state.UnregisterCustomProperty(canonicalName);

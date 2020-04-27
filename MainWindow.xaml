@@ -285,6 +285,7 @@
                     IsEnabled="{Binding CanCopy}" Click="Copy_Clicked"/>
         </StackPanel>
         <TreeView Grid.Row="2" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
+                  x:Name="treeViewInstalled"
                       ItemsSource="{Binding Path=InstalledPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectTreeViewItemStyle}"
                       SelectedItemChanged="InstalledTree_SelectedItemChanged">

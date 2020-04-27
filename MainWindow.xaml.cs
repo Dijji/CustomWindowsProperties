@@ -31,7 +31,6 @@ namespace CustomWindowsProperties
                 DisplayStatus($"Error {ex.Message} occurred during initialisation");
             }
             RefreshPropertyEditor();
-            //view.Test();
         }
 
         private void EditorTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -74,7 +73,6 @@ namespace CustomWindowsProperties
                 DisplayStatus($"Data folder is now {state.DataFolder}");
         }
 
-
         private void Save_Clicked(object sender, RoutedEventArgs e)
         {
             try
@@ -91,19 +89,6 @@ namespace CustomWindowsProperties
         private void Discard_Clicked(object sender, RoutedEventArgs e)
         {
             view.DiscardEditorChanges();
-        }
-
-        private void Delete_Clicked(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                view.DeleteEditedProperty();
-                DisplayStatus($"Property {EditedPropertyName} deleted");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error deleting property");
-            }
         }
 
         private void Install_Clicked(object sender, RoutedEventArgs e)
@@ -128,20 +113,6 @@ namespace CustomWindowsProperties
             }
         }
 
-        private void Uninstall_Clicked(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var name = view.SelectedInstalledProperty.CanonicalName;
-                if (view.UninstallEditedProperty())
-                    DisplayStatus($"Property {name} uninstalled");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error uninstalling property");
-            }
-        }
-
         private void Copy_Clicked(object sender, RoutedEventArgs e)
         {
             view.CopyInstalledPropertyToEditor();
@@ -156,7 +127,26 @@ namespace CustomWindowsProperties
 
         private void EditedInstall_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            var config = (treeViewEditor.SelectedItem as TreeItem)?.Item as PropertyConfig;
 
+            try
+            {
+                switch (view.InstallProperty(config))
+                {
+                    case 0:
+                        DisplayStatus($"Property {config.CanonicalName} installed");
+                        break;
+                    case 1:
+                        DisplayStatus($"Property {config.CanonicalName} installed with warnings of possible incompleteness");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error installing property");
+            }
         }
 
         private void EditedExport_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -191,17 +181,37 @@ namespace CustomWindowsProperties
 
         private void EditedDelete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            var config = (treeViewEditor.SelectedItem as TreeItem)?.Item as PropertyConfig;
 
+            try
+            {
+                view.DeleteProperty(config);
+                DisplayStatus($"Property {config.CanonicalName} deleted");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error deleting property");
+            }
         }
+    
 
         private void InstalledUninstall_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-
+            var config = (treeViewInstalled.SelectedItem as TreeItem)?.Item as PropertyConfig;
         }
 
         private void InstalledUninstall_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-
+            var config = (treeViewInstalled.SelectedItem as TreeItem)?.Item as PropertyConfig;
+            try
+            {
+                if (view.UninstallProperty(config))
+                    DisplayStatus($"Property {config.CanonicalName} uninstalled");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error uninstalling property");
+            }
         }
 
         private void RefreshPropertyEditor()
