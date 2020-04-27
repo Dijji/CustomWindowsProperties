@@ -78,6 +78,7 @@
     <Compile Include="CustomVirtualizingStackPanel.cs" />
     <Compile Include="NameChangedEventArgs.cs" />
     <Compile Include="Options.cs" />
+    <Compile Include="PropertyTree.cs" />
     <Compile Include="PropertyTypes.cs" />
     <Compile Include="PropertyConfig.cs" />
     <Compile Include="State.cs" />

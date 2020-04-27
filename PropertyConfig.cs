@@ -84,7 +84,7 @@ namespace CustomWindowsProperties
         /// </summary>
         public uint MaxSize { get { return maxSize; } set { maxSize = value; OnPropertyChanged(); } }
         private uint maxSize;
-        
+
         /// <summary>
         /// A list of mnemonic values that can be used to refer to the property in search queries.
         /// The list is delimited with the '|' character.
@@ -109,8 +109,6 @@ namespace CustomWindowsProperties
         /// element in the property's .propdesc file.</remarks>
         public PropertySortDescription SortDescription { get { return sortDescription; } set { sortDescription = value; OnPropertyChanged(); } }
         private PropertySortDescription sortDescription;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Gets the localized display string that describes the current sort order.
@@ -408,7 +406,7 @@ namespace CustomWindowsProperties
         public static string Publisher { get; set; } = "Publisher";
         public static string Product { get; set; } = "Product";
 
-        public static XmlDocument GetPropDesc(IEnumerable<PropertyConfig> properties)
+        internal static XmlDocument GetPropDesc(IEnumerable<PropertyConfig> properties)
         {
             var doc = new XmlDocument();
             doc.AppendChild(doc.CreateXmlDeclaration("1.0", null, null));
@@ -510,27 +508,13 @@ namespace CustomWindowsProperties
             desc.AppendChild(display);
 
             return desc;
-
-            //string S = $"<propertyDescription name=\"{CanonicalName}\" formatID=\"{FormatId.ToString("B").ToUpper()}\" propID=\"{PropertyId}\">" +
-            //       $"<searchInfo inInvertedIndex=\"{EnableFullTextSearch}\" isColumn=\"{EnableSearchQueries}\"/>" +
-            //       $"<typeInfo type=\"{Type}\" groupingRange=\"{GroupingRange}\" isInnate=\"{IsInnate}\"" +
-            //        $" canBePurged=\"{CanBePurged}\" multipleValues=\"{MultipleValues}\"" + 
-            //        $" isGroup=\"{IsGroup}\" aggregationType=\"{AggregationType}\"" + 
-            //        $" isTreeProperty=\"{IsTreeProperty}\" isViewable=\"{IsViewable}\"" + 
-            //        $" searchRawValue=\"false\" conditionType=\"{ConditionType}\" defaultOperation=\"{ConditionOperation}\"" + 
-            //       $"/>" +
-            //       $"<labelInfo label=\"{DisplayName}\" sortDescription=\"{SortDescription}\"" + 
-            //        $" invitationText=\"{EditInvitation}\" hideLabel=\"false\"/>" +
-            //       $"<displayInfo defaultColumnWidth=\"{DefaultColumWidth}\" displayType=\"{DisplayType}\"" +
-            //        $" alignment=\"Left\" relativeDescriptionType=\"General\" defaultSortDirection=\"Ascending\"/>" +
-            //       //$"<aliasInfo sortByAlias=\"{DisplayName}\" additionalSortByAliases=\"{SortDescription}\"" +
-            //       "</ propertyDescription >";
         }
 
-        public static HashSet<string> InstalledExclusions = new HashSet<string>
+        internal static HashSet<string> InstalledExclusions = new HashSet<string>
             { nameof(CanonicalName), nameof(FormatId), nameof(PropertyId),
               nameof(InInvertedIndex), nameof(IsColumn), nameof(IsColumnSparse),
               nameof(ColumnIndexType), nameof(MaxSize), nameof(Mnemonics),
+              nameof(BoundedName), nameof(IsSystemProperty),
             };
 
         internal void CopyFrom(PropertyConfig from, bool isInstalled)
@@ -582,6 +566,8 @@ namespace CustomWindowsProperties
             DefaultColumnWidth = from.DefaultColumnWidth;
             EditControl = from.EditControl;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string name = null)
         {

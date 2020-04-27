@@ -15,7 +15,7 @@ namespace CustomWindowsProperties
         private readonly State state = new State();
         private readonly MainView view = new MainView();
 
-        private string EditedPropertyName { get { return view.PropertyBeingEdited.CanonicalName; } }
+        private string EditedPropertyName { get { return view.EditorConfig.CanonicalName; } }
 
         public MainWindow()
         {
@@ -38,7 +38,7 @@ namespace CustomWindowsProperties
         {
             if (((TreeView)sender).SelectedItem is TreeItem item)
             {
-                var pc = view.SetSelectedItem(item, false);
+                var pc = view.SetSelectedTreeItem(item, false);
                 if (pc != null)
                 {
                     RefreshPropertyEditor();
@@ -50,10 +50,10 @@ namespace CustomWindowsProperties
         {
             if (((TreeView)sender).SelectedItem is TreeItem item)
             {
-                var pc = view.SetSelectedItem(item, true);
-                if (pc != null)
+                var config = view.SetSelectedTreeItem(item, true);
+                if (config != null)
                 {
-                    PropertyDisplay.DataContext = pc;
+                    PropertyDisplay.DataContext = config;
                 }
             }
         }
@@ -74,7 +74,7 @@ namespace CustomWindowsProperties
                 DisplayStatus($"Data folder is now {state.DataFolder}");
         }
 
-      
+
         private void Save_Clicked(object sender, RoutedEventArgs e)
         {
             try
@@ -90,6 +90,7 @@ namespace CustomWindowsProperties
 
         private void Discard_Clicked(object sender, RoutedEventArgs e)
         {
+            view.DiscardEditorChanges();
         }
 
         private void Delete_Clicked(object sender, RoutedEventArgs e)
@@ -206,7 +207,7 @@ namespace CustomWindowsProperties
         private void RefreshPropertyEditor()
         {
             PropertyEditor.DataContext = null;
-            PropertyEditor.DataContext = view.PropertyBeingEdited;
+            PropertyEditor.DataContext = view.EditorConfig;
             view.RefreshEditedStatus();
         }
 

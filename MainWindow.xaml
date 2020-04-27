@@ -279,7 +279,9 @@
                     IsEnabled="{Binding CanDiscard}" Click="Discard_Clicked"/>
             <Button Content="Install" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanInstall}" Click="Install_Clicked"/>
-            <Button Content="Copy ^" Margin="10,0,20,0" Height="25" HorizontalAlignment="Right"
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" Orientation="Horizontal" HorizontalAlignment="Right">
+        <Button Content="Copy ^" Margin="10,0,40,0" Height="25" 
                     IsEnabled="{Binding CanCopy}" Click="Copy_Clicked"/>
         </StackPanel>
         <TreeView Grid.Row="2" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
@@ -304,8 +306,8 @@
         </TreeView>
         <Border Grid.Row="2" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
             <ScrollViewer Margin="5,0,0,0"
-            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                      Visibility="{Binding IsInstalledPropertyVisible,Converter={StaticResource VisibleIfTrue}}">
+                        HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                        Visibility="{Binding IsInstalledPropertyVisible,Converter={StaticResource VisibleIfTrue}}">
                 <Grid x:Name="PropertyDisplay">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -409,10 +411,12 @@
                 <TextBlock Text="{Binding HelpText}" TextWrapping="Wrap" Margin="5,5,0,0" />
             </ScrollViewer>
         </Border>
-        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="5,0,0,0">
+        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,5,0">
             <TextBlock Text="Differences to:" FontSize="12"/>
-            <RadioButton Content="Saved" IsChecked="{Binding CompareSaved,Mode=TwoWay}" Margin="10,0,0,0" FontSize="12"/>
-            <RadioButton Content="Installed" Margin="10,0,0,0" FontSize="12"/>
+            <RadioButton Content="Saved" IsChecked="{Binding CompareSaved,Mode=TwoWay}" 
+                         Margin="10,0,0,0" FontSize="12"/>
+            <RadioButton Content="Installed" IsChecked="{Binding CompareInstalled,Mode=TwoWay}"
+                         Margin="10,0,0,0" FontSize="12"/>
         </StackPanel>
         <Border Grid.Row="2" Grid.Column="2" BorderBrush="Gray" BorderThickness="1">
             <ScrollViewer>
