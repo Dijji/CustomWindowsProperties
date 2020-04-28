@@ -25,14 +25,16 @@ namespace CustomWindowsProperties
             {
                 List<TreeItem> roots = new List<TreeItem>(treeItems);
                 treeItems.Clear();
+                List<TreeItem> lastRoots = new List<TreeItem>();
 
                 // Wire trees to tree controls, tweaking the structure as we go
                 TreeItem propGroup = null;
-                foreach (TreeItem root in roots)
+                foreach (TreeItem root in 
+                    roots)
                 {
-                    if (isInstalled && root.Name == "System")
+                    if (root.Name == "System")
                     {
-                        treeItems.Insert(0, root);
+                        lastRoots.Insert(0, root);
 
                         // Move property groups from root to their own list
                         propGroup = root.Children.Where(x => x.Name == "PropGroup").FirstOrDefault();
@@ -45,18 +47,22 @@ namespace CustomWindowsProperties
 
                         // Move properties with names of the form System.* to their own subtree
                         var systemProps = new TreeItem("System.*");
-                        treeItems.Insert(0, systemProps);
+                        lastRoots.Insert(0, systemProps);
 
                         foreach (var ti in root.Children.Where(x => x.Children.Count == 0).ToList())
                         {
                             root.RemoveChild(ti);
                             systemProps.AddChild(ti);
                         }
-
                     }
+                    else if (root.Name == "Microsoft")
+                        lastRoots.Insert(0, root);
                     else
                         treeItems.Add(root);
                 }
+
+                foreach (var ti in lastRoots)
+                    treeItems.Add(ti);
             }
 
             return dict;

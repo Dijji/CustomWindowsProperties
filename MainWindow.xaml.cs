@@ -93,9 +93,10 @@ namespace CustomWindowsProperties
 
         private void Install_Clicked(object sender, RoutedEventArgs e)
         {
+            Mouse.OverrideCursor = Cursors.Wait; // Tree search can be slow
             try
             {
-                switch (view.InstallEditorProperty())
+                switch (view.InstallEditorProperty(treeViewInstalled))
                 {
                     case 0:
                         DisplayStatus($"Property {EditedPropertyName} installed");
@@ -110,6 +111,10 @@ namespace CustomWindowsProperties
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error installing property");
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
             }
         }
 
@@ -128,10 +133,10 @@ namespace CustomWindowsProperties
         private void EditedInstall_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var config = (treeViewSaved.SelectedItem as TreeItem)?.Item as PropertyConfig;
-
+            Mouse.OverrideCursor = Cursors.Wait; // Tree search can be slow
             try
             {
-                switch (view.InstallProperty(config))
+                switch (view.InstallProperty(config, treeViewInstalled))
                 {
                     case 0:
                         DisplayStatus($"Property {config.CanonicalName} installed");
@@ -146,6 +151,10 @@ namespace CustomWindowsProperties
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error installing property");
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
             }
         }
 

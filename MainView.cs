@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Xml;
 using FolderSelect;
 
@@ -65,7 +66,7 @@ namespace CustomWindowsProperties
                 var error = ValidateName(canonicalName);
                 if (error != null)
                     return error;
-                else if (state.dictInstalledProperties.ContainsKey(canonicalName))
+                else if (state.DictInstalledProperties.ContainsKey(canonicalName))
                     return "True";
                 else
                     return "False";
@@ -213,13 +214,13 @@ namespace CustomWindowsProperties
         {
             return HasDataFolder && config != null &&
                 ValidateName(config.CanonicalName) == null &&
-                !state.dictInstalledProperties.ContainsKey(config.CanonicalName);
+                !state.DictInstalledProperties.ContainsKey(config.CanonicalName);
         }
 
         public bool CanBeDeleted(PropertyConfig config)
         {
             return CanBeInstalled(config) &&
-                state.dictSavedProperties.ContainsKey(config.CanonicalName);
+                state.DictSavedProperties.ContainsKey(config.CanonicalName);
         }
 
         public bool CanBeExported(TreeItem treeItem)
@@ -232,8 +233,8 @@ namespace CustomWindowsProperties
         public bool CanBeUninstalled(PropertyConfig config)
         {
             return HasDataFolder && config != null &&
-                state.dictInstalledProperties.ContainsKey(config.CanonicalName) &&
-                state.dictSavedProperties.ContainsKey(config.CanonicalName);
+                state.DictInstalledProperties.ContainsKey(config.CanonicalName) &&
+                state.DictSavedProperties.ContainsKey(config.CanonicalName);
         }
 
         public string ExportPropDesc(TreeItem treeItem)
@@ -291,7 +292,7 @@ namespace CustomWindowsProperties
 
         public PropertyConfig SaveEditorProperty()
         {
-            if (state.dictSavedProperties.TryGetValue(EditorConfig.CanonicalName, out PropertyConfig config))
+            if (state.DictSavedProperties.TryGetValue(EditorConfig.CanonicalName, out PropertyConfig config))
             {
                 // Property is already known about, just update its values
                 config.CopyFrom(EditorConfig, false);
@@ -323,15 +324,15 @@ namespace CustomWindowsProperties
             }
         }
 
-        public int InstallEditorProperty()
+        public int InstallEditorProperty(TreeView treeViewInstalled)
         {
             // Save as XML and update state and tree as necessary
             var config = SaveEditorProperty();
 
-            return InstallProperty(config);
+            return InstallProperty(config, treeViewInstalled);
         }
 
-        public int InstallProperty(PropertyConfig config)
+        public int InstallProperty(PropertyConfig config, TreeView treeViewInstalled)
         {
             // Save as propdesc
             var doc = PropertyConfig.GetPropDesc(new PropertyConfig[] { config });
@@ -347,7 +348,8 @@ namespace CustomWindowsProperties
                 PropertyConfig newConfig = new PropertyConfig();
                 newConfig.CopyFrom(config, false);
                 state.AddInstalledProperty(newConfig);
-                PropertyTree.AddTreeItem(dictInstalledTree, InstalledPropertyTree, newConfig);
+                var treeItem = PropertyTree.AddTreeItem(dictInstalledTree, InstalledPropertyTree, newConfig);
+                TreeViewHelper.SelectTreeProperty(treeViewInstalled, treeItem);
                 RefreshEditorStatus();
             }
 

@@ -19,9 +19,9 @@ namespace CustomWindowsProperties
         public List<PropertyConfig> SavedProperties { get; } = new List<PropertyConfig>();
 
 
-        public Dictionary<string, PropertyConfig> dictInstalledProperties { get; } = new Dictionary<string, PropertyConfig>();
+        public Dictionary<string, PropertyConfig> DictInstalledProperties { get; } = new Dictionary<string, PropertyConfig>();
 
-        public Dictionary<string, PropertyConfig> dictSavedProperties { get; } = new Dictionary<string, PropertyConfig>();
+        public Dictionary<string, PropertyConfig> DictSavedProperties { get; } = new Dictionary<string, PropertyConfig>();
 
 
         public string DataFolder
@@ -162,7 +162,7 @@ namespace CustomWindowsProperties
         public void AddSavedProperty(PropertyConfig config)
         {
             SavedProperties.Add(config);
-            dictSavedProperties[config.CanonicalName] = config;
+            DictSavedProperties[config.CanonicalName] = config;
         }
 
         public void RemoveSavedProperty(string canonicalName)
@@ -170,13 +170,13 @@ namespace CustomWindowsProperties
             var index = SavedProperties.FindIndex(p => p.CanonicalName == canonicalName);
             if (index != -1)
                 SavedProperties.RemoveAt(index);
-            dictSavedProperties.Remove(canonicalName);
+            DictSavedProperties.Remove(canonicalName);
         }
 
         public void AddInstalledProperty(PropertyConfig config)
         {
             CustomProperties.Add(config);
-            dictInstalledProperties[config.CanonicalName] = config;
+            DictInstalledProperties[config.CanonicalName] = config;
         }
 
         public void RemoveInstalledProperty(string canonicalName)
@@ -184,7 +184,7 @@ namespace CustomWindowsProperties
             var index = CustomProperties.FindIndex(p => p.CanonicalName == canonicalName);
             if (index != -1)
                 CustomProperties.RemoveAt(index);
-            dictInstalledProperties.Remove(canonicalName);
+            DictInstalledProperties.Remove(canonicalName);
         }
 
         // Returns negative numbers for failure, positive for success
@@ -299,7 +299,7 @@ namespace CustomWindowsProperties
                             shellProperty.Dispose(); // Releases propertyDescription
                             propertyDescription = null;
                             propertyList.Add(pc);
-                            dictInstalledProperties.Add(pc.CanonicalName, pc);
+                            DictInstalledProperties.Add(pc.CanonicalName, pc);
                         }
                     }
                 }
@@ -329,7 +329,7 @@ namespace CustomWindowsProperties
                 if (pc != null) // Occurs when property cannot be loaded
                 {
                     SavedProperties.Add(pc);
-                    dictSavedProperties.Add(pc.CanonicalName, pc);
+                    DictSavedProperties.Add(pc.CanonicalName, pc);
                 }
             }
         }
