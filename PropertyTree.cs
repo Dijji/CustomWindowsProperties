@@ -119,7 +119,7 @@ namespace CustomWindowsProperties
                     dict.Add(parentName, parent);
                 }
 
-                if (displayName != null)
+                if (displayName != null && displayName.Length > 0)
                     ti = new TreeItem($"{LastPartOf(name)} ({displayName})");
                 else
                     ti = new TreeItem(LastPartOf(name));

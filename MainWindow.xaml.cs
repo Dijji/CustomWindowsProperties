@@ -178,7 +178,6 @@ namespace CustomWindowsProperties
             e.CanExecute = view.CanBeDeleted(config);
         }
 
-
         private void EditedDelete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var config = (treeViewSaved.SelectedItem as TreeItem)?.Item as PropertyConfig;
@@ -194,10 +193,10 @@ namespace CustomWindowsProperties
             }
         }
     
-
         private void InstalledUninstall_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             var config = (treeViewInstalled.SelectedItem as TreeItem)?.Item as PropertyConfig;
+            e.CanExecute = view.CanBeUninstalled(config);
         }
 
         private void InstalledUninstall_Executed(object sender, ExecutedRoutedEventArgs e)

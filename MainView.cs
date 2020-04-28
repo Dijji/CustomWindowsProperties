@@ -229,6 +229,13 @@ namespace CustomWindowsProperties
                 (treeItem.Children.Count == 0 || treeItem.Children[0].Children.Count == 0);
         }
 
+        public bool CanBeUninstalled(PropertyConfig config)
+        {
+            return HasDataFolder && config != null &&
+                state.dictInstalledProperties.ContainsKey(config.CanonicalName) &&
+                state.dictSavedProperties.ContainsKey(config.CanonicalName);
+        }
+
         public string ExportPropDesc(TreeItem treeItem)
         {
             XmlDocument doc;
@@ -305,9 +312,11 @@ namespace CustomWindowsProperties
                     EditorConfig.PropertyId = newConfig.PropertyId = 1;
                 }
 
-                state.SavePropertyConfig(EditorConfig);
+                state.SavePropertyConfig(newConfig);
                 state.AddSavedProperty(newConfig);
                 PropertyTree.AddTreeItem(dictSavedTree, SavedPropertyTree, newConfig);
+                EditorBaseline = newConfig;
+                EditorBaselineType = BaselineType.Saved;
                 IsEditorDirty = false;
                 RefreshEditorStatus();
                 return newConfig;

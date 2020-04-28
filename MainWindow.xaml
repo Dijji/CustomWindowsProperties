@@ -82,9 +82,9 @@
             </TreeView.CommandBindings>
             <TreeView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Command="Open" Header="Install"/>
-                    <MenuItem Command="SaveAs" Header="Export"/>
-                    <MenuItem Command="Delete" Header="Delete"/>
+                    <MenuItem Command="Open" Header="Install" InputGestureText=""/>
+                    <MenuItem Command="SaveAs" Header="Export" InputGestureText=""/>
+                    <MenuItem Command="Delete" Header="Delete" InputGestureText=""/>
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
@@ -325,7 +325,7 @@
             </TreeView.CommandBindings>
             <TreeView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Command="Close" Header="Uninstall"/>
+                    <MenuItem Command="Close" Header="Uninstall" InputGestureText=""/>
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
@@ -438,7 +438,7 @@
                 <TextBlock Text="{Binding DifferencesText}" TextWrapping="Wrap" Margin="5,5,0,0" />
             </ScrollViewer>
         </Border>
-        <TextBlock x:Name="StatusBar" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>
+        <TextBlock x:Name="StatusBar" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Height="25"/>
         <GridSplitter Grid.Row="0" Grid.RowSpan="1" Grid.Column="1" Width="3"
                       HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Gray"/>
         <GridSplitter Grid.Row="0" Grid.RowSpan="1" Grid.Column="3" Width="3"
