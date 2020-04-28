@@ -13,18 +13,15 @@ namespace CustomWindowsProperties
     internal class State
     {
         private Options options = null;
-        //private List<TreeItem> allProperties = new List<TreeItem>();
-        //private List<string> groupProperties = new List<string>();
-        //private SavedState savedState = new SavedState();
-
+      
         public List<PropertyConfig> SystemProperties { get; } = new List<PropertyConfig>();
         public List<PropertyConfig> CustomProperties { get; } = new List<PropertyConfig>();
-        public List<PropertyConfig> EditorProperties { get; } = new List<PropertyConfig>();
+        public List<PropertyConfig> SavedProperties { get; } = new List<PropertyConfig>();
 
 
-        public Dictionary<string, PropertyConfig> InstalledProperties { get; } = new Dictionary<string, PropertyConfig>();
+        public Dictionary<string, PropertyConfig> dictInstalledProperties { get; } = new Dictionary<string, PropertyConfig>();
 
-        public Dictionary<string, PropertyConfig> EditedProperties { get; } = new Dictionary<string, PropertyConfig>();
+        public Dictionary<string, PropertyConfig> dictSavedProperties { get; } = new Dictionary<string, PropertyConfig>();
 
 
         public string DataFolder
@@ -159,27 +156,27 @@ namespace CustomWindowsProperties
             LoadOptions();
             PopulatePropertyList(SystemProperties, PropertySystemNativeMethods.PropDescEnumFilter.PDEF_SYSTEM);
             PopulatePropertyList(CustomProperties, PropertySystemNativeMethods.PropDescEnumFilter.PDEF_NONSYSTEM);
-            LoadEditorProperties();
+            LoadSavedProperties();
         }
 
-        public void AddEditorProperty(PropertyConfig config)
+        public void AddSavedProperty(PropertyConfig config)
         {
-            EditorProperties.Add(config);
-            EditedProperties[config.CanonicalName] = config;
+            SavedProperties.Add(config);
+            dictSavedProperties[config.CanonicalName] = config;
         }
 
-        public void RemoveEditorProperty(string canonicalName)
+        public void RemoveSavedProperty(string canonicalName)
         {
-            var index = EditorProperties.FindIndex(p => p.CanonicalName == canonicalName);
+            var index = SavedProperties.FindIndex(p => p.CanonicalName == canonicalName);
             if (index != -1)
-                EditorProperties.RemoveAt(index);
-            EditedProperties.Remove(canonicalName);
+                SavedProperties.RemoveAt(index);
+            dictSavedProperties.Remove(canonicalName);
         }
 
         public void AddInstalledProperty(PropertyConfig config)
         {
             CustomProperties.Add(config);
-            InstalledProperties[config.CanonicalName] = config;
+            dictInstalledProperties[config.CanonicalName] = config;
         }
 
         public void RemoveInstalledProperty(string canonicalName)
@@ -187,7 +184,7 @@ namespace CustomWindowsProperties
             var index = CustomProperties.FindIndex(p => p.CanonicalName == canonicalName);
             if (index != -1)
                 CustomProperties.RemoveAt(index);
-            InstalledProperties.Remove(canonicalName);
+            dictInstalledProperties.Remove(canonicalName);
         }
 
         // Returns negative numbers for failure, positive for success
@@ -302,7 +299,7 @@ namespace CustomWindowsProperties
                             shellProperty.Dispose(); // Releases propertyDescription
                             propertyDescription = null;
                             propertyList.Add(pc);
-                            InstalledProperties.Add(pc.CanonicalName, pc);
+                            dictInstalledProperties.Add(pc.CanonicalName, pc);
                         }
                     }
                 }
@@ -320,7 +317,7 @@ namespace CustomWindowsProperties
             }
         }
 
-        private void LoadEditorProperties()
+        private void LoadSavedProperties()
         {
             if (DataFolder == null)
                 return;
@@ -331,8 +328,8 @@ namespace CustomWindowsProperties
                 var pc = LoadPropertyConfig(fi.FullName);
                 if (pc != null) // Occurs when property cannot be loaded
                 {
-                    EditorProperties.Add(pc);
-                    EditedProperties.Add(pc.CanonicalName, pc);
+                    SavedProperties.Add(pc);
+                    dictSavedProperties.Add(pc.CanonicalName, pc);
                 }
             }
         }

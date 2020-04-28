@@ -19,19 +19,19 @@ namespace CustomWindowsProperties
         private State state;
 
         // Dictionaries of the parents in the trees (does not include the terminals)
-        private Dictionary<string, TreeItem> dictEditorTree = null;
+        private Dictionary<string, TreeItem> dictSavedTree = null;
         private Dictionary<string, TreeItem> dictInstalledTree = null;
 
         #region Public properties
         public ObservableCollection<TreeItem> InstalledPropertyTree { get; } = new ObservableCollection<TreeItem>();
-        public ObservableCollection<TreeItem> EditorPropertyTree { get; } = new ObservableCollection<TreeItem>();
+        public ObservableCollection<TreeItem> SavedPropertyTree { get; } = new ObservableCollection<TreeItem>();
 
-        public PropertyConfig SelectedEditorProperty
+        public PropertyConfig SelectedSavedProperty
         {
-            get { return selectedEditorProperty; }
-            private set { selectedEditorProperty = value; }
+            get { return selectedSavedProperty; }
+            private set { selectedSavedProperty = value; }
         }
-        private PropertyConfig selectedEditorProperty;
+        private PropertyConfig selectedSavedProperty;
 
         public PropertyConfig SelectedInstalledProperty
         {
@@ -65,7 +65,7 @@ namespace CustomWindowsProperties
                 var error = ValidateName(canonicalName);
                 if (error != null)
                     return error;
-                else if (state.InstalledProperties.ContainsKey(canonicalName))
+                else if (state.dictInstalledProperties.ContainsKey(canonicalName))
                     return "True";
                 else
                     return "False";
@@ -132,14 +132,14 @@ namespace CustomWindowsProperties
         public MainView()
         {
             EditorConfig = new PropertyConfig();
-            EditorConfig.PropertyChanged += PropertyBeingEdited_PropertyChanged;
+            EditorConfig.PropertyChanged += Editor_PropertyChanged;
         }
 
-        private void PropertyBeingEdited_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Editor_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(PropertyConfig.CanonicalName))
             {
-                RefreshEditedStatus();
+                RefreshEditorStatus();
             }
             CheckIfEditorDirty();
         }
@@ -154,8 +154,8 @@ namespace CustomWindowsProperties
             LoadEditorConfig(EditorBaseline, BaselineType.Standalone);
             dictInstalledTree = PropertyTree.PopulatePropertyTree(state.SystemProperties.Concat(state.CustomProperties),
                 InstalledPropertyTree, true);
-            dictEditorTree = PropertyTree.PopulatePropertyTree(state.EditorProperties,
-                EditorPropertyTree, false);
+            dictSavedTree = PropertyTree.PopulatePropertyTree(state.SavedProperties,
+                SavedPropertyTree, false);
         }
 
         public bool ChooseDataFolder()
@@ -168,7 +168,7 @@ namespace CustomWindowsProperties
             if (fsd.ShowDialog(IntPtr.Zero))
             {
                 state.DataFolder = fsd.FileName;
-                RefreshEditedStatus();
+                RefreshEditorStatus();
             }
             return false;
         }
@@ -184,10 +184,10 @@ namespace CustomWindowsProperties
             }
             else
             {
-                SelectedEditorProperty = selectedProperty;
-                if (SelectedEditorProperty != null)
+                SelectedSavedProperty = selectedProperty;
+                if (SelectedSavedProperty != null)
                 {
-                    LoadEditorConfig(SelectedEditorProperty, BaselineType.Edited);
+                    LoadEditorConfig(SelectedSavedProperty, BaselineType.Saved);
                 }
             }
 
@@ -195,7 +195,7 @@ namespace CustomWindowsProperties
             return selectedProperty;
         }
 
-        public void RefreshEditedStatus()
+        public void RefreshEditorStatus()
         {
             OnPropertyChanged(nameof(EditorInstalledText));
             OnPropertyChanged(nameof(CanDelete));
@@ -213,13 +213,13 @@ namespace CustomWindowsProperties
         {
             return HasDataFolder && config != null &&
                 ValidateName(config.CanonicalName) == null &&
-                !state.InstalledProperties.ContainsKey(config.CanonicalName);
+                !state.dictInstalledProperties.ContainsKey(config.CanonicalName);
         }
 
         public bool CanBeDeleted(PropertyConfig config)
         {
             return CanBeInstalled(config) &&
-                state.EditedProperties.ContainsKey(config.CanonicalName);
+                state.dictSavedProperties.ContainsKey(config.CanonicalName);
         }
 
         public bool CanBeExported(TreeItem treeItem)
@@ -271,9 +271,9 @@ namespace CustomWindowsProperties
 
             // Caller must ensure that property is in the editor tree, but not installed
             state.DeletePropertyConfig(canonicalName);
-            state.RemoveEditorProperty(canonicalName);
-            PropertyTree.RemoveTreeItem(dictEditorTree, EditorPropertyTree, canonicalName);
-            RefreshEditedStatus();
+            state.RemoveSavedProperty(canonicalName);
+            PropertyTree.RemoveTreeItem(dictSavedTree, SavedPropertyTree, canonicalName);
+            RefreshEditorStatus();
         }
 
         public void DiscardEditorChanges()
@@ -282,9 +282,9 @@ namespace CustomWindowsProperties
             CheckIfEditorDirty();
         }
 
-        public PropertyConfig SaveEditedProperty()
+        public PropertyConfig SaveEditorProperty()
         {
-            if (state.EditedProperties.TryGetValue(EditorConfig.CanonicalName, out PropertyConfig config))
+            if (state.dictSavedProperties.TryGetValue(EditorConfig.CanonicalName, out PropertyConfig config))
             {
                 // Property is already known about, just update its values
                 config.CopyFrom(EditorConfig, false);
@@ -306,18 +306,18 @@ namespace CustomWindowsProperties
                 }
 
                 state.SavePropertyConfig(EditorConfig);
-                state.AddEditorProperty(newConfig);
-                PropertyTree.AddTreeItem(dictEditorTree, EditorPropertyTree, newConfig);
+                state.AddSavedProperty(newConfig);
+                PropertyTree.AddTreeItem(dictSavedTree, SavedPropertyTree, newConfig);
                 IsEditorDirty = false;
-                RefreshEditedStatus();
+                RefreshEditorStatus();
                 return newConfig;
             }
         }
 
-        public int InstallEditedProperty()
+        public int InstallEditorProperty()
         {
             // Save as XML and update state and tree as necessary
-            var config = SaveEditedProperty();
+            var config = SaveEditorProperty();
 
             return InstallProperty(config);
         }
@@ -339,7 +339,7 @@ namespace CustomWindowsProperties
                 newConfig.CopyFrom(config, false);
                 state.AddInstalledProperty(newConfig);
                 PropertyTree.AddTreeItem(dictInstalledTree, InstalledPropertyTree, newConfig);
-                RefreshEditedStatus();
+                RefreshEditorStatus();
             }
 
             return result;
@@ -356,7 +356,7 @@ namespace CustomWindowsProperties
             {
                 state.RemoveInstalledProperty(canonicalName);
                 PropertyTree.RemoveTreeItem(dictInstalledTree, InstalledPropertyTree, canonicalName);
-                RefreshEditedStatus();
+                RefreshEditorStatus();
             }
 
             return succeeded;
@@ -374,10 +374,10 @@ namespace CustomWindowsProperties
             // Name has to be valid structurally and not part of the parent tree of another property
             if (!Extensions.IsValidPropertyName(name))
                 return "Invalid property name";
-            else if (PropertyTree.NameContainsExistingName(name, EditorPropertyTree, true))
-                return "Name clashes with edited property name";
+            else if (PropertyTree.NameContainsExistingName(name, SavedPropertyTree, true))
+                return "Name clashes with saved property name";
             else if (PropertyTree.NameContainsExistingName(name, InstalledPropertyTree, false) &&
-                     !PropertyTree.NameContainsExistingName(name, EditorPropertyTree, false))
+                     !PropertyTree.NameContainsExistingName(name, SavedPropertyTree, false))
                 // All installed property names clash unless we installed it ourselves
                 return "Name clashes with installed property name";
             else
@@ -387,7 +387,7 @@ namespace CustomWindowsProperties
         private enum BaselineType
         {
             Standalone,
-            Edited,
+            Saved,
             Installed,
         }
 
@@ -418,12 +418,12 @@ namespace CustomWindowsProperties
             EditorBaselineType = type;
             IsEditorDirty = false;
             CheckIfEditorDirty();
-            RefreshEditedStatus();
+            RefreshEditorStatus();
 
             switch (EditorBaselineType)
             {
                 case BaselineType.Standalone:
-                case BaselineType.Edited:
+                case BaselineType.Saved:
                     CompareSaved = true;
                     break;
                 case BaselineType.Installed:
@@ -447,7 +447,7 @@ namespace CustomWindowsProperties
 
             // Check for comparison override
             if (CompareSaved && EditorBaselineType == BaselineType.Installed)
-                baseline = SelectedEditorProperty;
+                baseline = SelectedSavedProperty;
             else if (CompareInstalled && EditorBaselineType != BaselineType.Installed)
             {
                 baseline = SelectedInstalledProperty;

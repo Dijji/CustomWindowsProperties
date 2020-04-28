@@ -64,10 +64,10 @@
         <TextBlock Grid.Row="0" Grid.Column="2" Text="Editor:" Margin="5,0,0,0" FontSize="12"/>
         <TextBlock Grid.Row="0" Grid.Column="4" Text="Help:" Margin="5,0,0,0" FontSize="12"/>
         <TreeView Grid.Row="1" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
-                  x:Name="treeViewEditor"
-                      ItemsSource="{Binding Path=EditorPropertyTree}" FontSize="12"
+                  x:Name="treeViewSaved"
+                      ItemsSource="{Binding Path=SavedPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectExpandedTreeViewItemStyle}"
-                      SelectedItemChanged="EditorTree_SelectedItemChanged">
+                      SelectedItemChanged="SavedTree_SelectedItemChanged">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
                     <Grid>

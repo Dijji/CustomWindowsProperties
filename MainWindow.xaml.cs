@@ -33,7 +33,7 @@ namespace CustomWindowsProperties
             RefreshPropertyEditor();
         }
 
-        private void EditorTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void SavedTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (((TreeView)sender).SelectedItem is TreeItem item)
             {
@@ -77,7 +77,7 @@ namespace CustomWindowsProperties
         {
             try
             {
-                view.SaveEditedProperty();
+                view.SaveEditorProperty();
                 DisplayStatus($"Property {EditedPropertyName} saved");
             }
             catch (Exception ex)
@@ -95,7 +95,7 @@ namespace CustomWindowsProperties
         {
             try
             {
-                switch (view.InstallEditedProperty())
+                switch (view.InstallEditorProperty())
                 {
                     case 0:
                         DisplayStatus($"Property {EditedPropertyName} installed");
@@ -121,13 +121,13 @@ namespace CustomWindowsProperties
 
         private void EditedInstall_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            var config = (treeViewEditor.SelectedItem as TreeItem)?.Item as PropertyConfig;
+            var config = (treeViewSaved.SelectedItem as TreeItem)?.Item as PropertyConfig;
             e.CanExecute = view.CanBeInstalled(config);
         }
 
         private void EditedInstall_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var config = (treeViewEditor.SelectedItem as TreeItem)?.Item as PropertyConfig;
+            var config = (treeViewSaved.SelectedItem as TreeItem)?.Item as PropertyConfig;
 
             try
             {
@@ -151,13 +151,13 @@ namespace CustomWindowsProperties
 
         private void EditedExport_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            var treeItem = treeViewEditor.SelectedItem as TreeItem;
+            var treeItem = treeViewSaved.SelectedItem as TreeItem;
             e.CanExecute = view.CanBeExported(treeItem);
         }
 
         private void EditedExport_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var treeItem = treeViewEditor.SelectedItem as TreeItem;
+            var treeItem = treeViewSaved.SelectedItem as TreeItem;
             try
             {
                 var outputFile = view.ExportPropDesc(treeItem);
@@ -174,14 +174,14 @@ namespace CustomWindowsProperties
 
         private void EditedDelete_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            var config = (treeViewEditor.SelectedItem as TreeItem)?.Item as PropertyConfig;
+            var config = (treeViewSaved.SelectedItem as TreeItem)?.Item as PropertyConfig;
             e.CanExecute = view.CanBeDeleted(config);
         }
 
 
         private void EditedDelete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var config = (treeViewEditor.SelectedItem as TreeItem)?.Item as PropertyConfig;
+            var config = (treeViewSaved.SelectedItem as TreeItem)?.Item as PropertyConfig;
 
             try
             {
@@ -218,7 +218,7 @@ namespace CustomWindowsProperties
         {
             PropertyEditor.DataContext = null;
             PropertyEditor.DataContext = view.EditorConfig;
-            view.RefreshEditedStatus();
+            view.RefreshEditorStatus();
         }
 
         private void DisplayStatus(string text)
