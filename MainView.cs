@@ -11,7 +11,6 @@ using System.Text;
 using System.Windows;
 using System.Xml;
 using FolderSelect;
-using KellermanSoftware.CompareNetObjects;
 
 namespace CustomWindowsProperties
 {
@@ -461,34 +460,54 @@ namespace CustomWindowsProperties
                 return false;
             }
 
-            var compare = new CompareLogic();
-            compare.Config.MaxDifferences = int.MaxValue;
-            compare.Config.CompareChildren = false;
-            var result = compare.Compare(baseline, EditorConfig);
-            StringBuilder sb = null;
-            bool different = false;
+            var differences = EditorConfig.CompareTo(baseline, isInstalled); 
 
-            if (!result.AreEqual)
+            if (differences.Count > 0)
             {
-                sb = new StringBuilder();
-                //sb.AppendLine("Differences are:");
-                foreach (var d in result.Differences)
+                var sb = new StringBuilder();
+
+                foreach (var d in differences)
                 {
-                    if (!isInstalled ||
-                        !PropertyConfig.InstalledExclusions.Contains(d.PropertyName))
-                    {
-                        sb.AppendLine($"{d.PropertyName} changed from '{d.Object1Value}' to '{d.Object2Value}'");
-                        different = true;
-                    }
+                    sb.AppendLine($"{d.Name} changed from '{d.Previous}' to '{d.Current}'");
                 }
+
+                DifferencesText = sb?.ToString();
+                return true;
+            }
+            else
+            {
+                DifferencesText = "No differences";
+                return false;
             }
 
-            if (different)
-                DifferencesText = sb.ToString();
-            else
-                DifferencesText = "No differences";
+            //var compare = new CompareLogic();
+            //compare.Config.MaxDifferences = int.MaxValue;
+            //compare.Config.CompareChildren = false;
+            //var result = compare.Compare(baseline, EditorConfig);
+            //StringBuilder sb = null;
+            //bool different = false;
 
-            return different;
+            //if (!result.AreEqual)
+            //{
+            //    sb = new StringBuilder();
+            //    //sb.AppendLine("Differences are:");
+            //    foreach (var d in result.Differences)
+            //    {
+            //        if (!isInstalled ||
+            //            !PropertyConfig.InstalledExclusions.Contains(d.PropertyName))
+            //        {
+            //            sb.AppendLine($"{d.PropertyName} changed from '{d.Object1Value}' to '{d.Object2Value}'");
+            //            different = true;
+            //        }
+            //    }
+            //}
+
+            //if (different)
+            //    DifferencesText = sb.ToString();
+            //else
+            //    DifferencesText = "No differences";
+
+            //return different;
         }
         #endregion
 

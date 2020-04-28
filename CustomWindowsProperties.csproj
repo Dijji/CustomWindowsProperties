@@ -140,11 +140,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Compare-NET-Objects\Compare-NET-Objects.csproj">
-      <Project>{de1988ce-addb-4135-9d60-95aca2b6b42d}</Project>
-      <Name>Compare-NET-Objects</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -567,6 +567,69 @@ namespace CustomWindowsProperties
             EditControl = from.EditControl;
         }
 
+        internal struct Difference
+        {
+            public string Name;
+            public string Current;
+            public string Previous;
+            public Difference(string name, object current, object previous)
+            {
+                Name = name;
+                Current = current?.ToString();
+                Previous = previous?.ToString();
+            }
+        }
+
+        internal List< Difference> CompareTo(PropertyConfig baseline, bool isInstalled)
+        {
+            var result = new List<Difference>();
+         
+            // Basics
+            if (!isInstalled)
+            {
+                if (CanonicalName != baseline.CanonicalName) result.Add (new Difference(nameof(CanonicalName), CanonicalName, baseline.CanonicalName));
+                if (FormatId != baseline.FormatId) result.Add (new Difference(nameof(FormatId), FormatId, baseline.FormatId));
+                if (PropertyId != baseline.PropertyId) result.Add (new Difference(nameof(PropertyId), PropertyId, baseline.PropertyId));
+            }
+
+            // Search
+            if (!isInstalled)
+            {
+                if (InInvertedIndex != baseline.InInvertedIndex) result.Add (new Difference(nameof(InInvertedIndex), InInvertedIndex, baseline.InInvertedIndex));
+                if (IsColumn != baseline.IsColumn) result.Add (new Difference(nameof(IsColumn), IsColumn, baseline.IsColumn));
+                if (IsColumnSparse != baseline.IsColumnSparse) result.Add (new Difference(nameof(IsColumnSparse), IsColumnSparse, baseline.IsColumnSparse));
+                if (ColumnIndexType != baseline.ColumnIndexType) result.Add (new Difference(nameof(ColumnIndexType), ColumnIndexType, baseline.ColumnIndexType));
+                if (MaxSize != baseline.MaxSize) result.Add (new Difference(nameof(MaxSize), MaxSize, baseline.MaxSize));
+                if (Mnemonics != baseline.Mnemonics) result.Add (new Difference(nameof(Mnemonics), Mnemonics, baseline.Mnemonics));
+            }
+
+            // Label
+            if (DisplayName != baseline.DisplayName) result.Add (new Difference(nameof(DisplayName), DisplayName, baseline.DisplayName));
+            if (SortDescription != baseline.SortDescription) result.Add (new Difference(nameof(SortDescription), SortDescription, baseline.SortDescription));
+            if (EditInvitation != baseline.EditInvitation) result.Add (new Difference(nameof(EditInvitation), EditInvitation, baseline.EditInvitation));
+            if (HideLabel != baseline.HideLabel) result.Add (new Difference(nameof(HideLabel), HideLabel, baseline.HideLabel));
+
+            // Type
+            if (Type != baseline.Type) result.Add (new Difference(nameof(Type), Type, baseline.Type));
+            if (GroupingRange != baseline.GroupingRange) result.Add (new Difference(nameof(GroupingRange), GroupingRange, baseline.GroupingRange));
+            if (IsInnate != baseline.IsInnate) result.Add (new Difference(nameof(IsInnate), IsInnate, baseline.IsInnate));
+            if (CanBePurged != baseline.CanBePurged) result.Add (new Difference(nameof(CanBePurged), CanBePurged, baseline.CanBePurged));
+            if (MultipleValues != baseline.MultipleValues) result.Add (new Difference(nameof(MultipleValues), MultipleValues, baseline.MultipleValues));
+            if (IsGroup != baseline.IsGroup) result.Add (new Difference(nameof(IsGroup), IsGroup, baseline.IsGroup));
+            if (AggregationType != baseline.AggregationType) result.Add (new Difference(nameof(AggregationType), AggregationType, baseline.AggregationType));
+            if (IsTreeProperty != baseline.IsTreeProperty) result.Add (new Difference(nameof(IsTreeProperty), IsTreeProperty, baseline.IsTreeProperty));
+            if (IsViewable != baseline.IsViewable) result.Add (new Difference(nameof(IsViewable), IsViewable, baseline.IsViewable));
+            if (SearchRawValue != baseline.SearchRawValue) result.Add (new Difference(nameof(SearchRawValue), SearchRawValue, baseline.SearchRawValue));
+            if (ConditionType != baseline.ConditionType) result.Add (new Difference(nameof(ConditionType), ConditionType, baseline.ConditionType));
+            if (ConditionOperation != baseline.ConditionOperation) result.Add (new Difference(nameof(ConditionOperation), ConditionOperation, baseline.ConditionOperation));
+
+            // Display
+            if (DisplayType != baseline.DisplayType) result.Add (new Difference(nameof(DisplayType), DisplayType, baseline.DisplayType));
+            if (DefaultColumnWidth != baseline.DefaultColumnWidth) result.Add (new Difference(nameof(DefaultColumnWidth), DefaultColumnWidth, baseline.DefaultColumnWidth));
+            if (EditControl != baseline.EditControl) result.Add (new Difference(nameof(EditControl), EditControl, baseline.EditControl));
+            return result;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string name = null)

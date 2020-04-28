@@ -47,16 +47,23 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="6*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="4*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TreeView Grid.Row="0" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
+        
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Saved:" Margin="5,0,0,0" FontSize="12"/>
+        <TextBlock Grid.Row="0" Grid.Column="2" Text="Editor:" Margin="5,0,0,0" FontSize="12"/>
+        <TextBlock Grid.Row="0" Grid.Column="4" Text="Help:" Margin="5,0,0,0" FontSize="12"/>
+        <TreeView Grid.Row="1" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
                   x:Name="treeViewEditor"
                       ItemsSource="{Binding Path=EditorPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectExpandedTreeViewItemStyle}"
@@ -81,7 +88,7 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
-        <Border Grid.Row="0" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
+        <Border Grid.Row="1" Grid.Column="2" BorderBrush="Gray" BorderThickness="1">
             <ScrollViewer Margin="5,0,0,0"
             HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <Grid x:Name="PropertyEditor" 
@@ -269,10 +276,19 @@
                 </Grid>
             </ScrollViewer>
         </Border>
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,5,0,5" Orientation="Horizontal">
-            <Button Content="Choose Data Folder" Margin="10,0,0,0" Height="25" Click="ChooseDataFolder_Clicked"/>
-        </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" Orientation="Horizontal">
+        <Border  Grid.Row="1" Grid.Column="4" BorderBrush="Gray" BorderThickness="1">
+            <ScrollViewer>
+                <TextBlock Text="{Binding HelpText}" TextWrapping="Wrap" Margin="5,5,0,0" />
+            </ScrollViewer>
+        </Border>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Installed:" FontSize="12"
+                   Margin="5,0,0,0" VerticalAlignment="Bottom"/>
+        <!--<StackPanel Grid.Row="2" Grid.Column="0" Margin="0,5,0,5" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            
+        </StackPanel>-->
+        <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,5,0,5" Orientation="Horizontal">
+            <Button Content="Choose Save Folder..." Margin="5,0,10,0" Height="25" Click="ChooseDataFolder_Clicked"/>
             <Button Content="Save" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanInstall}" Click="Save_Clicked"/>
             <Button Content="Discard" Margin="10,0,0,0" Height="25" 
@@ -280,11 +296,19 @@
             <Button Content="Install" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanInstall}" Click="Install_Clicked"/>
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" Orientation="Horizontal" HorizontalAlignment="Right">
-        <Button Content="Copy ^" Margin="10,0,40,0" Height="25" 
+        
+        <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,5,0,5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Copy ^" Margin="10,0,40,0" Height="25" 
                     IsEnabled="{Binding CanCopy}" Click="Copy_Clicked"/>
         </StackPanel>
-        <TreeView Grid.Row="2" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
+        <StackPanel Grid.Row="2" Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,5,0">
+            <TextBlock Text="Differences to:" FontSize="12" Margin="5,0,0,0"/>
+            <RadioButton Content="Saved" IsChecked="{Binding CompareSaved,Mode=TwoWay}" 
+                         Margin="10,0,0,0" FontSize="12"/>
+            <RadioButton Content="Installed" IsChecked="{Binding CompareInstalled,Mode=TwoWay}"
+                         Margin="10,0,0,0" FontSize="12"/>
+        </StackPanel>
+        <TreeView Grid.Row="3" Grid.Column="0" VirtualizingStackPanel.IsVirtualizing="True"
                   x:Name="treeViewInstalled"
                       ItemsSource="{Binding Path=InstalledPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectTreeViewItemStyle}"
@@ -305,7 +329,7 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
-        <Border Grid.Row="2" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
+        <Border Grid.Row="3" Grid.Column="2" BorderBrush="Gray" BorderThickness="1">
             <ScrollViewer Margin="5,0,0,0"
                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                         Visibility="{Binding IsInstalledPropertyVisible,Converter={StaticResource VisibleIfTrue}}">
@@ -407,23 +431,17 @@
                 </Grid>
             </ScrollViewer>
         </Border>
-        <Border  Grid.Row="0" Grid.Column="2" BorderBrush="Gray" BorderThickness="1">
-            <ScrollViewer>
-                <TextBlock Text="{Binding HelpText}" TextWrapping="Wrap" Margin="5,5,0,0" />
-            </ScrollViewer>
-        </Border>
-        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,5,0">
-            <TextBlock Text="Differences to:" FontSize="12"/>
-            <RadioButton Content="Saved" IsChecked="{Binding CompareSaved,Mode=TwoWay}" 
-                         Margin="10,0,0,0" FontSize="12"/>
-            <RadioButton Content="Installed" IsChecked="{Binding CompareInstalled,Mode=TwoWay}"
-                         Margin="10,0,0,0" FontSize="12"/>
-        </StackPanel>
-        <Border Grid.Row="2" Grid.Column="2" BorderBrush="Gray" BorderThickness="1">
+        
+        
+        <Border Grid.Row="3" Grid.Column="4" BorderBrush="Gray" BorderThickness="1">
             <ScrollViewer>
                 <TextBlock Text="{Binding DifferencesText}" TextWrapping="Wrap" Margin="5,5,0,0" />
             </ScrollViewer>
         </Border>
-        <TextBlock x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>
+        <TextBlock x:Name="StatusBar" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Height="25"/>
+        <GridSplitter Grid.Row="0" Grid.RowSpan="1" Grid.Column="1" Width="3"
+                      HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Gray"/>
+        <GridSplitter Grid.Row="0" Grid.RowSpan="1" Grid.Column="3" Width="3"
+                      HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Gray"/>
     </Grid>
 </Window>
