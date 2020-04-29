@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
@@ -290,7 +292,7 @@ namespace CustomWindowsProperties
             CheckIfEditorDirty();
         }
 
-        public PropertyConfig SaveEditorProperty()
+        public PropertyConfig SaveEditorProperty(TreeView treeViewSaved)
         {
             if (state.DictSavedProperties.TryGetValue(EditorConfig.CanonicalName, out PropertyConfig config))
             {
@@ -306,28 +308,26 @@ namespace CustomWindowsProperties
                 PropertyConfig newConfig = new PropertyConfig();
                 newConfig.CopyFrom(EditorConfig, false);
 
-                if (newConfig.FormatId == Guid.Empty)
-                {
-                    // To do reuse format ID from sibling, if available
-                    EditorConfig.FormatId = newConfig.FormatId = Guid.NewGuid();
-                    EditorConfig.PropertyId = newConfig.PropertyId = 1;
-                }
+                // To do reuse format ID from sibling, if available
+                EditorConfig.FormatId = newConfig.FormatId = Guid.NewGuid();
+                EditorConfig.PropertyId = newConfig.PropertyId = 1;
 
                 state.SavePropertyConfig(newConfig);
                 state.AddSavedProperty(newConfig);
-                PropertyTree.AddTreeItem(dictSavedTree, SavedPropertyTree, newConfig);
+                var treeItem = PropertyTree.AddTreeItem(dictSavedTree, SavedPropertyTree, newConfig);
                 EditorBaseline = newConfig;
                 EditorBaselineType = BaselineType.Saved;
-                IsEditorDirty = false;
+                CheckIfEditorDirty();
+                SelectTreeItemAfterDelay(treeViewSaved, treeItem);
                 RefreshEditorStatus();
                 return newConfig;
             }
         }
 
-        public int InstallEditorProperty(TreeView treeViewInstalled)
+        public int InstallEditorProperty(TreeView treeViewSaved, TreeView treeViewInstalled)
         {
             // Save as XML and update state and tree as necessary
-            var config = SaveEditorProperty();
+            var config = SaveEditorProperty(treeViewSaved);
 
             return InstallProperty(config, treeViewInstalled);
         }
@@ -340,16 +340,15 @@ namespace CustomWindowsProperties
             doc.Save(fullFileName);
 
             // Attempt installation
-            var result = state.RegisterCustomProperty(fullFileName, config);
+            var result = state.RegisterCustomProperty(fullFileName, config, out PropertyConfig installedConfig);
 
             if (result >= 0)
             {
-                // Property is new, need to clone it and add it in
-                PropertyConfig newConfig = new PropertyConfig();
-                newConfig.CopyFrom(config, false);
-                state.AddInstalledProperty(newConfig);
-                var treeItem = PropertyTree.AddTreeItem(dictInstalledTree, InstalledPropertyTree, newConfig);
-                TreeViewHelper.SelectTreeProperty(treeViewInstalled, treeItem);
+                // Property is new, need to add it in
+                state.AddInstalledProperty(installedConfig);
+                var treeItem = PropertyTree.AddTreeItem(dictInstalledTree, InstalledPropertyTree,
+                                installedConfig, addRootTop: true);
+                SelectTreeItemAfterDelay(treeViewInstalled, treeItem);
                 RefreshEditorStatus();
             }
 
@@ -519,6 +518,19 @@ namespace CustomWindowsProperties
             //    DifferencesText = "No differences";
 
             //return different;
+        }
+
+        private void SelectTreeItemAfterDelay(TreeView treeView, TreeItem treeItem)
+        {
+            // Need to give the tree view a little time before selecting a new item
+            Task.Factory.StartNew(() =>
+            {
+                Thread.Sleep(200);
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    TreeViewHelper.SelectTreeProperty(treeView, treeItem);
+                }));
+            });
         }
         #endregion
 

@@ -100,10 +100,11 @@ namespace CustomWindowsProperties
 
         // Top level entry point for the algorithm that builds the property name tree from an unordered sequence
         // of property names
-        public static TreeItem AddTreeItem(Dictionary<string, TreeItem> dict, ObservableCollection<TreeItem> roots, PropertyConfig pc)
+        public static TreeItem AddTreeItem(Dictionary<string, TreeItem> dict,
+            ObservableCollection<TreeItem> roots, PropertyConfig pc, bool addRootTop = false)
         {
             Debug.Assert(pc.CanonicalName.Contains('.')); // Because the algorithm assumes that this is the case
-            TreeItem ti = AddTreeItemInner(dict, roots, pc.CanonicalName, pc.DisplayName);
+            TreeItem ti = AddTreeItemInner(dict, roots, pc.CanonicalName, addRootTop, pc.DisplayName);
             ti.Item = pc;
 
             return ti;
@@ -111,8 +112,9 @@ namespace CustomWindowsProperties
 
         // Recurse backwards through each term in the property name, adding tree items as we go,
         // until we join onto an existing part of the tree
-        private static TreeItem AddTreeItemInner(Dictionary<string, TreeItem> dict, ObservableCollection<TreeItem> roots,
-            string name, string displayName = null)
+        private static TreeItem AddTreeItemInner(Dictionary<string, TreeItem> dict, 
+            ObservableCollection<TreeItem> roots,
+            string name, bool addRootTop, string displayName = null)
         {
             TreeItem ti;
             string parentName = FirstPartsOf(name);
@@ -121,7 +123,7 @@ namespace CustomWindowsProperties
             {
                 if (!dict.TryGetValue(parentName, out TreeItem parent))
                 {
-                    parent = AddTreeItemInner(dict, roots, parentName);
+                    parent = AddTreeItemInner(dict, roots, parentName, addRootTop);
                     dict.Add(parentName, parent);
                 }
 
@@ -141,7 +143,10 @@ namespace CustomWindowsProperties
                     {
                         Tag = name
                     };
-                    roots.Add(ti);
+                    if (addRootTop)
+                        roots.Insert(0, ti);
+                    else
+                        roots.Add(ti);
                 }
             }
 

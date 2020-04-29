@@ -188,8 +188,9 @@ namespace CustomWindowsProperties
         }
 
         // Returns negative numbers for failure, positive for success
-        public int RegisterCustomProperty(string fullFileName, PropertyConfig pc)
+        public int RegisterCustomProperty(string fullFileName, PropertyConfig pc, out PropertyConfig installedConfig)
         {
+            installedConfig = null;
             FileInfo fi = new FileInfo(fullFileName);
             if (!fi.Exists)
                 throw new Exception($"Installed property configuration file {fullFileName} is missing");
@@ -204,17 +205,21 @@ namespace CustomWindowsProperties
 
             var result = PropertySystemNativeMethods.PSRegisterPropertySchema(targetFileName);
 
-            if (result == 0)
-                return 0;
-            else if (result == 0x000401A0) // INPLACE_S_TRUNCATED 
+            if (result == 0 || result == 0x000401A0) // INPLACE_S_TRUNCATED
             {
-                // Check to see if the thing was altered or rejected
-                if (IsPropertyRegistered(pc))
+                // Read back what was actually installed
+                installedConfig = GetInstalledProperty(pc);
+                if (installedConfig != null)
                 {
-                    //MessageBox.Show("Property configuration was installed by Windows, but not all sections could be used. " + 
-                    //    "There may be more information in the Application event log.",
-                    // "Partial installation");
-                    return 1;
+                    if (result == 0)
+                        return 0;
+                    else
+                    {
+                        //MessageBox.Show("Property configuration was installed by Windows, but not all sections could be used. " + 
+                        //    "There may be more information in the Application event log.",
+                        // "Partial installation");
+                        return 1;
+                    }
                 }
                 else
                     MessageBox.Show("Property configuration was rejected by Windows. There may be more information in the Application event log.",
@@ -226,7 +231,7 @@ namespace CustomWindowsProperties
             return -1;
         }
 
-        private bool IsPropertyRegistered(PropertyConfig pc)
+        private PropertyConfig GetInstalledProperty(PropertyConfig pc)
         {
             try
             {
@@ -236,7 +241,15 @@ namespace CustomWindowsProperties
                 var hr = PropertySystemNativeMethods.PSGetPropertyDescription(
                             ref key, ref guid, out IPropertyDescription propertyDescription);
 
-                return (hr >= 0);
+                if (hr >= 0)
+                {
+                    var shellProperty = new ShellPropertyDescription(propertyDescription);
+                    var installed = new PropertyConfig(shellProperty);
+                    shellProperty.Dispose(); // Releases propertyDescription
+                    return installed;
+                }
+                else
+                    return null;
             }
 #pragma warning disable CS0168 // Variable is declared but never used
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
@@ -244,7 +257,7 @@ namespace CustomWindowsProperties
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
 #pragma warning restore CS0168 // Variable is declared but never used
             {
-                return false;
+                return null;
             }
         }
 

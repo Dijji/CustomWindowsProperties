@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9781E1FE-D926-4E25-974A-E1EEA3030321}</ProjectGuid>
+    <ProjectGuid>{045FF1A0-BC3F-48E6-A059-572DD6AE8E0A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>CustomWindowsProperties</RootNamespace>
     <AssemblyName>CustomWindowsProperties</AssemblyName>
@@ -75,7 +75,6 @@
       <DependentUpon>LocalizedMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="MainView.cs" />
-    <Compile Include="CustomVirtualizingStackPanel.cs" />
     <Compile Include="NameChangedEventArgs.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="PropertyTree.cs" />
@@ -83,6 +82,7 @@
     <Compile Include="PropertyConfig.cs" />
     <Compile Include="State.cs" />
     <Compile Include="TreeItem.cs" />
+    <Compile Include="TreeViewHelper.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

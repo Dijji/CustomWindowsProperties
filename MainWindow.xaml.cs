@@ -77,7 +77,7 @@ namespace CustomWindowsProperties
         {
             try
             {
-                view.SaveEditorProperty();
+                view.SaveEditorProperty(treeViewSaved);
                 DisplayStatus($"Property {EditedPropertyName} saved");
             }
             catch (Exception ex)
@@ -96,7 +96,7 @@ namespace CustomWindowsProperties
             Mouse.OverrideCursor = Cursors.Wait; // Tree search can be slow
             try
             {
-                switch (view.InstallEditorProperty(treeViewInstalled))
+                switch (view.InstallEditorProperty(treeViewSaved, treeViewInstalled))
                 {
                     case 0:
                         DisplayStatus($"Property {EditedPropertyName} installed");

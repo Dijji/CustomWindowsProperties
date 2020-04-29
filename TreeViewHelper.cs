@@ -79,10 +79,11 @@ namespace CustomWindowsProperties
 
 
                 // Ensure that the generator for this panel has been created.
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
                 UIElementCollection children = itemsHostPanel.Children;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
 
-                CustomVirtualizingStackPanel virtualizingPanel =
-                    itemsHostPanel as CustomVirtualizingStackPanel;
+                var virtualizingPanel = itemsHostPanel as CustomVirtualizingStackPanel;
 
                 for (int i = 0, count = container.Items.Count; i < count; i++)
                 {
@@ -105,7 +106,7 @@ namespace CustomWindowsProperties
 
                         // Bring the item into view to maintain the 
                         // same behavior as with a virtualizing panel.
-                        subContainer.BringIntoView();
+                        subContainer?.BringIntoView();
                     }
 
                     if (subContainer != null)
