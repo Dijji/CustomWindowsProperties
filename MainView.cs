@@ -307,10 +307,9 @@ namespace CustomWindowsProperties
                 // Property is new, need to clone it and add it in
                 PropertyConfig newConfig = new PropertyConfig();
                 newConfig.CopyFrom(EditorConfig, false);
-
-                // To do reuse format ID from sibling, if available
-                EditorConfig.FormatId = newConfig.FormatId = Guid.NewGuid();
-                EditorConfig.PropertyId = newConfig.PropertyId = 1;
+                AssignPropertyKey(newConfig);
+                EditorConfig.FormatId = newConfig.FormatId;
+                EditorConfig.PropertyId = newConfig.PropertyId;
 
                 state.SavePropertyConfig(newConfig);
                 state.AddSavedProperty(newConfig);
@@ -323,7 +322,7 @@ namespace CustomWindowsProperties
                 return newConfig;
             }
         }
-
+     
         public int InstallEditorProperty(TreeView treeViewSaved, TreeView treeViewInstalled)
         {
             // Save as XML and update state and tree as necessary
@@ -518,6 +517,26 @@ namespace CustomWindowsProperties
             //    DifferencesText = "No differences";
 
             //return different;
+        }
+
+        private void AssignPropertyKey(PropertyConfig config)
+        {
+            // Look for parent property
+            var parentName = PropertyTree.FirstPartsOf(config.CanonicalName);
+            if (parentName != null && dictSavedTree.TryGetValue(parentName, out TreeItem parent))
+            {
+                if (parent.Children.Count != 0)
+                {
+                    config.FormatId = (parent.Children[0].Item as PropertyConfig).FormatId;
+                    config.PropertyId = parent.Children.Select(t => t.Item).Cast<PropertyConfig>()
+                        .Select(p => p?.PropertyId).Max() + 1;
+                    return;
+                }
+            }
+
+            // No usable parent, give it a new name  
+            config.FormatId = Guid.NewGuid();
+            config.PropertyId = 1;
         }
 
         private void SelectTreeItemAfterDelay(TreeView treeView, TreeItem treeItem)

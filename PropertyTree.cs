@@ -202,7 +202,7 @@ namespace CustomWindowsProperties
             return index >= 0 ? name.Substring(0, index) : name;
         }
 
-        private static string FirstPartsOf(string name)
+        public static string FirstPartsOf(string name)
         {
             int index = name.LastIndexOf('.');
             return index >= 0 ? name.Substring(0, index) : null;
