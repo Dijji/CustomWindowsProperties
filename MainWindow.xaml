@@ -71,7 +71,7 @@
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
                     <Grid>
-                        <TextBlock Text="{Binding Path=Name}" />
+                        <TextBlock Text="{Binding Path=Name}" Background="{Binding Path=Background}" />
                     </Grid>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>

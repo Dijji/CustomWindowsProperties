@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Xml;
 using FolderSelect;
 
@@ -158,7 +159,7 @@ namespace CustomWindowsProperties
             dictInstalledTree = PropertyTree.PopulatePropertyTree(state.SystemProperties.Concat(state.CustomProperties),
                 InstalledPropertyTree, true);
             dictSavedTree = PropertyTree.PopulatePropertyTree(state.SavedProperties,
-                SavedPropertyTree, false);
+                SavedPropertyTree, false, ShowIfSavedIsInstalled);
         }
 
         public bool ChooseDataFolder()
@@ -348,6 +349,7 @@ namespace CustomWindowsProperties
                 var treeItem = PropertyTree.AddTreeItem(dictInstalledTree, InstalledPropertyTree,
                                 installedConfig, addRootTop: true);
                 SelectTreeItemAfterDelay(treeViewInstalled, treeItem);
+                ShowIfSavedIsInstalled(installedConfig.CanonicalName);
                 RefreshEditorStatus();
             }
 
@@ -364,6 +366,7 @@ namespace CustomWindowsProperties
             if (succeeded)
             {
                 state.RemoveInstalledProperty(canonicalName);
+                ShowIfSavedIsInstalled(canonicalName);
                 PropertyTree.RemoveTreeItem(dictInstalledTree, InstalledPropertyTree, canonicalName);
                 RefreshEditorStatus();
             }
@@ -441,6 +444,21 @@ namespace CustomWindowsProperties
             }
 
             return true;
+        }
+
+        private void ShowIfSavedIsInstalled(string canonicalName)
+        {
+            var treeItem = PropertyTree.FindTreeItem(canonicalName, dictSavedTree, SavedPropertyTree);
+            if (treeItem != null)
+                ShowIfSavedIsInstalled(treeItem, treeItem.Item as PropertyConfig);
+        }
+
+        private void ShowIfSavedIsInstalled(TreeItem treeItem, PropertyConfig config)
+        {
+            if (CanBeUninstalled(config))
+                treeItem.Background = Brushes.LightGreen;
+            else
+                treeItem.Background = null;
         }
 
         private void CheckIfEditorDirty()

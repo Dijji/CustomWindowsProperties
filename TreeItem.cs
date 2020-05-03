@@ -1,9 +1,10 @@
-﻿// Copyright (c) 2013, Dijji, and released under Ms-PL.  This, with other relevant licenses, can be found in the root of this distribution.
+﻿// Copyr itight (c) 2013, Dijji, and released under Ms-PL.  This, with other relevant licenses, can be found in the root of this distribution.
 
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-
+using System.Runtime.CompilerServices;
+using System.Windows.Media;
 
 namespace CustomWindowsProperties
 {
@@ -14,13 +15,7 @@ namespace CustomWindowsProperties
         TreeItem parent = null;
         readonly ObservableCollection<TreeItem> children = new ObservableCollection<TreeItem>();
 
-        public event PropertyChangedEventHandler PropertyChanged;
         public event NameChangedEventHandler NameChanged;
-
-        protected void OnPropertyChanged(String info)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
 
         public TreeItem(string name, object item = null)
         {
@@ -34,6 +29,10 @@ namespace CustomWindowsProperties
         public TreeItem Parent { get { return parent; } }
         public ObservableCollection<TreeItem> Children { get { return children; } }
 
+        public Brush Background { get { return background; } set { background = value; OnPropertyChanged(); } }
+        private Brush background = null;
+
+
         public bool IsSelected
         {
             get
@@ -45,7 +44,7 @@ namespace CustomWindowsProperties
                 if (value != isSelected)
                 {
                     isSelected = value;
-                    OnPropertyChanged("IsSelected");
+                    OnPropertyChanged();
                 }
             }
         }
@@ -93,14 +92,14 @@ namespace CustomWindowsProperties
 
         public void AbandonNameChange()
         {
-            OnPropertyChanged("EditableName");
+            OnPropertyChanged(nameof(EditableName));
         }
 
         public void ChangeName(string newName)
         {
             name = newName;
-            OnPropertyChanged("Name");
-            OnPropertyChanged("EditableName");
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(EditableName));
         }
 
         public TreeItem Clone()
@@ -110,5 +109,14 @@ namespace CustomWindowsProperties
                 clone.AddChild(ti.Clone());
             return clone;
         }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+        #endregion
     }
 }

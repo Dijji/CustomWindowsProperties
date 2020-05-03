@@ -1,5 +1,6 @@
 ﻿// Copyright (c) 2020, Dijji, and released under Ms-PL.  This, with other relevant licenses, can be found in the root of this distribution.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -10,14 +11,16 @@ namespace CustomWindowsProperties
     static class PropertyTree
     {
         public static Dictionary<string, TreeItem> PopulatePropertyTree(
-            IEnumerable<PropertyConfig> properties, ObservableCollection<TreeItem> treeItems, bool isInstalled)
+            IEnumerable<PropertyConfig> properties, ObservableCollection<TreeItem> treeItems, 
+            bool isInstalled, Action<TreeItem, PropertyConfig> OnCreate = null)
         {
             Dictionary<string, TreeItem> dict = new Dictionary<string, TreeItem>();
 
             // Build tree based on property names
             foreach (var p in properties)
             {
-                AddTreeItem(dict, treeItems, p);
+                var treeItem = AddTreeItem(dict, treeItems, p);
+                OnCreate?.Invoke(treeItem, p);
             }
 
             // Populating installed tree - do some surgery on the system properties
@@ -66,6 +69,17 @@ namespace CustomWindowsProperties
             }
 
             return dict;
+        }
+        public static TreeItem FindTreeItem(string name,
+                Dictionary<string, TreeItem> dictTree, ObservableCollection<TreeItem> roots)
+        {
+            TreeItem result = null;
+            var parentName = FirstPartsOf(name);
+            if (parentName != null && dictTree.TryGetValue(parentName, out TreeItem parent))
+            {
+                result = parent.Children.Where(t => t.Name == LastPartOf(name)).FirstOrDefault();
+            }
+            return result;
         }
 
         public static bool NameContainsExistingName(string name, ObservableCollection<TreeItem> roots, bool isEditor)
