@@ -118,23 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AggregationType" xml:space="preserve">
-    <value>Specifies how aggregate properties are displayed when multiple values are selected. Default is "Default".
-
-Default	Displays a Multiple Values placeholder in the UI. This is the default if the type is incompatible with the specified aggregationType.
-
-First	Displays the property value of the first item in the selection or collection.
-
-Sum	Displays the sum of the numerical values. Useful for properties such as System.Media.Duration or System.Size. This value is not compatible with non-numeric types.
-
-Average	Displays the average of the numerical values. Useful for properties such as System.Rating. This value is not compatible with non-numeric types.
-
-DateRange	Displays a range of dates. Useful for properties like System.Photo.DateTaken. This value is not compatible with anything except type="DateTime" and is the default for properties of that type.
-
-Union	Displays a union of all the values in the selection or collection. The order in which the values are shown is undefined. This value is the default for properties of type="String" and multipleValues="true".
-
-Maximum	Displays the maximum value in the collection. Useful for properties like System.DateModified. Not compatible with non-numeric or non-date types.
-
-Minimum	Displays the minimum value in the collection. Not compatible with non-numeric or non-date types.</value>
+    <value>&lt;p&gt;Specifies how aggregate properties are displayed when multiple values are selected. Default is "Default".&lt;/p&gt;
+&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+Default	&lt;/td&gt;&lt;td&gt;Displays a Multiple Values placeholder in the UI. This is the default if the type is incompatible with the specified aggregationType.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+First&lt;/td&gt;&lt;td&gt;	Displays the property value of the first item in the selection or collection.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Sum&lt;/td&gt;&lt;td&gt;	Displays the sum of the numerical values. Useful for properties such as System.Media.Duration or System.Size. This value is not compatible with non-numeric types.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Average&lt;/td&gt;&lt;td&gt;	Displays the average of the numerical values. Useful for properties such as System.Rating. This value is not compatible with non-numeric types.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+DateRange&lt;/td&gt;&lt;td&gt;	Displays a range of dates. Useful for properties like System.Photo.DateTaken. This value is not compatible with anything except type="DateTime" and is the default for properties of that type.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Union&lt;/td&gt;&lt;td&gt;	Displays a union of all the values in the selection or collection. The order in which the values are shown is undefined. This value is the default for properties of type="String" and multipleValues="true".
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Maximum	&lt;/td&gt;&lt;td&gt;Displays the maximum value in the collection. Useful for properties like System.DateModified. Not compatible with non-numeric or non-date types.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Minimum&lt;/td&gt;&lt;td&gt;	Displays the minimum value in the collection. Not compatible with non-numeric or non-date types.
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="CanBePurged" xml:space="preserve">
     <value>When set to "true", allows an innate property to be deleted. Innate properties, which are calculated from other properties, are read-only by definition. The available and default values for this attribute depends on the IsInnate value. If IsInnate is "true ", then CanBePurged defaults to "false", but may be set to "true". If IsInnate is "false", then CanBePurged must be "true".</value>
@@ -149,36 +150,46 @@ Name1.NameB.Name7.Basil
 Each token in the name must begin with a capital letter, and otherwise consist of upper case and lower case letters, or numbers.</value>
   </data>
   <data name="ColumnIndexType" xml:space="preserve">
-    <value>To optimize sorting and grouping, the Windows search engine can create secondary indexes for properties that have isColumn="true" and is only useful in such cases.  If the property tends to be sorted frequently by users, this attribute should be specified.  
-The default value is "OnDemand".
-The following values are valid. 
-NotIndexed: Never build a value index. 
-OnDisk: Build a value index by default for this property.
-OnDiskAll: Build a value index by default for this property, and if it is a vector property, also a value index for all concatenated vector values. 
-OnDiskVector: Build a value index by default for the concatenated vector values. 
-OnDemand: Only build value indices by demand, that is, only first time they are used for a query.</value>
+    <value>&lt;p&gt;To optimize sorting and grouping, the Windows search engine can create secondary indexes for properties that have isColumn="true" and is only useful in such cases.  If the property tends to be sorted frequently by users, this attribute should be specified. The default value is "OnDemand".&lt;/p&gt;
+&lt;p&gt;The following values are valid. &lt;/p&gt;
+&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+NotIndexed:&lt;/td&gt;&lt;td&gt; Never build a value index. 
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+OnDisk: &lt;/td&gt;&lt;td&gt;Build a value index by default for this property.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+OnDiskAll: &lt;/td&gt;&lt;td&gt;Build a value index by default for this property, and if it is a vector property, also a value index for all concatenated vector values. 
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+OnDiskVector: &lt;/td&gt;&lt;td&gt;Build a value index by default for the concatenated vector values. 
+OnDemand: &lt;/td&gt;&lt;td&gt;Only build value indices by demand, that is, only first time they are used for a query.
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="ConditionOperation" xml:space="preserve">
-    <value>Specifies a hint to the Search Query Builder tool so that it can determine the default operator. The default is "Equal". The possible values are as follows:
-
-Equal	        Indicates equivalent.
-NotEqual	Indicates not equivalent.
-LessThan	Indicates less than.
-GreaterThan	Default for properties of ConditionType="Size". Indicates greater than.
-Contains	Default for properties of ConditionType="String". Indicates inclusion.</value>
+    <value>&lt;p&gt;Specifies a hint to the Search Query Builder tool so that it can determine the default operator. The default is "Equal". The possible values are as follows:&lt;/p&gt;
+&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+Equal	 &lt;/td&gt;&lt;td&gt; Indicates equivalent.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+NotEqual	&lt;/td&gt;&lt;td&gt;Indicates not equivalent.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+LessThan&lt;/td&gt;&lt;td&gt;	Indicates less than.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+GreaterThan	&lt;/td&gt;&lt;td&gt;Default for properties of ConditionType="Size". Indicates greater than.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Contains&lt;/td&gt;&lt;td&gt;	Default for properties of ConditionType="String". Indicates inclusion.
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="ConditionType" xml:space="preserve">
-    <value>Specifies a hint to the Search Query Builder UI so that it can determine the list of possible condition operators inside a predicate. The following are recognized values. The default is "String".
-
-String	The following operators will be used: "is", "is not", "&lt;", "&gt;", "&lt;=", "=""&gt;=", "starts with", "ends with", "contains", "doesn't contain", "is like".
-
-Number	Default for numeric properties. The following operators will be used: "equals", "doesn't equal", "is less than", "is greater than", "is less than or equal to", "is greater than or equal to".
-
-DateTime	Default for properties of type="DateTime". The following operators will be used: "is", "is not", "is before", "is after", "is before but includes", "is after but includes".
-
-Boolean	Default for properties of type="Boolean". Same as Number.
-
-Size	Same as Number.</value>
+    <value>&lt;p&gt;Specifies a hint to the Search Query Builder UI so that it can determine the list of possible condition operators inside a predicate. The following are recognized values. The default is "String".&lt;/p&gt;
+&lt;table&gt;&lt;tr&gt;
+&lt;td&gt;String&lt;/td&gt;&lt;td&gt;The following operators will be used: "is", "is not", "&lt;", "&gt;", "&lt;=", "=""&gt;=", "starts with", "ends with", "contains", "doesn't contain", "is like".
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt; Number&lt;/td&gt;&lt;td&gt;Default for numeric properties. The following operators will be used: "equals", "doesn't equal", "is less than", "is greater than", "is less than or equal to", "is greater than or equal to".
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt; DateTime &lt;/td&gt;&lt;td&gt;Default for properties of type="DateTime". The following operators will be used: "is", "is not", "is before", "is after", "is before but includes", "is after but includes".
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt; Boolean &lt;/td&gt;&lt;td&gt;Default for properties of type="Boolean". Same as Number.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;Size&lt;/td&gt;&lt;td&gt;Same as Number.
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="DisplayName" xml:space="preserve">
     <value>The display name of the property as it is displayed in the UI (for example, the details column label or preview panel).</value>
@@ -187,15 +198,22 @@ Size	Same as Number.</value>
     <value>The Help string text that is displayed as an instruction to the user for the control or ToolTip (for instance, "Enter author name.").</value>
   </data>
   <data name="GroupingRange" xml:space="preserve">
-    <value>Specifies how this property is displayed when a view is grouped by this property. The default is "Discrete".
-
-Discrete	Default. Displays individual values.
-Alphanumeric Displays static alphanumeric ranges for values.
-Size	Displays static size ranges for values.
-Date	Displays month/year groups. Default for properties of type="DateTime".
-TimeRelative Displays in time-relative groups.
-Dynamic	Displays dynamically created ranges for the values.
-Percent	Displays percent buckets.</value>
+    <value>&lt;p&gt;Specifies how this property is displayed when a view is grouped by this property. The default is "Discrete".&lt;/p&gt;
+&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+Discrete	&lt;/td&gt;&lt;td&gt;Default. Displays individual values.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Alphanumeric &lt;/td&gt;&lt;td&gt;Displays static alphanumeric ranges for values.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Size&lt;/td&gt;&lt;td&gt;	Displays static size ranges for values.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Date	&lt;/td&gt;&lt;td&gt;Displays month/year groups. Default for properties of type="DateTime".
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+TimeRelative&lt;/td&gt;&lt;td&gt; Displays in time-relative groups.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Dynamic	&lt;/td&gt;&lt;td&gt;Displays dynamically created ranges for the values.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Percent	&lt;/td&gt;&lt;td&gt;Displays percent buckets.
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="HideLabel" xml:space="preserve">
     <value>Indicates whether the label is hidden. The default is "false".</value>
@@ -240,12 +258,18 @@ The list is delimited with the '|' character.</value>
     <value>The default is "false".</value>
   </data>
   <data name="SortDescription" xml:space="preserve">
-    <value>Specifies the strings offered as sort options. The following values provide the corresponding UI strings.
-General: "Sort going up" / "Sort going down"
-AToZ: "A on top" / "Z on top"
-LowestHighest: "Lowest on top" / "Highest on top"
-OldestNewest: "Oldest on top" / "Newest on top"
-SmallestLargest: "Smallest on top" / "Largest on top"</value>
+    <value>&lt;p&gt;Specifies the strings offered as sort options. The following values provide the corresponding UI strings.&lt;/p&gt;
+&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+General: &lt;/td&gt;&lt;td&gt;"Sort going up" / "Sort going down"
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+AToZ:&lt;/td&gt;&lt;td&gt; "A on top" / "Z on top"
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+LowestHighest:&lt;/td&gt;&lt;td&gt; "Lowest on top" / "Highest on top"
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+OldestNewest: &lt;/td&gt;&lt;td&gt;"Oldest on top" / "Newest on top"
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+SmallestLargest: &lt;/td&gt;&lt;td&gt;"Smallest on top" / "Largest on top"
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Indicates the type of the property. The default is "Any".

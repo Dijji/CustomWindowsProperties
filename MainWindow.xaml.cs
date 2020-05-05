@@ -59,12 +59,12 @@ namespace CustomWindowsProperties
 
         private void Editor_GotFocus(object sender, RoutedEventArgs e)
         {
-            view.EditorFocusChanged(((FrameworkElement)e.OriginalSource).Tag as string);
+            view.EditorFocusChanged(((FrameworkElement)e.OriginalSource).Tag as string, wbHelp);
         }
 
         private void Editor_LostFocus(object sender, RoutedEventArgs e)
         {
-            view.EditorFocusChanged(null);
+            view.EditorFocusChanged(null, wbHelp);
         }
 
         private void ChooseDataFolder_Clicked(object sender, RoutedEventArgs e)

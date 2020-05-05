@@ -48,9 +48,9 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="8*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="6*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -293,7 +293,8 @@
         </Border>
         <Border  Grid.Row="1" Grid.Column="4" BorderBrush="Gray" BorderThickness="1">
             <ScrollViewer>
-                <TextBlock Text="{Binding HelpText}" TextWrapping="Wrap" Margin="5,5,0,0" />
+                <WebBrowser Name="wbHelp" Margin="5,5,0,0"/>
+                <!--<TextBlock Text="{Binding HelpText}" TextWrapping="Wrap" Margin="5,5,0,0" />-->
             </ScrollViewer>
         </Border>
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Installed:" FontSize="12"

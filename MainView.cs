@@ -206,11 +206,11 @@ namespace CustomWindowsProperties
             OnPropertyChanged(nameof(CanInstall));
         }
 
-        public void EditorFocusChanged(string tag)
+        public void EditorFocusChanged(string tag, WebBrowser browser)
         {
             //CheckIfEditorDirty();
             if (tag != null)
-                HelpText = Help.Text(tag);
+                browser.NavigateToString(Help.HtmlText(tag));
         }
 
         public bool CanBeInstalled(PropertyConfig config)

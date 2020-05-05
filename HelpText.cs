@@ -2,6 +2,16 @@
 {
     static class Help
     {
+        public static string HtmlText (string tag)
+        {
+            var body = Text(tag);
+            if (!body.StartsWith("<"))
+                body = $"<p>{body}</p>";
+
+            return "<!doctype html><html lang=en><head><meta charset=utf-8><style>body{font-size:11px; font-family:Arial,Helvetica,sans-serif;}td{vertical-align:top;}</style></head>" + 
+                    $"<body><p><b>{tag}</b></p>{body}</body></html>";
+        }
+
         public static string Text(string tag)
         {
             switch (tag)

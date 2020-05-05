@@ -61,15 +61,13 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specifies how aggregate properties are displayed when multiple values are selected. Default is &quot;Default&quot;.
-        ///
-        ///Default	Displays a Multiple Values placeholder in the UI. This is the default if the type is incompatible with the specified aggregationType.
-        ///
-        ///First	Displays the property value of the first item in the selection or collection.
-        ///
-        ///Sum	Displays the sum of the numerical values. Useful for properties such as System.Media.Duration or System.Size. This value is not compatible with non-numeric types.
-        ///
-        ///A [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;p&gt;Specifies how aggregate properties are displayed when multiple values are selected. Default is &quot;Default&quot;.&lt;/p&gt;
+        ///&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+        ///Default	&lt;/td&gt;&lt;td&gt;Displays a Multiple Values placeholder in the UI. This is the default if the type is incompatible with the specified aggregationType.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///First&lt;/td&gt;&lt;td&gt;	Displays the property value of the first item in the selection or collection.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///Sum&lt;/td&gt;&lt;td&gt;	Displays the sum of the numerical values. Useful for properties such as System.Med [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AggregationType {
             get {
@@ -102,12 +100,13 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To optimize sorting and grouping, the Windows search engine can create secondary indexes for properties that have isColumn=&quot;true&quot; and is only useful in such cases.  If the property tends to be sorted frequently by users, this attribute should be specified.  
-        ///The default value is &quot;OnDemand&quot;.
-        ///The following values are valid. 
-        ///NotIndexed: Never build a value index. 
-        ///OnDisk: Build a value index by default for this property.
-        ///OnDiskAll: Build a value index by default for this property, and if it is a vector p [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;p&gt;To optimize sorting and grouping, the Windows search engine can create secondary indexes for properties that have isColumn=&quot;true&quot; and is only useful in such cases.  If the property tends to be sorted frequently by users, this attribute should be specified. The default value is &quot;OnDemand&quot;.&lt;/p&gt;
+        ///&lt;p&gt;The following values are valid. &lt;/p&gt;
+        ///&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+        ///NotIndexed:&lt;/td&gt;&lt;td&gt; Never build a value index. 
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///OnDisk: &lt;/td&gt;&lt;td&gt;Build a value index by default for this property.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ColumnIndexType {
             get {
@@ -116,13 +115,17 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specifies a hint to the Search Query Builder tool so that it can determine the default operator. The default is &quot;Equal&quot;. The possible values are as follows:
-        ///
-        ///Equal	        Indicates equivalent.
-        ///NotEqual	Indicates not equivalent.
-        ///LessThan	Indicates less than.
-        ///GreaterThan	Default for properties of ConditionType=&quot;Size&quot;. Indicates greater than.
-        ///Contains	Default for properties of ConditionType=&quot;String&quot;. Indicates inclusion..
+        ///   Looks up a localized string similar to &lt;p&gt;Specifies a hint to the Search Query Builder tool so that it can determine the default operator. The default is &quot;Equal&quot;. The possible values are as follows:&lt;/p&gt;
+        ///&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+        ///Equal	 &lt;/td&gt;&lt;td&gt; Indicates equivalent.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///NotEqual	&lt;/td&gt;&lt;td&gt;Indicates not equivalent.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///LessThan&lt;/td&gt;&lt;td&gt;	Indicates less than.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///GreaterThan	&lt;/td&gt;&lt;td&gt;Default for properties of ConditionType=&quot;Size&quot;. Indicates greater than.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///Contains&lt;/td&gt;&lt;td&gt;	Default for p [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ConditionOperation {
             get {
@@ -131,11 +134,11 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specifies a hint to the Search Query Builder UI so that it can determine the list of possible condition operators inside a predicate. The following are recognized values. The default is &quot;String&quot;.
-        ///
-        ///String	The following operators will be used: &quot;is&quot;, &quot;is not&quot;, &quot;&lt;&quot;, &quot;&gt;&quot;, &quot;&lt;=&quot;, &quot;=&quot;&quot;&gt;=&quot;, &quot;starts with&quot;, &quot;ends with&quot;, &quot;contains&quot;, &quot;doesn&apos;t contain&quot;, &quot;is like&quot;.
-        ///
-        ///Number	Default for numeric properties. The following operators will be used: &quot;equals&quot;, &quot;doesn&apos;t equal&quot;, &quot;is less than&quot;, &quot;is greater than&quot;, &quot;is less than o [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;p&gt;Specifies a hint to the Search Query Builder UI so that it can determine the list of possible condition operators inside a predicate. The following are recognized values. The default is &quot;String&quot;.&lt;/p&gt;
+        ///&lt;table&gt;&lt;tr&gt;
+        ///&lt;td&gt;String&lt;/td&gt;&lt;td&gt;The following operators will be used: &quot;is&quot;, &quot;is not&quot;, &quot;&lt;&quot;, &quot;&gt;&quot;, &quot;&lt;=&quot;, &quot;=&quot;&quot;&gt;=&quot;, &quot;starts with&quot;, &quot;ends with&quot;, &quot;contains&quot;, &quot;doesn&apos;t contain&quot;, &quot;is like&quot;.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;
+        ///&lt;td&gt; Number&lt;/td&gt;&lt;td&gt;Default for numeric properties. The following operators will be used: &quot;equals&quot;, &quot;doesn&apos;t e [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ConditionType {
             get {
@@ -162,15 +165,17 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specifies how this property is displayed when a view is grouped by this property. The default is &quot;Discrete&quot;.
-        ///
-        ///Discrete	Default. Displays individual values.
-        ///Alphanumeric Displays static alphanumeric ranges for values.
-        ///Size	Displays static size ranges for values.
-        ///Date	Displays month/year groups. Default for properties of type=&quot;DateTime&quot;.
-        ///TimeRelative Displays in time-relative groups.
-        ///Dynamic	Displays dynamically created ranges for the values.
-        ///Percent	Displays percent buckets..
+        ///   Looks up a localized string similar to &lt;p&gt;Specifies how this property is displayed when a view is grouped by this property. The default is &quot;Discrete&quot;.&lt;/p&gt;
+        ///&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+        ///Discrete	&lt;/td&gt;&lt;td&gt;Default. Displays individual values.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///Alphanumeric &lt;/td&gt;&lt;td&gt;Displays static alphanumeric ranges for values.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///Size&lt;/td&gt;&lt;td&gt;	Displays static size ranges for values.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///Date	&lt;/td&gt;&lt;td&gt;Displays month/year groups. Default for properties of type=&quot;DateTime&quot;.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///TimeRelative&lt;/td&gt;&lt;td&gt; Displays [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GroupingRange {
             get {
@@ -293,12 +298,18 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specifies the strings offered as sort options. The following values provide the corresponding UI strings.
-        ///General: &quot;Sort going up&quot; / &quot;Sort going down&quot;
-        ///AToZ: &quot;A on top&quot; / &quot;Z on top&quot;
-        ///LowestHighest: &quot;Lowest on top&quot; / &quot;Highest on top&quot;
-        ///OldestNewest: &quot;Oldest on top&quot; / &quot;Newest on top&quot;
-        ///SmallestLargest: &quot;Smallest on top&quot; / &quot;Largest on top&quot;.
+        ///   Looks up a localized string similar to &lt;p&gt;Specifies the strings offered as sort options. The following values provide the corresponding UI strings.&lt;/p&gt;
+        ///&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+        ///General: &lt;/td&gt;&lt;td&gt;&quot;Sort going up&quot; / &quot;Sort going down&quot;
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///AToZ:&lt;/td&gt;&lt;td&gt; &quot;A on top&quot; / &quot;Z on top&quot;
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///LowestHighest:&lt;/td&gt;&lt;td&gt; &quot;Lowest on top&quot; / &quot;Highest on top&quot;
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///OldestNewest: &lt;/td&gt;&lt;td&gt;&quot;Oldest on top&quot; / &quot;Newest on top&quot;
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///SmallestLargest: &lt;/td&gt;&lt;td&gt;&quot;Smallest on top&quot; / &quot;Largest on top&quot;
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;.
         /// </summary>
         internal static string SortDescription {
             get {
