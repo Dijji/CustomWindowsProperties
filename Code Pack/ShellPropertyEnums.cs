@@ -733,6 +733,15 @@ namespace CustomWindowsProperties
         MaskAll = 0x000003ff,
     }
 
+    [Flags]
+    public enum PropertySearchInfoFlags
+    {
+        Default = 0x00000000,
+        InInvertedIndex = 0x00000001,
+        IsColumn = 0x00000002,
+        IsColumnSparse = 0x00000004,
+        AlwaysInclude = 0x00000008,
+        UseForTypeAhead = 0x00000010,
+    }
     #endregion
-
 }

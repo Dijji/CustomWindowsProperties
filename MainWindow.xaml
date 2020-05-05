@@ -268,8 +268,23 @@
                     <TextBox Grid.Row="29" Grid.Column="2" Margin="0,0,10,0" Text="{Binding DefaultColumnWidth, UpdateSourceTrigger=PropertyChanged}" 
                              MinWidth="50" VerticalAlignment="Center"
                          Tag="DefaultColumWidth" HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Row="30" Grid.Column="1" Text="EditControl:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="30" Grid.Column="1" Margin="0,0,10,0" Text="Alignment:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="30" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                       SelectedItem="{Binding Alignment, UpdateSourceTrigger=PropertyChanged}" Tag="Alignment"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyAlignmentType}}}"/>
+                    <TextBlock Grid.Row="31" Grid.Column="1" Margin="0,0,10,0" Text="RelativeDescriptionType:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="31" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                       SelectedItem="{Binding RelativeDescriptionType, UpdateSourceTrigger=PropertyChanged}" Tag="RelativeDescriptionType"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:RelativeDescriptionType}}}"/>
+                    <TextBlock Grid.Row="32" Grid.Column="1" Margin="0,0,10,0" Text="DefaultSortDirection:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="32" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                       SelectedItem="{Binding DefaultSortDirection, UpdateSourceTrigger=PropertyChanged}" Tag="DefaultSortDirection"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:SortDirection}}}"/>
+                    <TextBlock Grid.Row="33" Grid.Column="1" Text="EditControl:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="33" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding EditControl, UpdateSourceTrigger=PropertyChanged}" Tag="EditControl"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:EditControl}}}"/> 
@@ -365,6 +380,8 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Basics" FontWeight="Bold"  VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="Name:" VerticalAlignment="Center"/>
@@ -416,7 +433,7 @@
                     <TextBlock Grid.Row="16" Grid.Column="1" Text="IsViewable:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="16" Grid.Column="2" Text="{Binding IsViewable}" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="17" Grid.Column="1" Text="SearchRawValue:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="17" Grid.Column="2" VerticalAlignment="Center" Text="{Binding SearchRawValue}"/>
+                    <TextBlock Grid.Row="17" Grid.Column="2" VerticalAlignment="Center" Text="unavailable"/>
                     <TextBlock Grid.Row="18" Grid.Column="1" Text="ConditionType:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="18" Grid.Column="2" Text="{Binding ConditionType}" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="19" Grid.Column="1" Margin="0,0,10,0" Text="ConditionOperation:" VerticalAlignment="Center"/>
@@ -425,9 +442,15 @@
                     <TextBlock Grid.Row="20" Grid.Column="1" Text="DisplayType:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="20" Grid.Column="2" Text="{Binding DisplayType}" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="21" Grid.Column="1" Margin="0,0,10,0" Text="DefaultColumWidth:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="21" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultColumWidth}"/>
-                    <TextBlock Grid.Row="22" Grid.Column="1" Text="EditControl:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="22" Grid.Column="2" Text="{Binding EditControl}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="21" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultColumnWidth}"/>
+                    <TextBlock Grid.Row="22" Grid.Column="1" Margin="0,0,10,0" Text="Alignment:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="22" Grid.Column="2" VerticalAlignment="Center" Text="{Binding Alignment}"/>
+                    <TextBlock Grid.Row="23" Grid.Column="1" Margin="0,0,10,0" Text="RelativeDescriptionType:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="23" Grid.Column="2" VerticalAlignment="Center" Text="{Binding RelativeDescriptionType}"/>
+                    <TextBlock Grid.Row="24" Grid.Column="1" Margin="0,0,10,0" Text="DefaultSortDirection:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="24" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultSortDirection}"/>
+                    <TextBlock Grid.Row="25" Grid.Column="1" Text="EditControl:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="25" Grid.Column="2" Text="unavailable" VerticalAlignment="Center"/>
                 </Grid>
             </ScrollViewer>
         </Border>

@@ -6,19 +6,19 @@ using System.Runtime.InteropServices;
 
 namespace CustomWindowsProperties
 {
-    internal enum RelativeDescriptionType
+    public enum RelativeDescriptionType
     {
-        General,
-        Date,
-        Size,
-        Count,
-        Revision,
-        Length,
-        Duration,
-        Speed,
-        Rate,
-        Rating,
-        Priority
+        General = 0,
+        Date = 1,
+        Size = 2,
+        Count = 3,
+        Revision = 4,
+        Length = 5,
+        Duration = 6,
+        Speed = 7,
+        Rate = 8,
+        Rating = 9,
+        Priority = 10
     }
     internal static class ShellIIDGuid
     {
@@ -28,6 +28,8 @@ namespace CustomWindowsProperties
         internal const string IPropertyEnumType = "11E1FBF9-2D56-4A6B-8DB3-7CD193A471F2";
         internal const string IPropertyEnumType2 = "9B6E051C-5DDD-4321-9070-FE2ACB55E794";
         internal const string IPropertyEnumTypeList = "A99400F4-3D84-4557-94BA-1242FB2CC9A6";
+        internal const string IPropertyDescriptionSearchInfo = "078f91bd-29a2-440f-924e-46a291524520";
+        internal const string IPropertyDescriptionAliasInfo = "f67104fc-2af9-46fd-b32d-243c1404f3d1";
     }
     [ComImport,
     Guid(ShellIIDGuid.IPropertyDescriptionList),
@@ -77,8 +79,9 @@ namespace CustomWindowsProperties
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetGroupingRange(out PropertyGroupingRange pgr);
+        [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        void GetRelativeDescriptionType(out RelativeDescriptionType prdt);
+        HResult GetRelativeDescriptionType(out RelativeDescriptionType prdt);
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetRelativeDescription([In] PropVariant propvar1, [In] PropVariant propvar2, [MarshalAs(UnmanagedType.LPWStr)] out string ppszDesc1, [MarshalAs(UnmanagedType.LPWStr)] out string ppszDesc2);
         [PreserveSig]
@@ -103,6 +106,40 @@ namespace CustomWindowsProperties
         HResult FormatForDisplay([In] PropVariant propvar, [In] ref PropertyDescriptionFormatOptions pdfFlags, [MarshalAs(UnmanagedType.LPWStr)] out string ppszDisplay);
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult IsValueCanonical([In] PropVariant propvar);
+    }
+
+    [ComImport,
+    Guid(ShellIIDGuid.IPropertyDescriptionSearchInfo),
+    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IPropertyDescriptionSearchInfo : IPropertyDescription
+    {
+        [PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        HResult GetSearchInfoFlags(out PropertySearchInfoFlags ppdsiFlags);
+        [PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        HResult GetColumnIndexType(out ColumnIndexType ppdciType);
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime),
+        PreserveSig]
+        HResult GetProjectionString([MarshalAs(UnmanagedType.LPWStr)] out string ppszName);
+        [PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        HResult GetMaxSize(out uint pcbMaxSize);
+    }
+
+
+    [ComImport,
+    Guid(ShellIIDGuid.IPropertyDescriptionAliasInfo),
+    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IPropertyDescriptionAliasInfo : IPropertyDescription
+    {
+        [PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        HResult GetSortByAlias([In] ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out IPropertyDescription ppv);
+
+        [PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        HResult GetAdditionalSortByAliases([In] ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out IPropertyDescriptionList ppv);
     }
 
     [ComImport,
@@ -187,6 +224,18 @@ namespace CustomWindowsProperties
             ref PropertyKey propkey,
             ref Guid riid,
             [Out, MarshalAs(UnmanagedType.Interface)] out IPropertyDescription ppv
+        );
+        [DllImport("propsys.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        internal static extern HResult PSGetPropertyDescription(
+            ref PropertyKey propkey,
+            ref Guid riid,
+            [Out, MarshalAs(UnmanagedType.Interface)] out IPropertyDescriptionSearchInfo ppv
+        );
+        [DllImport("propsys.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        internal static extern HResult PSGetPropertyDescription(
+            ref PropertyKey propkey,
+            ref Guid riid,
+            [Out, MarshalAs(UnmanagedType.Interface)] out IPropertyDescriptionAliasInfo ppv
         );
 
         [DllImport("Propsys.dll", CharSet = CharSet.Unicode)]

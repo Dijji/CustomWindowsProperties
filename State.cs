@@ -231,25 +231,78 @@ namespace CustomWindowsProperties
             return -1;
         }
 
-        private PropertyConfig GetInstalledProperty(PropertyConfig pc)
+        private PropertyConfig GetInstalledProperty(PropertyConfig pc, bool skipBasics = false)
         {
             try
             {
+                PropertyConfig installed = null;
                 var key = new PropertyKey(pc.FormatId, (int)pc.PropertyId);
-                var guid = new Guid(ShellIIDGuid.IPropertyDescription);
+                var guidDescription = new Guid(ShellIIDGuid.IPropertyDescription);
 
-                var hr = PropertySystemNativeMethods.PSGetPropertyDescription(
-                            ref key, ref guid, out IPropertyDescription propertyDescription);
-
-                if (hr >= 0)
+                if (!skipBasics)
                 {
-                    var shellProperty = new ShellPropertyDescription(propertyDescription);
-                    var installed = new PropertyConfig(shellProperty);
-                    shellProperty.Dispose(); // Releases propertyDescription
-                    return installed;
+                    var hr = PropertySystemNativeMethods.PSGetPropertyDescription(
+                                ref key, ref guidDescription, out IPropertyDescription propertyDescription);
+
+                    if (hr >= 0)
+                    {
+                        var shellProperty = new ShellPropertyDescription(propertyDescription);
+                        installed = new PropertyConfig(shellProperty);
+                        shellProperty.Dispose(); // Releases propertyDescription
+                    }
                 }
                 else
-                    return null;
+                    installed = pc; // Continue populating existing config
+
+                if (installed != null)
+                {
+                    var guidSearch = new Guid(ShellIIDGuid.IPropertyDescriptionSearchInfo);
+
+                    var hr = PropertySystemNativeMethods.PSGetPropertyDescription(
+                                ref key, ref guidSearch, out IPropertyDescriptionSearchInfo propSearchInfo);
+
+                    if (hr >= 0)
+                    {
+                        hr = propSearchInfo.GetSearchInfoFlags(out PropertySearchInfoFlags searchOptions);
+                        if (hr >= 0)
+                        {
+                            installed.InInvertedIndex = searchOptions.HasFlag(PropertySearchInfoFlags.InInvertedIndex);
+                            installed.IsColumn = searchOptions.HasFlag(PropertySearchInfoFlags.IsColumn);
+                            installed.IsColumnSparse = searchOptions.HasFlag(PropertySearchInfoFlags.IsColumnSparse);
+                            installed.AlwaysInclude = searchOptions.HasFlag(PropertySearchInfoFlags.AlwaysInclude);
+                            installed.UseForTypeAhead = searchOptions.HasFlag(PropertySearchInfoFlags.UseForTypeAhead);
+                        }
+                        hr = propSearchInfo.GetColumnIndexType(out ColumnIndexType ppType);
+                        if (hr >= 0) installed.ColumnIndexType = ppType;
+                        // Just the canonical name again
+                        //hr = propSearchInfo.GetProjectionString(out string projectionString);
+                        //if (hr >= 0)) installed.MaxSize = maxSize;
+                        hr = propSearchInfo.GetMaxSize(out uint maxSize);
+                        if (hr >= 0) installed.MaxSize = maxSize;
+
+                        Marshal.ReleaseComObject(propSearchInfo);
+                    }
+
+                    var guidAlias = new Guid(ShellIIDGuid.IPropertyDescriptionAliasInfo);
+
+                    hr = PropertySystemNativeMethods.PSGetPropertyDescription(
+                                ref key, ref guidAlias, out IPropertyDescriptionAliasInfo propAliasInfo);
+
+                    if (hr >= 0)
+                    {
+                        hr = propAliasInfo.GetSortByAlias(guidDescription, out IPropertyDescription alias);
+                        if (hr >= 0 && alias != null)
+                        {
+                            // To do use the information, if we ever get it
+
+                            Marshal.ReleaseComObject(alias);
+                        }
+
+                        Marshal.ReleaseComObject(propAliasInfo);
+                    }
+                }
+
+                return installed;
             }
 #pragma warning disable CS0168 // Variable is declared but never used
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
@@ -260,7 +313,7 @@ namespace CustomWindowsProperties
                 return null;
             }
         }
-
+      
         public bool UnregisterCustomProperty(string canonicalName)
         {
             // The file is held in a more protected common area away from the editor
@@ -311,6 +364,7 @@ namespace CustomWindowsProperties
                             var pc = new PropertyConfig(shellProperty);
                             shellProperty.Dispose(); // Releases propertyDescription
                             propertyDescription = null;
+                            GetInstalledProperty(pc, true); // Add search and alias info
                             propertyList.Add(pc);
                             DictInstalledProperties.Add(pc.CanonicalName, pc);
                         }

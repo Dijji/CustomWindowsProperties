@@ -29,11 +29,12 @@ namespace CustomWindowsProperties
 
     public enum ColumnIndexType
     {
-        NotIndexed,
-        OnDisk,
-        OnDiskAll,
-        OnDiskVector,
-        OnDemand,
+        NotIndexed = 0,
+        OnDisk = 1,
+        InMemory = 2, // Obsolete
+        OnDiskAll = 3,
+        OnDiskVector = 4,
+        OnDemand = 5,
     }
 
     public enum EditControl
@@ -49,6 +50,18 @@ namespace CustomWindowsProperties
         IconList,
     }
 
+    public enum PropertyAlignmentType
+    {
+        Left,
+        Center,
+        Right,
+    }
+
+    public enum SortDirection
+    {
+        Ascending,
+        Descending,
+    }
 
     internal class PropertyUtils
     {

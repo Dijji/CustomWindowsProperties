@@ -448,7 +448,7 @@ namespace CustomWindowsProperties
 
         private void ShowIfSavedIsInstalled(string canonicalName)
         {
-            var treeItem = PropertyTree.FindTreeItem(canonicalName, dictSavedTree, SavedPropertyTree);
+            var treeItem = PropertyTree.FindTreeItem(canonicalName, dictSavedTree);
             if (treeItem != null)
                 ShowIfSavedIsInstalled(treeItem, treeItem.Item as PropertyConfig);
         }

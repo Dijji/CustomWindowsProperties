@@ -92,6 +92,19 @@ namespace CustomWindowsProperties
         public string Mnemonics { get { return mnemonics; } set { mnemonics = value; OnPropertyChanged(); } }
         private string mnemonics;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool AlwaysInclude { get { return alwaysInclude; } set { alwaysInclude = value; OnPropertyChanged(); } }
+        private bool alwaysInclude;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool UseForTypeAhead { get { return useForTypeAhead; } set { useForTypeAhead = value; OnPropertyChanged(); } }
+        private bool useForTypeAhead;
+
+
         // LABEL
 
         /// <summary>
@@ -124,8 +137,6 @@ namespace CustomWindowsProperties
         {
             return null;
         }
-
-        // To do HideLabel
 
         /// <summary>
         /// Gets the text used in edit controls hosted in various dialog boxes.
@@ -260,6 +271,13 @@ namespace CustomWindowsProperties
 
         // DISPLAY
 
+        /// <summary>
+        /// The control used to edit the property.
+        /// </summary>
+        public EditControl EditControl { get { return editControl; } set { editControl = value; OnPropertyChanged(); } }
+        private EditControl editControl;
+
+
         //To do lots of things about how the value is set
 
         /// <summary>
@@ -274,12 +292,27 @@ namespace CustomWindowsProperties
         public uint DefaultColumnWidth { get { return defaultColumnWidth; } set { defaultColumnWidth = value; OnPropertyChanged(); } }
         private uint defaultColumnWidth;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public PropertyAlignmentType Alignment { get { return alignment; } set { alignment = value; OnPropertyChanged(); } }
+        private PropertyAlignmentType alignment;
+
 
         /// <summary>
-        /// The control used to edit the property.
+        /// 
         /// </summary>
-        public EditControl EditControl { get { return editControl; } set { editControl = value; OnPropertyChanged(); } }
-        private EditControl editControl;
+        public RelativeDescriptionType RelativeDescriptionType { get { return relativeDescriptionType; } set { relativeDescriptionType = value; OnPropertyChanged(); } }
+        private RelativeDescriptionType relativeDescriptionType;
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public SortDirection DefaultSortDirection { get { return defaultSortDirection; } set { defaultSortDirection = value; OnPropertyChanged(); } }
+        private SortDirection defaultSortDirection;
+
+
 
         // OTHER
 
@@ -335,7 +368,7 @@ namespace CustomWindowsProperties
             DisplayName = propertyDescription.DisplayName;
             EditInvitation = propertyDescription.EditInvitation;
             SortDescription = propertyDescription.SortDescription;
-            // To do source HideLabel
+            HideLabel = propertyDescription.ViewFlags.HasFlag(PropertyViewOptions.HideLabel);
 
             // Type information
             Type = PropertyUtils.VarEnumToPropertyType(propertyDescription.VarEnumType);
@@ -345,6 +378,7 @@ namespace CustomWindowsProperties
             CanBePurged = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.CanBePurged);
             IsGroup = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IsGroup);
             AggregationType = propertyDescription.AggregationTypes;
+            // Pre-Windows 7
             //CanGroupBy = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.CanGroupBy);
             //CanStackBy = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.CanStackBy);
             IsTreeProperty = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IsTreeProperty);
@@ -355,15 +389,26 @@ namespace CustomWindowsProperties
 
             // Display information
             DisplayType = propertyDescription.DisplayType;
-            DefaultColumnWidth = propertyDescription.DefaultColumWidth;
-            // To do are these just pre-Windows 7?
+            DefaultColumnWidth = propertyDescription.DefaultColumnWidth;
+            if (propertyDescription.ViewFlags.HasFlag(PropertyViewOptions.CenterAlign))
+                Alignment = PropertyAlignmentType.Center;
+            else if (propertyDescription.ViewFlags.HasFlag(PropertyViewOptions.RightAlign))
+                Alignment = PropertyAlignmentType.Right;
+            else
+                Alignment = PropertyAlignmentType.Left;
+            RelativeDescriptionType = propertyDescription.RelativeDescriptionType;
+            if (propertyDescription.ViewFlags.HasFlag(PropertyViewOptions.SortDescending))
+                DefaultSortDirection = SortDirection.Descending;
+            else
+                DefaultSortDirection = SortDirection.Ascending;
+
+            // Pre-Windows 7 displayInfo
             //ColumnState = propertyDescription.ColumnState;
 
             // To do elements controlling editing the property
+            // They do not seem to be readable: we have EditControl so far
 
-            // To do this GetRelativeDescription:  shell property Does not read it  from the interface
-
-            // To do. See if these are still relevant
+            // To do. See if these have any more juice in them
             ViewFlags = propertyDescription.ViewFlags;
 
         }
@@ -395,12 +440,16 @@ namespace CustomWindowsProperties
             AggregationType = PropertyAggregationType.Default;
             IsTreeProperty = false;
             IsViewable = false;
+            SearchRawValue = false;
             ConditionType = PropertyConditionType.None;
             ConditionOperation = PropertyConditionOperation.Equal;
-            //SearchRawValue = false;
 
             DisplayType = PropertyDisplayType.String;
             DefaultColumnWidth = 20;
+            Alignment = PropertyAlignmentType.Left;
+            RelativeDescriptionType = RelativeDescriptionType.General;
+            DefaultSortDirection = SortDirection.Ascending;
+            EditControl = EditControl.Default;
         }
 
         public static string Publisher { get; set; } = "Publisher";
@@ -499,6 +548,12 @@ namespace CustomWindowsProperties
             display.SetAttribute("displayType", DisplayType.ToString());
             if (DefaultColumnWidth != 20)
                 display.SetAttribute("defaultColumnWidth", DefaultColumnWidth.ToString());
+            if (Alignment != PropertyAlignmentType.Left)
+                display.SetAttribute("alignment", Alignment.ToString());
+            if (RelativeDescriptionType != RelativeDescriptionType.General)
+                display.SetAttribute("relativeDescriptionType", RelativeDescriptionType.ToString());
+            if (DefaultSortDirection != SortDirection.Ascending)
+                display.SetAttribute("defaultSortDirection", DefaultSortDirection.ToString());
             if (EditControl != EditControl.Default)
             {
                 var edit = doc.CreateElement("editControl");
@@ -557,14 +612,19 @@ namespace CustomWindowsProperties
             AggregationType = from.AggregationType;
             IsTreeProperty = from.IsTreeProperty;
             IsViewable = from.IsViewable;
-            SearchRawValue = from.SearchRawValue;
+            if (!isInstalled)
+                SearchRawValue = from.SearchRawValue;
             ConditionType = from.ConditionType;
             ConditionOperation = from.ConditionOperation;
 
             // Display
             DisplayType = from.DisplayType;
             DefaultColumnWidth = from.DefaultColumnWidth;
-            EditControl = from.EditControl;
+            Alignment = from.Alignment;
+            RelativeDescriptionType = from.RelativeDescriptionType;
+            DefaultSortDirection = from.DefaultSortDirection;
+            if (!isInstalled)
+                EditControl = from.EditControl;
         }
 
         internal struct Difference
@@ -626,6 +686,9 @@ namespace CustomWindowsProperties
             // Display
             if (DisplayType != baseline.DisplayType) result.Add (new Difference(nameof(DisplayType), DisplayType, baseline.DisplayType));
             if (DefaultColumnWidth != baseline.DefaultColumnWidth) result.Add (new Difference(nameof(DefaultColumnWidth), DefaultColumnWidth, baseline.DefaultColumnWidth));
+            if (Alignment != baseline.Alignment) result.Add(new Difference(nameof(Alignment), Alignment, baseline.Alignment));
+            if (RelativeDescriptionType != baseline.RelativeDescriptionType) result.Add(new Difference(nameof(RelativeDescriptionType), RelativeDescriptionType, baseline.RelativeDescriptionType));
+            if (DefaultSortDirection != baseline.DefaultSortDirection) result.Add(new Difference(nameof(DefaultSortDirection), DefaultSortDirection, baseline.DefaultSortDirection));
             if (EditControl != baseline.EditControl) result.Add (new Difference(nameof(EditControl), EditControl, baseline.EditControl));
             return result;
         }

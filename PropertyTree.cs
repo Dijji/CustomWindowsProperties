@@ -70,8 +70,7 @@ namespace CustomWindowsProperties
 
             return dict;
         }
-        public static TreeItem FindTreeItem(string name,
-                Dictionary<string, TreeItem> dictTree, ObservableCollection<TreeItem> roots)
+        public static TreeItem FindTreeItem(string name, Dictionary<string, TreeItem> dictTree)
         {
             TreeItem result = null;
             var parentName = FirstPartsOf(name);

@@ -24,7 +24,7 @@ namespace CustomWindowsProperties
         private VarEnum? varEnumType = null;
         private PropertyDisplayType? displayType;
         private PropertyAggregationType? aggregationTypes;
-        private uint? defaultColumWidth;
+        private uint? defaultColumnWidth;
         private PropertyTypeOptions? propertyTypeFlags;
         private PropertyViewOptions? propertyViewFlags;
         private Type valueType;
@@ -33,6 +33,7 @@ namespace CustomWindowsProperties
         private PropertyConditionType? conditionType;
         private PropertyConditionOperation? conditionOperation;
         private PropertyGroupingRange? groupingRange;
+        private RelativeDescriptionType? relativeDescriptionType;
         private PropertySortDescription? sortDescription;
 
         #endregion
@@ -185,23 +186,23 @@ namespace CustomWindowsProperties
         /// <summary>
         /// Gets the default user interface (UI) column width for this property.
         /// </summary>
-        public uint DefaultColumWidth
+        public uint DefaultColumnWidth
         {
             get
             {
-                if (NativePropertyDescription != null && !defaultColumWidth.HasValue)
+                if (NativePropertyDescription != null && !defaultColumnWidth.HasValue)
                 {
-                    uint tempDefaultColumWidth;
+                    uint tempDefaultColumnWidth;
 
-                    HResult hr = NativePropertyDescription.GetDefaultColumnWidth(out tempDefaultColumWidth);
+                    HResult hr = NativePropertyDescription.GetDefaultColumnWidth(out tempDefaultColumnWidth);
 
                     if (CoreErrorHelper.Succeeded(hr))
                     {
-                        defaultColumWidth = tempDefaultColumWidth;
+                        defaultColumnWidth = tempDefaultColumnWidth;
                     }
                 }
 
-                return defaultColumWidth.HasValue ? defaultColumWidth.Value : default(uint);
+                return defaultColumnWidth.HasValue ? defaultColumnWidth.Value : default(uint);
             }
         }
 
@@ -382,6 +383,25 @@ namespace CustomWindowsProperties
             }
         }
 
+        public RelativeDescriptionType RelativeDescriptionType
+        {
+            get
+            {
+                // If default/first value, try to get it again, otherwise used the cached one.
+                if (NativePropertyDescription != null && relativeDescriptionType == null)
+                {
+                    HResult hr = NativePropertyDescription.GetRelativeDescriptionType(out RelativeDescriptionType tempDescriptionType);
+
+                    if (CoreErrorHelper.Succeeded(hr))
+                    {
+                        relativeDescriptionType = tempDescriptionType;
+                    }
+                }
+
+                return relativeDescriptionType.HasValue ? relativeDescriptionType.Value : default(RelativeDescriptionType);
+            }
+        }
+
         /// <summary>
         /// Gets the current sort description flags for the property, 
         /// which indicate the particular wordings of sort offerings.
@@ -543,7 +563,7 @@ namespace CustomWindowsProperties
                 canonicalName = null;
                 displayName = null;
                 editInvitation = null;
-                defaultColumWidth = null;
+                defaultColumnWidth = null;
                 valueType = null;
                 propertyEnumTypes = null;
             }
