@@ -61,6 +61,32 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specifies how aggregate properties are displayed when multiple values are selected. Default is &quot;Default&quot;.
+        ///
+        ///Default	Displays a Multiple Values placeholder in the UI. This is the default if the type is incompatible with the specified aggregationType.
+        ///
+        ///First	Displays the property value of the first item in the selection or collection.
+        ///
+        ///Sum	Displays the sum of the numerical values. Useful for properties such as System.Media.Duration or System.Size. This value is not compatible with non-numeric types.
+        ///
+        ///A [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AggregationType {
+            get {
+                return ResourceManager.GetString("AggregationType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When set to &quot;true&quot;, allows an innate property to be deleted. Innate properties, which are calculated from other properties, are read-only by definition. The available and default values for this attribute depends on the IsInnate value. If IsInnate is &quot;true &quot;, then CanBePurged defaults to &quot;false&quot;, but may be set to &quot;true&quot;. If IsInnate is &quot;false&quot;, then CanBePurged must be &quot;true&quot;..
+        /// </summary>
+        internal static string CanBePurged {
+            get {
+                return ResourceManager.GetString("CanBePurged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The case-sensitive name of a property as it is known to the system, regardless of its localized name.
         ///
         ///Canonical names consist of any number of tokens, separated by dots, for example:
@@ -86,6 +112,78 @@ namespace CustomWindowsProperties {
         internal static string ColumnIndexType {
             get {
                 return ResourceManager.GetString("ColumnIndexType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies a hint to the Search Query Builder tool so that it can determine the default operator. The default is &quot;Equal&quot;. The possible values are as follows:
+        ///
+        ///Equal	        Indicates equivalent.
+        ///NotEqual	Indicates not equivalent.
+        ///LessThan	Indicates less than.
+        ///GreaterThan	Default for properties of ConditionType=&quot;Size&quot;. Indicates greater than.
+        ///Contains	Default for properties of ConditionType=&quot;String&quot;. Indicates inclusion..
+        /// </summary>
+        internal static string ConditionOperation {
+            get {
+                return ResourceManager.GetString("ConditionOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies a hint to the Search Query Builder UI so that it can determine the list of possible condition operators inside a predicate. The following are recognized values. The default is &quot;String&quot;.
+        ///
+        ///String	The following operators will be used: &quot;is&quot;, &quot;is not&quot;, &quot;&lt;&quot;, &quot;&gt;&quot;, &quot;&lt;=&quot;, &quot;=&quot;&quot;&gt;=&quot;, &quot;starts with&quot;, &quot;ends with&quot;, &quot;contains&quot;, &quot;doesn&apos;t contain&quot;, &quot;is like&quot;.
+        ///
+        ///Number	Default for numeric properties. The following operators will be used: &quot;equals&quot;, &quot;doesn&apos;t equal&quot;, &quot;is less than&quot;, &quot;is greater than&quot;, &quot;is less than o [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ConditionType {
+            get {
+                return ResourceManager.GetString("ConditionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The display name of the property as it is displayed in the UI (for example, the details column label or preview panel)..
+        /// </summary>
+        internal static string DisplayName {
+            get {
+                return ResourceManager.GetString("DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Help string text that is displayed as an instruction to the user for the control or ToolTip (for instance, &quot;Enter author name.&quot;)..
+        /// </summary>
+        internal static string EditInvitation {
+            get {
+                return ResourceManager.GetString("EditInvitation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies how this property is displayed when a view is grouped by this property. The default is &quot;Discrete&quot;.
+        ///
+        ///Discrete	Default. Displays individual values.
+        ///Alphanumeric Displays static alphanumeric ranges for values.
+        ///Size	Displays static size ranges for values.
+        ///Date	Displays month/year groups. Default for properties of type=&quot;DateTime&quot;.
+        ///TimeRelative Displays in time-relative groups.
+        ///Dynamic	Displays dynamically created ranges for the values.
+        ///Percent	Displays percent buckets..
+        /// </summary>
+        internal static string GroupingRange {
+            get {
+                return ResourceManager.GetString("GroupingRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicates whether the label is hidden. The default is &quot;false&quot;..
+        /// </summary>
+        internal static string HideLabel {
+            get {
+                return ResourceManager.GetString("HideLabel", resourceCulture);
             }
         }
         
@@ -120,6 +218,42 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specifies whether the property is a group heading. Default is &quot;false&quot;. A group heading is strictly used to group properties within a list, has no value, and is never stored in a file. Some UI in the system use property lists to indicate the sequence of the properties to display. These property lists may include references to group headings (eg, System.PropGroup.Camera), which tell the UI to start a new group section (eg, &quot;Camera Settings&quot;). A property description with IsGroup=&quot;true&quot; should specify a , other [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string IsGroup {
+            get {
+                return ResourceManager.GetString("IsGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default is &quot;false&quot;. Specifies whether the property is considered innate. An innate property is one which is either calculated from the content of a file, or from other resources or systems. For example, System.Size is an innate property provided by the file system; changing the value of the property in and of itself does nothing. Other examples are System.Image.Dimensions and System.Document.PageCount, which are calculated by programs based upon the content of the file, not based upon a user-changeable sett [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string IsInnate {
+            get {
+                return ResourceManager.GetString("IsInnate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Whether this is a tree property. The default is &quot;false&quot;..
+        /// </summary>
+        internal static string IsTreeProperty {
+            get {
+                return ResourceManager.GetString("IsTreeProperty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies whether this property is intended to be viewable to the user. Default value is &quot;false&quot;. For example, the Column Chooser UI only shows the properties that have IisViewable=&quot;true&quot;. The exception is UI that is driven by a property list, which will always show the property. If you have a property that is only meant to shuttle data between two objects, and never intended to be viewed by the user, this attribute should be false..
+        /// </summary>
+        internal static string IsViewable {
+            get {
+                return ResourceManager.GetString("IsViewable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The maximum size, in bytes, allowed for a certain property that is stored in the Windows search database.
         ///The default is: 512 bytes 
         ///Note that this maximum size is measured in bytes, not characters. The maximum number of characters depends on their encoding..
@@ -137,6 +271,51 @@ namespace CustomWindowsProperties {
         internal static string Mnemonics {
             get {
                 return ResourceManager.GetString("Mnemonics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies whether this property can have multiple values. Default is &quot;false&quot;..
+        /// </summary>
+        internal static string MultipleValues {
+            get {
+                return ResourceManager.GetString("MultipleValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default is &quot;false&quot;..
+        /// </summary>
+        internal static string SearchRawValue {
+            get {
+                return ResourceManager.GetString("SearchRawValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies the strings offered as sort options. The following values provide the corresponding UI strings.
+        ///General: &quot;Sort going up&quot; / &quot;Sort going down&quot;
+        ///AToZ: &quot;A on top&quot; / &quot;Z on top&quot;
+        ///LowestHighest: &quot;Lowest on top&quot; / &quot;Highest on top&quot;
+        ///OldestNewest: &quot;Oldest on top&quot; / &quot;Newest on top&quot;
+        ///SmallestLargest: &quot;Smallest on top&quot; / &quot;Largest on top&quot;.
+        /// </summary>
+        internal static string SortDescription {
+            get {
+                return ResourceManager.GetString("SortDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicates the type of the property. The default is &quot;Any&quot;.
+        ///Notes on some of the less obvious options:
+        ///&quot;Any&quot; means that the property system does not know anything about the type of the value, and you are strongly encouraged not to use this default.
+        ///&quot;Null&quot; means that the property never has a value.
+        ///Some of the options only make sense for programmatic access to the property, like Buffer, Stream, Blob, Clipboard or Object, and cannot be used directly in an editor..
+        /// </summary>
+        internal static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
             }
         }
     }

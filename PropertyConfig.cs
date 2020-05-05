@@ -108,13 +108,13 @@ namespace CustomWindowsProperties
         // LABEL
 
         /// <summary>
-        /// Gets the display name of the property as it is shown in any user interface (UI).
+        /// The display name of the property as it is shown in any user interface (UI).
         /// </summary>
         public string DisplayName { get { return displayName; } set { displayName = value; OnPropertyChanged(); } }
         private string displayName;
 
         /// <summary>
-        /// Gets the current sort description flags for the property, 
+        /// The current sort description flags for the property, 
         /// which indicate the particular wordings of sort offerings.
         /// </summary>
         /// <remarks>The settings retrieved by this method are set 
@@ -139,7 +139,7 @@ namespace CustomWindowsProperties
         }
 
         /// <summary>
-        /// Gets the text used in edit controls hosted in various dialog boxes.
+        /// The text used in edit controls hosted in various dialog boxes.
         /// </summary>
         public string EditInvitation { get { return editInvitation; } set { editInvitation = value; OnPropertyChanged(); } }
         private string editInvitation;
@@ -574,7 +574,7 @@ namespace CustomWindowsProperties
 
         internal void CopyFrom(PropertyConfig from, bool isInstalled)
         {
-            // If we don't copy a value, set it toMostly the default
+            // If we don't copy a value, set it to the default
             SetDefaultValues();
 
             // Basics

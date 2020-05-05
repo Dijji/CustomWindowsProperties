@@ -117,6 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AggregationType" xml:space="preserve">
+    <value>Specifies how aggregate properties are displayed when multiple values are selected. Default is "Default".
+
+Default	Displays a Multiple Values placeholder in the UI. This is the default if the type is incompatible with the specified aggregationType.
+
+First	Displays the property value of the first item in the selection or collection.
+
+Sum	Displays the sum of the numerical values. Useful for properties such as System.Media.Duration or System.Size. This value is not compatible with non-numeric types.
+
+Average	Displays the average of the numerical values. Useful for properties such as System.Rating. This value is not compatible with non-numeric types.
+
+DateRange	Displays a range of dates. Useful for properties like System.Photo.DateTaken. This value is not compatible with anything except type="DateTime" and is the default for properties of that type.
+
+Union	Displays a union of all the values in the selection or collection. The order in which the values are shown is undefined. This value is the default for properties of type="String" and multipleValues="true".
+
+Maximum	Displays the maximum value in the collection. Useful for properties like System.DateModified. Not compatible with non-numeric or non-date types.
+
+Minimum	Displays the minimum value in the collection. Not compatible with non-numeric or non-date types.</value>
+  </data>
+  <data name="CanBePurged" xml:space="preserve">
+    <value>When set to "true", allows an innate property to be deleted. Innate properties, which are calculated from other properties, are read-only by definition. The available and default values for this attribute depends on the IsInnate value. If IsInnate is "true ", then CanBePurged defaults to "false", but may be set to "true". If IsInnate is "false", then CanBePurged must be "true".</value>
+  </data>
   <data name="CanonicalName" xml:space="preserve">
     <value>The case-sensitive name of a property as it is known to the system, regardless of its localized name.
 
@@ -136,6 +158,48 @@ OnDiskAll: Build a value index by default for this property, and if it is a vect
 OnDiskVector: Build a value index by default for the concatenated vector values. 
 OnDemand: Only build value indices by demand, that is, only first time they are used for a query.</value>
   </data>
+  <data name="ConditionOperation" xml:space="preserve">
+    <value>Specifies a hint to the Search Query Builder tool so that it can determine the default operator. The default is "Equal". The possible values are as follows:
+
+Equal	        Indicates equivalent.
+NotEqual	Indicates not equivalent.
+LessThan	Indicates less than.
+GreaterThan	Default for properties of ConditionType="Size". Indicates greater than.
+Contains	Default for properties of ConditionType="String". Indicates inclusion.</value>
+  </data>
+  <data name="ConditionType" xml:space="preserve">
+    <value>Specifies a hint to the Search Query Builder UI so that it can determine the list of possible condition operators inside a predicate. The following are recognized values. The default is "String".
+
+String	The following operators will be used: "is", "is not", "&lt;", "&gt;", "&lt;=", "=""&gt;=", "starts with", "ends with", "contains", "doesn't contain", "is like".
+
+Number	Default for numeric properties. The following operators will be used: "equals", "doesn't equal", "is less than", "is greater than", "is less than or equal to", "is greater than or equal to".
+
+DateTime	Default for properties of type="DateTime". The following operators will be used: "is", "is not", "is before", "is after", "is before but includes", "is after but includes".
+
+Boolean	Default for properties of type="Boolean". Same as Number.
+
+Size	Same as Number.</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>The display name of the property as it is displayed in the UI (for example, the details column label or preview panel).</value>
+  </data>
+  <data name="EditInvitation" xml:space="preserve">
+    <value>The Help string text that is displayed as an instruction to the user for the control or ToolTip (for instance, "Enter author name.").</value>
+  </data>
+  <data name="GroupingRange" xml:space="preserve">
+    <value>Specifies how this property is displayed when a view is grouped by this property. The default is "Discrete".
+
+Discrete	Default. Displays individual values.
+Alphanumeric Displays static alphanumeric ranges for values.
+Size	Displays static size ranges for values.
+Date	Displays month/year groups. Default for properties of type="DateTime".
+TimeRelative Displays in time-relative groups.
+Dynamic	Displays dynamically created ranges for the values.
+Percent	Displays percent buckets.</value>
+  </data>
+  <data name="HideLabel" xml:space="preserve">
+    <value>Indicates whether the label is hidden. The default is "false".</value>
+  </data>
   <data name="InInvertedIndex" xml:space="preserve">
     <value>Indicates whether the property value should be stored in the inverted index. This lets end users perform full-text queries over the values of this property.
 The default is "false".</value>
@@ -148,6 +212,18 @@ The default is "false".</value>
   <data name="IsColumnSparse" xml:space="preserve">
     <value>The default is "true". If the property is multi-valued, this attribute is always "true".</value>
   </data>
+  <data name="IsGroup" xml:space="preserve">
+    <value>Specifies whether the property is a group heading. Default is "false". A group heading is strictly used to group properties within a list, has no value, and is never stored in a file. Some UI in the system use property lists to indicate the sequence of the properties to display. These property lists may include references to group headings (eg, System.PropGroup.Camera), which tell the UI to start a new group section (eg, "Camera Settings"). A property description with IsGroup="true" should specify a , otherwise it isn't a useful property.</value>
+  </data>
+  <data name="IsInnate" xml:space="preserve">
+    <value>Default is "false". Specifies whether the property is considered innate. An innate property is one which is either calculated from the content of a file, or from other resources or systems. For example, System.Size is an innate property provided by the file system; changing the value of the property in and of itself does nothing. Other examples are System.Image.Dimensions and System.Document.PageCount, which are calculated by programs based upon the content of the file, not based upon a user-changeable setting. Setting IsInnate="true" means the user cannot edit this property directly via a property control.</value>
+  </data>
+  <data name="IsTreeProperty" xml:space="preserve">
+    <value>Whether this is a tree property. The default is "false".</value>
+  </data>
+  <data name="IsViewable" xml:space="preserve">
+    <value>Specifies whether this property is intended to be viewable to the user. Default value is "false". For example, the Column Chooser UI only shows the properties that have IisViewable="true". The exception is UI that is driven by a property list, which will always show the property. If you have a property that is only meant to shuttle data between two objects, and never intended to be viewed by the user, this attribute should be false.</value>
+  </data>
   <data name="MaxSize" xml:space="preserve">
     <value>The maximum size, in bytes, allowed for a certain property that is stored in the Windows search database.
 The default is: 512 bytes 
@@ -156,5 +232,26 @@ Note that this maximum size is measured in bytes, not characters. The maximum nu
   <data name="Mnemonics" xml:space="preserve">
     <value>A list of mnemonic values that can be used to refer to the property in search queries.
 The list is delimited with the '|' character.</value>
+  </data>
+  <data name="MultipleValues" xml:space="preserve">
+    <value>Specifies whether this property can have multiple values. Default is "false".</value>
+  </data>
+  <data name="SearchRawValue" xml:space="preserve">
+    <value>The default is "false".</value>
+  </data>
+  <data name="SortDescription" xml:space="preserve">
+    <value>Specifies the strings offered as sort options. The following values provide the corresponding UI strings.
+General: "Sort going up" / "Sort going down"
+AToZ: "A on top" / "Z on top"
+LowestHighest: "Lowest on top" / "Highest on top"
+OldestNewest: "Oldest on top" / "Newest on top"
+SmallestLargest: "Smallest on top" / "Largest on top"</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Indicates the type of the property. The default is "Any".
+Notes on some of the less obvious options:
+"Any" means that the property system does not know anything about the type of the value, and you are strongly encouraged not to use this default.
+"Null" means that the property never has a value.
+Some of the options only make sense for programmatic access to the property, like Buffer, Stream, Blob, Clipboard or Object, and cannot be used directly in an editor.</value>
   </data>
 </root>

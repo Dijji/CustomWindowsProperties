@@ -119,9 +119,9 @@ namespace CustomWindowsProperties
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetColumnIndexType(out ColumnIndexType ppdciType);
-        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime),
-        PreserveSig]
-        HResult GetProjectionString([MarshalAs(UnmanagedType.LPWStr)] out string ppszName);
+        [PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        HResult GetProjectionString(out IntPtr ppszName);
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetMaxSize(out uint pcbMaxSize);

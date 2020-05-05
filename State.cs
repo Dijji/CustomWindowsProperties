@@ -254,6 +254,9 @@ namespace CustomWindowsProperties
                 else
                     installed = pc; // Continue populating existing config
 
+                // All attempts to read search properties using IPropertyDescriptionSearchInfo
+                // have failed  to date, so leave that code commented out
+                /*
                 if (installed != null)
                 {
                     var guidSearch = new Guid(ShellIIDGuid.IPropertyDescriptionSearchInfo);
@@ -275,8 +278,12 @@ namespace CustomWindowsProperties
                         hr = propSearchInfo.GetColumnIndexType(out ColumnIndexType ppType);
                         if (hr >= 0) installed.ColumnIndexType = ppType;
                         // Just the canonical name again
-                        //hr = propSearchInfo.GetProjectionString(out string projectionString);
-                        //if (hr >= 0)) installed.MaxSize = maxSize;
+                        hr = propSearchInfo.GetProjectionString(out IntPtr namePtr); 
+                        if (CoreErrorHelper.Succeeded(hr) && namePtr != IntPtr.Zero)
+                        {
+                            string displayName = Marshal.PtrToStringUni(namePtr);
+                            Marshal.FreeCoTaskMem(namePtr);
+                        }
                         hr = propSearchInfo.GetMaxSize(out uint maxSize);
                         if (hr >= 0) installed.MaxSize = maxSize;
 
@@ -301,6 +308,7 @@ namespace CustomWindowsProperties
                         Marshal.ReleaseComObject(propAliasInfo);
                     }
                 }
+                */
 
                 return installed;
             }
