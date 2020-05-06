@@ -264,21 +264,49 @@
                           MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding DisplayType, UpdateSourceTrigger=PropertyChanged}" Tag="DisplayType"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyDisplayType}}}"/>
-                    <TextBlock Grid.Row="29" Grid.Column="1" Text="DefaultColumWidth:" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="29" Grid.Column="2" Margin="0,0,10,0" Text="{Binding DefaultColumnWidth, UpdateSourceTrigger=PropertyChanged}" 
+                    <TextBlock Grid.Row="29" Grid.Column="1" Text="StringFormat:" VerticalAlignment="Center"
+                               Visibility="{Binding IsStringFormat,Converter={StaticResource VisibleIfTrue}}"/>
+                    <ComboBox Grid.Row="29" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                              Visibility="{Binding IsStringFormat,Converter={StaticResource VisibleIfTrue}}"
+                       SelectedItem="{Binding StringFormat, UpdateSourceTrigger=PropertyChanged}" Tag="StringFormat"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:StringFormat}}}"/>
+                    <TextBlock Grid.Row="29" Grid.Column="1" Text="BooleanFormat:" VerticalAlignment="Center"
+                               Visibility="{Binding IsBooleanFormat,Converter={StaticResource VisibleIfTrue}}"/>
+                    <ComboBox Grid.Row="29" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                              Visibility="{Binding IsBooleanFormat,Converter={StaticResource VisibleIfTrue}}"
+                       SelectedItem="{Binding BooleanFormat, UpdateSourceTrigger=PropertyChanged}" Tag="BooleanFormat"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:BooleanFormat}}}"/>
+                    <TextBlock Grid.Row="29" Grid.Column="1" Text="NumberFormat:" VerticalAlignment="Center"
+                               Visibility="{Binding IsNumberFormat,Converter={StaticResource VisibleIfTrue}}"/>
+                    <ComboBox Grid.Row="29" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                              Visibility="{Binding IsNumberFormat,Converter={StaticResource VisibleIfTrue}}"
+                       SelectedItem="{Binding NumberFormat, UpdateSourceTrigger=PropertyChanged}" Tag="NumberFormat"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:NumberFormat}}}"/>
+                    <TextBlock Grid.Row="29" Grid.Column="1" Text="DateTimeFormat:" VerticalAlignment="Center"
+                               Visibility="{Binding IsDateTimeFormat,Converter={StaticResource VisibleIfTrue}}"/>
+                    <ComboBox Grid.Row="29" Grid.Column="2" VerticalAlignment="Center" 
+                          MinWidth="100" HorizontalAlignment="Left"
+                              Visibility="{Binding IsDateTimeFormat,Converter={StaticResource VisibleIfTrue}}"
+                       SelectedItem="{Binding DateTimeFormat, UpdateSourceTrigger=PropertyChanged}" Tag="DateTimeFormat"
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:DateTimeFormat}}}"/>
+                    <TextBlock Grid.Row="30" Grid.Column="1" Text="DefaultColumWidth:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="30" Grid.Column="2" Margin="0,0,10,0" Text="{Binding DefaultColumnWidth, UpdateSourceTrigger=PropertyChanged}" 
                              MinWidth="50" VerticalAlignment="Center"
                          Tag="DefaultColumWidth" HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Row="30" Grid.Column="1" Margin="0,0,10,0" Text="Alignment:" VerticalAlignment="Center"/>
-                    <ComboBox Grid.Row="30" Grid.Column="2" VerticalAlignment="Center" 
+                    <TextBlock Grid.Row="31" Grid.Column="1" Margin="0,0,10,0" Text="Alignment:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="31" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding Alignment, UpdateSourceTrigger=PropertyChanged}" Tag="Alignment"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyAlignmentType}}}"/>
-                    <TextBlock Grid.Row="31" Grid.Column="1" Margin="0,0,10,0" Text="RelativeDescriptionType:" VerticalAlignment="Center"/>
+                    <!--<TextBlock Grid.Row="31" Grid.Column="1" Margin="0,0,10,0" Text="RelativeDescriptionType:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="31" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding RelativeDescriptionType, UpdateSourceTrigger=PropertyChanged}" Tag="RelativeDescriptionType"
                        ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:RelativeDescriptionType}}}"/>
-                    <TextBlock Grid.Row="32" Grid.Column="1" Margin="0,0,10,0" Text="DefaultSortDirection:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="32" Grid.Column="1" Margin="0,0,10,0" Text="DefaultSortDirection:" VerticalAlignment="Center"/>-->
                     <ComboBox Grid.Row="32" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding DefaultSortDirection, UpdateSourceTrigger=PropertyChanged}" Tag="DefaultSortDirection"
@@ -442,12 +470,14 @@
                     <TextBlock Grid.Row="20" Grid.Column="0" Text="Display" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="20" Grid.Column="1" Text="DisplayType:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="20" Grid.Column="2" Text="{Binding DisplayType}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="21" Grid.Column="1" Margin="0,0,10,0" Text="DefaultColumWidth:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="21" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultColumnWidth}"/>
-                    <TextBlock Grid.Row="22" Grid.Column="1" Margin="0,0,10,0" Text="Alignment:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="22" Grid.Column="2" VerticalAlignment="Center" Text="{Binding Alignment}"/>
-                    <TextBlock Grid.Row="23" Grid.Column="1" Margin="0,0,10,0" Text="RelativeDescriptionType:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="23" Grid.Column="2" VerticalAlignment="Center" Text="{Binding RelativeDescriptionType}"/>
+                    <TextBlock Grid.Row="21" Grid.Column="1" Text="Format:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="21" Grid.Column="2" Text="unavailable" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="22" Grid.Column="1" Margin="0,0,10,0" Text="DefaultColumWidth:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="22" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultColumnWidth}"/>
+                    <TextBlock Grid.Row="23" Grid.Column="1" Margin="0,0,10,0" Text="Alignment:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="23" Grid.Column="2" VerticalAlignment="Center" Text="{Binding Alignment}"/>
+                    <!--<TextBlock Grid.Row="23" Grid.Column="1" Margin="0,0,10,0" Text="RelativeDescriptionType:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="23" Grid.Column="2" VerticalAlignment="Center" Text="{Binding RelativeDescriptionType}"/>-->
                     <TextBlock Grid.Row="24" Grid.Column="1" Margin="0,0,10,0" Text="DefaultSortDirection:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="24" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultSortDirection}"/>
                     <TextBlock Grid.Row="25" Grid.Column="1" Text="EditControl:" VerticalAlignment="Center"/>

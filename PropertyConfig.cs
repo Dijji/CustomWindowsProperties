@@ -283,8 +283,36 @@ namespace CustomWindowsProperties
         /// <summary>
         /// Gets the current data type used to display the property.
         /// </summary>
-        public PropertyDisplayType DisplayType { get { return displayType; } set { displayType = value; OnPropertyChanged(); } }
+        public PropertyDisplayType DisplayType
+        {
+            get { return displayType; }
+            set
+            {
+                displayType = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsStringFormat));
+                OnPropertyChanged(nameof(IsBooleanFormat));
+                OnPropertyChanged(nameof(IsNumberFormat));
+                OnPropertyChanged(nameof(IsDateTimeFormat));
+            }
+        }
         private PropertyDisplayType displayType;
+        public bool IsStringFormat { get { return DisplayType == PropertyDisplayType.String; } }
+        public bool IsBooleanFormat { get { return DisplayType == PropertyDisplayType.Boolean; } }
+        public bool IsNumberFormat { get { return DisplayType == PropertyDisplayType.Number; } }
+        public bool IsDateTimeFormat { get { return DisplayType == PropertyDisplayType.DateTime; } }
+
+        public StringFormat StringFormat { get { return stringFormat; } set { stringFormat = value; OnPropertyChanged(); } }
+        private StringFormat stringFormat;
+        
+        public BooleanFormat BooleanFormat { get { return booleanFormat; } set { booleanFormat = value; OnPropertyChanged(); } }
+        private BooleanFormat booleanFormat;
+
+        public NumberFormat NumberFormat { get { return numberFormat; } set { numberFormat = value; OnPropertyChanged(); } }
+        private NumberFormat numberFormat;
+
+        public DateTimeFormat DateTimeFormat { get { return dateTimeFormat; } set { dateTimeFormat = value; OnPropertyChanged(); } }
+        private DateTimeFormat dateTimeFormat;
 
         /// <summary>
         /// Gets the default user interface (UI) column width for this property.
@@ -445,6 +473,10 @@ namespace CustomWindowsProperties
             ConditionOperation = PropertyConditionOperation.Equal;
 
             DisplayType = PropertyDisplayType.String;
+            StringFormat = StringFormat.General;
+            BooleanFormat = BooleanFormat.YesNo;
+            NumberFormat = NumberFormat.General;
+            DateTimeFormat = DateTimeFormat.General;
             DefaultColumnWidth = 20;
             Alignment = PropertyAlignmentType.Left;
             RelativeDescriptionType = RelativeDescriptionType.General;
@@ -546,18 +578,45 @@ namespace CustomWindowsProperties
 
             var display = doc.CreateElement("displayInfo");
             display.SetAttribute("displayType", DisplayType.ToString());
+            if(DisplayType == PropertyDisplayType.String && StringFormat != StringFormat.General)
+            {
+                var format = doc.CreateElement("stringFormat");
+                format.SetAttribute("formatAs", StringFormat.ToString());
+                display.AppendChild(format);
+            }
+            if (DisplayType == PropertyDisplayType.Boolean && BooleanFormat != BooleanFormat.YesNo)
+            {
+                var format = doc.CreateElement("booleanFormat");
+                format.SetAttribute("formatAs", BooleanFormat.ToString());
+                display.AppendChild(format);
+            }
+            if (DisplayType == PropertyDisplayType.Number && NumberFormat != NumberFormat.General)
+            {
+                var format = doc.CreateElement("numberFormat");
+                format.SetAttribute("formatAs", NumberFormat.ToString());
+                display.AppendChild(format);
+            }
+            if (DisplayType == PropertyDisplayType.DateTime && DateTimeFormat != DateTimeFormat.General)
+            {
+                var format = doc.CreateElement("dateTimeFormat");
+                format.SetAttribute("formatAs", DateTimeFormat.ToString());
+                display.AppendChild(format);
+            }
+
+
+
             if (DefaultColumnWidth != 20)
                 display.SetAttribute("defaultColumnWidth", DefaultColumnWidth.ToString());
             if (Alignment != PropertyAlignmentType.Left)
                 display.SetAttribute("alignment", Alignment.ToString());
-            if (RelativeDescriptionType != RelativeDescriptionType.General)
-                display.SetAttribute("relativeDescriptionType", RelativeDescriptionType.ToString());
+            //if (RelativeDescriptionType != RelativeDescriptionType.General)
+              //  display.SetAttribute("relativeDescriptionType", RelativeDescriptionType.ToString());
             if (DefaultSortDirection != SortDirection.Ascending)
                 display.SetAttribute("defaultSortDirection", DefaultSortDirection.ToString());
             if (EditControl != EditControl.Default)
             {
                 var edit = doc.CreateElement("editControl");
-                edit.SetAttribute("control", DisplayType.ToString());
+                edit.SetAttribute("control", EditControl.ToString());
                 display.AppendChild(edit);
             }
             desc.AppendChild(display);
@@ -619,6 +678,13 @@ namespace CustomWindowsProperties
 
             // Display
             DisplayType = from.DisplayType;
+            if (!isInstalled)
+            {
+                StringFormat = from.StringFormat;
+                BooleanFormat = from.BooleanFormat;
+                NumberFormat = from.NumberFormat;
+                DateTimeFormat = from.DateTimeFormat;
+            }
             DefaultColumnWidth = from.DefaultColumnWidth;
             Alignment = from.Alignment;
             RelativeDescriptionType = from.RelativeDescriptionType;
@@ -685,9 +751,16 @@ namespace CustomWindowsProperties
 
             // Display
             if (DisplayType != baseline.DisplayType) result.Add (new Difference(nameof(DisplayType), DisplayType, baseline.DisplayType));
+            if (!isInstalled)
+            {
+                if (StringFormat != baseline.StringFormat) result.Add(new Difference(nameof(StringFormat), StringFormat, baseline.StringFormat));
+                if (BooleanFormat != baseline.BooleanFormat) result.Add(new Difference(nameof(BooleanFormat), BooleanFormat, baseline.BooleanFormat));
+                if (NumberFormat != baseline.NumberFormat) result.Add(new Difference(nameof(NumberFormat), NumberFormat, baseline.NumberFormat));
+                if (DateTimeFormat != baseline.DateTimeFormat) result.Add(new Difference(nameof(DateTimeFormat), DateTimeFormat, baseline.DateTimeFormat));
+            }
             if (DefaultColumnWidth != baseline.DefaultColumnWidth) result.Add (new Difference(nameof(DefaultColumnWidth), DefaultColumnWidth, baseline.DefaultColumnWidth));
             if (Alignment != baseline.Alignment) result.Add(new Difference(nameof(Alignment), Alignment, baseline.Alignment));
-            if (RelativeDescriptionType != baseline.RelativeDescriptionType) result.Add(new Difference(nameof(RelativeDescriptionType), RelativeDescriptionType, baseline.RelativeDescriptionType));
+            //if (RelativeDescriptionType != baseline.RelativeDescriptionType) result.Add(new Difference(nameof(RelativeDescriptionType), RelativeDescriptionType, baseline.RelativeDescriptionType));
             if (DefaultSortDirection != baseline.DefaultSortDirection) result.Add(new Difference(nameof(DefaultSortDirection), DefaultSortDirection, baseline.DefaultSortDirection));
             if (EditControl != baseline.EditControl) result.Add (new Difference(nameof(EditControl), EditControl, baseline.EditControl));
             return result;

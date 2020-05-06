@@ -64,6 +64,14 @@
                     return LocalizedHelp.ConditionType;
                 case nameof(PropertyConfig.ConditionOperation):
                     return LocalizedHelp.ConditionOperation;
+                case nameof(PropertyConfig.EditControl):
+                    return LocalizedHelp.EditControl;
+                case nameof(PropertyConfig.DisplayType):
+                    return LocalizedHelp.DisplayType;
+                case nameof(PropertyConfig.Alignment):
+                    return LocalizedHelp.Alignment;
+                case nameof(PropertyConfig.DefaultSortDirection):
+                    return LocalizedHelp.DefaultSortDirection;
                 default:
                     return $"Help for {tag} is not yet available";
             }

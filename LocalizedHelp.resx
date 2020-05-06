@@ -137,6 +137,9 @@ Maximum	&lt;/td&gt;&lt;td&gt;Displays the maximum value in the collection. Usefu
 Minimum&lt;/td&gt;&lt;td&gt;	Displays the minimum value in the collection. Not compatible with non-numeric or non-date types.
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
+  <data name="Alignment" xml:space="preserve">
+    <value>Specifies the alignment to use. The default is "Left".</value>
+  </data>
   <data name="CanBePurged" xml:space="preserve">
     <value>When set to "true", allows an innate property to be deleted. Innate properties, which are calculated from other properties, are read-only by definition. The available and default values for this attribute depends on the IsInnate value. If IsInnate is "true ", then CanBePurged defaults to "false", but may be set to "true". If IsInnate is "false", then CanBePurged must be "true".</value>
   </data>
@@ -191,8 +194,68 @@ Contains&lt;/td&gt;&lt;td&gt;	Default for properties of ConditionType="String". 
 &lt;td&gt;Size&lt;/td&gt;&lt;td&gt;Same as Number.
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
+  <data name="DefaultColumnWidth" xml:space="preserve">
+    <value>The default is '20'</value>
+  </data>
+  <data name="DefaultSortDirection" xml:space="preserve">
+    <value>Specifies the sort direction. The default is "Ascending".</value>
+  </data>
   <data name="DisplayName" xml:space="preserve">
     <value>The display name of the property as it is displayed in the UI (for example, the details column label or preview panel).</value>
+  </data>
+  <data name="DisplayType" xml:space="preserve">
+    <value>&lt;p&gt;Default is &amp;quot;String&amp;quot;. Specifies the type of the display string. The following are valid types. &lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class="header"&gt;
+&lt;th&gt;Value&lt;/th&gt;
+&lt;th&gt;Meaning&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;String&lt;/td&gt;
+&lt;td&gt;Default. Value is displayed as a string. Use &amp;quot;StringFormat&amp;quot; to format. &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;Number&lt;/td&gt;
+&lt;td&gt;Default for numeric properties. Value is displayed as a number. Use &amp;quot;NumberFormat&amp;quot; to format. &lt;/td&gt;
+&lt;/tr&gt;&lt;tr class="odd"&gt;
+&lt;td&gt;Boolean&lt;/td&gt;
+&lt;td&gt;Default if Type is Boolean. Value is displayed as a boolean. Use &amp;quot;BooleanFormat&amp;quot; to format. &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;DateTime&lt;/td&gt;
+&lt;td&gt;Default if Type is DateTime. Value is displayed as a date or time. Use &amp;quot;DateTimeFormat&amp;quot; to format. &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;Enumeration&lt;/td&gt;
+&lt;td&gt;Value is displayed as a display string mapping provided by the &amp;quot;EnumeratedList&amp;quot; property&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;</value>
+  </data>
+  <data name="EditControl" xml:space="preserve">
+    <value>&lt;p&gt;Specifies what control to use when editing the property. The default is "Default". The following are valid values.&lt;/p&gt;
+&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+Default	&lt;/td&gt;&lt;td&gt; Uses the default control, based upon the Type. String with MultipleValues uses the "MultiValueText" control. DateTime uses the "Calendar" control. Any other type results in using the "Text" control.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Calendar	&lt;/td&gt;&lt;td&gt;Uses the calendar control.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+CheckboxDropList	&lt;/td&gt;&lt;td&gt;Uses the list control with checkboxes.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+DropList&lt;/td&gt;&lt;td&gt;	Uses the dropdown list control.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+MultiLineText&lt;/td&gt;&lt;td&gt;	Uses the multi-line text edit control.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+MultiValueText	&lt;/td&gt;&lt;td&gt;Uses the multi-value text edit control.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Rating&lt;/td&gt;&lt;td&gt;	Uses the 5-star rating control.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Text&lt;/td&gt;&lt;td&gt;	Uses the text edit control.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+IconList&lt;/td&gt;&lt;td&gt;	Windows 7 and late
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="EditInvitation" xml:space="preserve">
     <value>The Help string text that is displayed as an instruction to the user for the control or ToolTip (for instance, "Enter author name.").</value>
@@ -253,6 +316,9 @@ The list is delimited with the '|' character.</value>
   </data>
   <data name="MultipleValues" xml:space="preserve">
     <value>Specifies whether this property can have multiple values. Default is "false".</value>
+  </data>
+  <data name="RelativeDescriptionType" xml:space="preserve">
+    <value />
   </data>
   <data name="SearchRawValue" xml:space="preserve">
     <value>The default is "false".</value>

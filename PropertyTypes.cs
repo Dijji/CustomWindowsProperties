@@ -62,6 +62,45 @@ namespace CustomWindowsProperties
         Ascending,
         Descending,
     }
+    
+    public enum StringFormat
+    {
+        General,
+        FileName,
+        FilePath,
+        Hyperlink,
+    }
+
+    public enum BooleanFormat
+    {
+        YesNo,
+        OnOff,
+        TrueFalse,
+    }
+
+    public enum NumberFormat
+    {
+        General,
+        Percentage,
+        ByteSize,
+        KBSize,
+        SampleSize,
+        Bitrate,
+        SampleRate,
+        FrameRate,
+        Pixels,
+        DPI,
+        Duration,
+    }
+    
+    public enum DateTimeFormat
+    {
+        General,
+        Month,
+        YearMonth,
+        Year,
+    }
+
 
     internal class PropertyUtils
     {

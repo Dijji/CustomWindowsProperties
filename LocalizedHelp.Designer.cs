@@ -76,6 +76,15 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specifies the alignment to use. The default is &quot;Left&quot;..
+        /// </summary>
+        internal static string Alignment {
+            get {
+                return ResourceManager.GetString("Alignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When set to &quot;true&quot;, allows an innate property to be deleted. Innate properties, which are calculated from other properties, are read-only by definition. The available and default values for this attribute depends on the IsInnate value. If IsInnate is &quot;true &quot;, then CanBePurged defaults to &quot;false&quot;, but may be set to &quot;true&quot;. If IsInnate is &quot;false&quot;, then CanBePurged must be &quot;true&quot;..
         /// </summary>
         internal static string CanBePurged {
@@ -147,11 +156,70 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The default is &apos;20&apos;.
+        /// </summary>
+        internal static string DefaultColumnWidth {
+            get {
+                return ResourceManager.GetString("DefaultColumnWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies the sort direction. The default is &quot;Ascending&quot;..
+        /// </summary>
+        internal static string DefaultSortDirection {
+            get {
+                return ResourceManager.GetString("DefaultSortDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The display name of the property as it is displayed in the UI (for example, the details column label or preview panel)..
         /// </summary>
         internal static string DisplayName {
             get {
                 return ResourceManager.GetString("DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Default is &amp;quot;String&amp;quot;. Specifies the type of the display string. The following are valid types. &lt;/p&gt;
+        ///&lt;table&gt;
+        ///&lt;thead&gt;
+        ///&lt;tr class=&quot;header&quot;&gt;
+        ///&lt;th&gt;Value&lt;/th&gt;
+        ///&lt;th&gt;Meaning&lt;/th&gt;
+        ///&lt;/tr&gt;
+        ///&lt;/thead&gt;
+        ///&lt;tbody&gt;
+        ///&lt;tr class=&quot;odd&quot;&gt;
+        ///&lt;td&gt;String&lt;/td&gt;
+        ///&lt;td&gt;Default. Value is displayed as a string. Use &amp;quot;StringFormat&amp;quot; to format. &lt;/td&gt;
+        ///&lt;/tr&gt;
+        ///&lt;tr class=&quot;even&quot;&gt;
+        ///&lt;td&gt;Number&lt;/td&gt;
+        ///&lt;td&gt;Default for numeric properties. Value is displayed as a number. Use &amp;quot;NumberFormat&amp;quot; to format. &lt;/td&gt;
+        ///&lt;/tr&gt;&lt;tr class= [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DisplayType {
+            get {
+                return ResourceManager.GetString("DisplayType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Specifies what control to use when editing the property. The default is &quot;Default&quot;. The following are valid values.&lt;/p&gt;
+        ///&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+        ///Default	&lt;/td&gt;&lt;td&gt; Uses the default control, based upon the Type. String with MultipleValues uses the &quot;MultiValueText&quot; control. DateTime uses the &quot;Calendar&quot; control. Any other type results in using the &quot;Text&quot; control.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///Calendar	&lt;/td&gt;&lt;td&gt;Uses the calendar control.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///CheckboxDropList	&lt;/td&gt;&lt;td&gt;Uses the list control with checkboxes.
+        ///&lt;/ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string EditControl {
+            get {
+                return ResourceManager.GetString("EditControl", resourceCulture);
             }
         }
         
@@ -285,6 +353,15 @@ namespace CustomWindowsProperties {
         internal static string MultipleValues {
             get {
                 return ResourceManager.GetString("MultipleValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string RelativeDescriptionType {
+            get {
+                return ResourceManager.GetString("RelativeDescriptionType", resourceCulture);
             }
         }
         
