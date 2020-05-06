@@ -278,7 +278,7 @@ namespace CustomWindowsProperties
         private EditControl editControl;
 
 
-        //To do lots of things about how the value is set
+        //To do Add support for missing pieces: more controls; enumerations; duration
 
         /// <summary>
         /// Gets the current data type used to display the property.

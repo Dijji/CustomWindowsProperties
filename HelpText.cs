@@ -68,6 +68,14 @@
                     return LocalizedHelp.EditControl;
                 case nameof(PropertyConfig.DisplayType):
                     return LocalizedHelp.DisplayType;
+                case nameof(PropertyConfig.StringFormat):
+                    return LocalizedHelp.StringFormat;
+                case nameof(PropertyConfig.BooleanFormat):
+                    return LocalizedHelp.BooleanFormat;
+                case nameof(PropertyConfig.NumberFormat):
+                    return LocalizedHelp.NumberFormat;
+                case nameof(PropertyConfig.DateTimeFormat):
+                    return LocalizedHelp.DateTimeFormat;
                 case nameof(PropertyConfig.Alignment):
                     return LocalizedHelp.Alignment;
                 case nameof(PropertyConfig.DefaultSortDirection):

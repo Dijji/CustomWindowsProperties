@@ -140,6 +140,9 @@ Minimum&lt;/td&gt;&lt;td&gt;	Displays the minimum value in the collection. Not c
   <data name="Alignment" xml:space="preserve">
     <value>Specifies the alignment to use. The default is "Left".</value>
   </data>
+  <data name="BooleanFormat" xml:space="preserve">
+    <value>Specifies which pair of strings should be used to format a Boolean value. The default is "YesNo", i.e. "Yes" for true and "No" for false.</value>
+  </data>
   <data name="CanBePurged" xml:space="preserve">
     <value>When set to "true", allows an innate property to be deleted. Innate properties, which are calculated from other properties, are read-only by definition. The available and default values for this attribute depends on the IsInnate value. If IsInnate is "true ", then CanBePurged defaults to "false", but may be set to "true". If IsInnate is "false", then CanBePurged must be "true".</value>
   </data>
@@ -159,6 +162,8 @@ Each token in the name must begin with a capital letter, and otherwise consist o
 NotIndexed:&lt;/td&gt;&lt;td&gt; Never build a value index. 
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 OnDisk: &lt;/td&gt;&lt;td&gt;Build a value index by default for this property.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+InMemory: &lt;/td&gt;&lt;td&gt;Obsolete. Do not use.
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 OnDiskAll: &lt;/td&gt;&lt;td&gt;Build a value index by default for this property, and if it is a vector property, also a value index for all concatenated vector values. 
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
@@ -194,6 +199,19 @@ Contains&lt;/td&gt;&lt;td&gt;	Default for properties of ConditionType="String". 
 &lt;td&gt;Size&lt;/td&gt;&lt;td&gt;Same as Number.
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
+  <data name="DateTimeFormat" xml:space="preserve">
+    <value>&lt;p&gt; Specifies how a date-time value should be formatted. The default is "General". The following values are valid:&lt;/p&gt;
+&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+General	&lt;/td&gt;&lt;td&gt;Default. Formats the date-time value using the shell date-time format. [Use the formatTimeAs and formatDateAs attributes to specify how the time and date are formatted.] Currently, this tool will always format the time as ShortTime e.g. "7:48 PM" and the date as ShortDate e.g. "5/13/59". Requires the property type to be DateTime.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Month&lt;/td&gt;&lt;td&gt;	Formats the value as one of the months of the year. Requires the property type to be Int32. The value must be stored as a numeric value with 1 representing the first month of the year.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+YearMonth&lt;/td&gt;&lt;td&gt;	Formats the value as "Year - Month". Requires the property type to be Int32. The value must be stored such that the two highest bytes specify the year and the lower two bytes specify the month.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Year	&lt;/td&gt;&lt;td&gt;Formats the value as a simple string.
+ 
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
+  </data>
   <data name="DefaultColumnWidth" xml:space="preserve">
     <value>The default is '20'</value>
   </data>
@@ -226,11 +244,13 @@ Contains&lt;/td&gt;&lt;td&gt;	Default for properties of ConditionType="String". 
 &lt;/tr&gt;
 &lt;tr class="even"&gt;
 &lt;td&gt;DateTime&lt;/td&gt;
-&lt;td&gt;Default if Type is DateTime. Value is displayed as a date or time. Use &amp;quot;DateTimeFormat&amp;quot; to format. &lt;/td&gt;
+&lt;td&gt;Default if Type is DateTime. Value is displayed as a date or time. Use &amp;quot;DateTimeFormat&amp;quot; to format.
+If Duration is chosen, this tool will currently always specify hh:mm:ss as its format &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr class="odd"&gt;
-&lt;td&gt;Enumeration&lt;/td&gt;
-&lt;td&gt;Value is displayed as a display string mapping provided by the &amp;quot;EnumeratedList&amp;quot; property&lt;/td&gt;
+&lt;td&gt;Enumerated&lt;/td&gt;
+&lt;td&gt;Value is displayed as a display string mapping provided by the &amp;quot;EnumeratedList&amp;quot; property
+ &lt;b&gt; Not currently supported by this tool &lt;/b&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;</value>
@@ -317,6 +337,33 @@ The list is delimited with the '|' character.</value>
   <data name="MultipleValues" xml:space="preserve">
     <value>Specifies whether this property can have multiple values. Default is "false".</value>
   </data>
+  <data name="NumberFormat" xml:space="preserve">
+    <value>&lt;p&gt;Specifies the display format. The default is "General". The following are valid values.&lt;/p&gt;
+	&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+General	&lt;/td&gt;&lt;td&gt; Displays the value as an unformatted number.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Percentage&lt;/td&gt;&lt;td&gt;	Formats the value as a percentage. Requires the property to be UInt32.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+ByteSize&lt;/td&gt;&lt;td&gt;	Formats the value as a byte, "KB", "MB", or "GB" as appropriate. Requires the property to be UInt64.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+KBSize	&lt;/td&gt;&lt;td&gt;Formats the value as a "KB", no matter what the value is. Requires the property to be UInt64.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+SampleSize&lt;/td&gt;&lt;td&gt;	Formats the value as a number of bits. Requires the property to be UInt32.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+BitRate	&lt;/td&gt;&lt;td&gt;Formats the value in "Kbps". Requires the property to be UInt32. The value must be stored in "bits-per-second" units.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+SampleRate&lt;/td&gt;&lt;td&gt;	Formats the value in "KHz". Requires the property to be UInt32. The value must be stored in "Hertz" units.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+FrameRate&lt;/td&gt;&lt;td&gt;	Formats the value in frames/second. Requires the property to be UInt32. The value must be stored in "kilo-frames-per-second" units.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Pixels	&lt;/td&gt;&lt;td&gt;Formats the value in pixel units. Requires the property to be UInt32.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+DPI	&lt;/td&gt;&lt;td&gt;Formats the value in dots-per-inch. Requires the property to be UInt32.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Duration&lt;/td&gt;&lt;td&gt;	Formats the value as a duration. Use to specify the duration format. Requires the property to be UInt64.
+At the moment, this tool will always use hh:mm:ss
+ &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
+  </data>
   <data name="RelativeDescriptionType" xml:space="preserve">
     <value />
   </data>
@@ -337,11 +384,50 @@ OldestNewest: &lt;/td&gt;&lt;td&gt;"Oldest on top" / "Newest on top"
 SmallestLargest: &lt;/td&gt;&lt;td&gt;"Smallest on top" / "Largest on top"
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
+  <data name="StringFormat" xml:space="preserve">
+    <value>Specifies how the property's value should be formatted as a string. The default is "General".</value>
+  </data>
   <data name="Type" xml:space="preserve">
-    <value>Indicates the type of the property. The default is "Any".
-Notes on some of the less obvious options:
-"Any" means that the property system does not know anything about the type of the value, and you are strongly encouraged not to use this default.
-"Null" means that the property never has a value.
-Some of the options only make sense for programmatic access to the property, like Buffer, Stream, Blob, Clipboard or Object, and cannot be used directly in an editor.</value>
+    <value>&lt;p&gt;Indicates the type of the property. The default is "Any".  The following are valid types &lt;/p&gt;
+&lt;p&gt;Some of the options only make sense for programmatic access to the property, like Buffer, Stream, Blob, Clipboard or Object, and cannot be used directly in an editor.&lt;/p&gt;
+&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+Any&lt;/td&gt;&lt;td&gt;	The  property system does not know anything about the type of the value, and you are strongly encouraged not to use this default.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Null	&lt;/td&gt;&lt;td&gt;There is and never can be any value for this property. 
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+String	&lt;/td&gt;&lt;td&gt;The value must be a  Unicode string terminated by a null character.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Boolean	&lt;/td&gt;&lt;td&gt;The value must be a boolean.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Byte&lt;/td&gt;&lt;td&gt;	The value must be a byte.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Buffer&lt;/td&gt;&lt;td&gt;	The value must be an array of bytes.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Int16	&lt;/td&gt;&lt;td&gt;The value must be a 16-bit integer.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+UInt16	&lt;/td&gt;&lt;td&gt;The value must be a 16-bit unsigned integer.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Int32&lt;/td&gt;&lt;td&gt;	The value must be a 32-bit integer.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+UInt32&lt;/td&gt;&lt;td&gt;	The value must be a 32-bit unsigned integer.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Int64	&lt;/td&gt;&lt;td&gt;The value must be a 64-bit integer.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+UInt64	&lt;/td&gt;&lt;td&gt;The value must be a 64-bit unsigned integer.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Double&lt;/td&gt;&lt;td&gt;	The value must be a double precision decimal.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+DateTime	&lt;/td&gt;&lt;td&gt;The value must be a shell datetime stamp, as used for files.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Guid&lt;/td&gt;&lt;td&gt;	The value must be a programmatically generated statistically unique identifier.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Blob&lt;/td&gt;&lt;td&gt;	The value must be a blob, which is a set of length-prefixed bytes.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Stream	&lt;/td&gt;&lt;td&gt;The value must be an object that implements IStream.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Clipboard	&lt;/td&gt;&lt;td&gt;The value must be a clipboard format used to hold copied values in flight.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Object	&lt;/td&gt;&lt;td&gt;The value must be an object that implements IUnknown.
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
 </root>

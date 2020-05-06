@@ -85,6 +85,15 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specifies which pair of strings should be used to format a Boolean value. The default is &quot;YesNo&quot;, i.e. &quot;Yes&quot; for true and &quot;No&quot; for false..
+        /// </summary>
+        internal static string BooleanFormat {
+            get {
+                return ResourceManager.GetString("BooleanFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When set to &quot;true&quot;, allows an innate property to be deleted. Innate properties, which are calculated from other properties, are read-only by definition. The available and default values for this attribute depends on the IsInnate value. If IsInnate is &quot;true &quot;, then CanBePurged defaults to &quot;false&quot;, but may be set to &quot;true&quot;. If IsInnate is &quot;false&quot;, then CanBePurged must be &quot;true&quot;..
         /// </summary>
         internal static string CanBePurged {
@@ -152,6 +161,19 @@ namespace CustomWindowsProperties {
         internal static string ConditionType {
             get {
                 return ResourceManager.GetString("ConditionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt; Specifies how a date-time value should be formatted. The default is &quot;General&quot;. The following values are valid:&lt;/p&gt;
+        ///&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+        ///General	&lt;/td&gt;&lt;td&gt;Default. Formats the date-time value using the shell date-time format. [Use the formatTimeAs and formatDateAs attributes to specify how the time and date are formatted.] Currently, this tool will always format the time as ShortTime e.g. &quot;7:48 PM&quot; and the date as ShortDate e.g. &quot;5/13/59&quot;. Requires the property type to be DateTime.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///Month [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DateTimeFormat {
+            get {
+                return ResourceManager.GetString("DateTimeFormat", resourceCulture);
             }
         }
         
@@ -357,6 +379,23 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Specifies the display format. The default is &quot;General&quot;. The following are valid values.&lt;/p&gt;
+        ///	&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+        ///General	&lt;/td&gt;&lt;td&gt; Displays the value as an unformatted number.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///Percentage&lt;/td&gt;&lt;td&gt;	Formats the value as a percentage. Requires the property to be UInt32.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///ByteSize&lt;/td&gt;&lt;td&gt;	Formats the value as a byte, &quot;KB&quot;, &quot;MB&quot;, or &quot;GB&quot; as appropriate. Requires the property to be UInt64.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///KBSize	&lt;/td&gt;&lt;td&gt;Formats the value as a &quot;KB&quot;, no matter what th [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string NumberFormat {
+            get {
+                return ResourceManager.GetString("NumberFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string RelativeDescriptionType {
@@ -395,11 +434,21 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicates the type of the property. The default is &quot;Any&quot;.
-        ///Notes on some of the less obvious options:
-        ///&quot;Any&quot; means that the property system does not know anything about the type of the value, and you are strongly encouraged not to use this default.
-        ///&quot;Null&quot; means that the property never has a value.
-        ///Some of the options only make sense for programmatic access to the property, like Buffer, Stream, Blob, Clipboard or Object, and cannot be used directly in an editor..
+        ///   Looks up a localized string similar to Specifies how the property&apos;s value should be formatted as a string. The default is &quot;General&quot;..
+        /// </summary>
+        internal static string StringFormat {
+            get {
+                return ResourceManager.GetString("StringFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Indicates the type of the property. The default is &quot;Any&quot;.  The following are valid types &lt;/p&gt;
+        ///&lt;p&gt;Some of the options only make sense for programmatic access to the property, like Buffer, Stream, Blob, Clipboard or Object, and cannot be used directly in an editor.&lt;/p&gt;
+        ///&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+        ///Any&lt;/td&gt;&lt;td&gt;	The  property system does not know anything about the type of the value, and you are strongly encouraged not to use this default.
+        ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+        ///Null	&lt;/td&gt;&lt;td&gt;There is and never can be any value for this [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Type {
             get {
