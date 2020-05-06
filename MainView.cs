@@ -323,7 +323,7 @@ namespace CustomWindowsProperties
                 return newConfig;
             }
         }
-     
+
         public int InstallEditorProperty(TreeView treeViewSaved, TreeView treeViewInstalled)
         {
             // Save as XML and update state and tree as necessary
@@ -379,7 +379,7 @@ namespace CustomWindowsProperties
         {
             LoadEditorConfig(SelectedInstalledProperty, BaselineType.Installed);
         }
-#endregion
+        #endregion
         #region Private methods
         private string ValidateName(string name)
         {
@@ -466,7 +466,7 @@ namespace CustomWindowsProperties
             if (!IsBulkUpdating)
                 IsEditorDirty = CompareEditorToBaseline();
         }
-        
+
         private bool CompareEditorToBaseline()
         {
             var baseline = EditorBaseline;
@@ -487,7 +487,7 @@ namespace CustomWindowsProperties
                 return false;
             }
 
-            var differences = EditorConfig.CompareTo(baseline, isInstalled); 
+            var differences = EditorConfig.CompareTo(baseline, isInstalled);
 
             if (differences.Count > 0)
             {

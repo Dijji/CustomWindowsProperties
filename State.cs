@@ -13,7 +13,7 @@ namespace CustomWindowsProperties
     internal class State
     {
         private Options options = null;
-      
+
         public List<PropertyConfig> SystemProperties { get; } = new List<PropertyConfig>();
         public List<PropertyConfig> CustomProperties { get; } = new List<PropertyConfig>();
         public List<PropertyConfig> SavedProperties { get; } = new List<PropertyConfig>();
@@ -254,9 +254,6 @@ namespace CustomWindowsProperties
                 else
                     installed = pc; // Continue populating existing config
 
-                // All attempts to read search properties using IPropertyDescriptionSearchInfo
-                // have failed  to date, so leave that code commented out
-                /*
                 if (installed != null)
                 {
                     var guidSearch = new Guid(ShellIIDGuid.IPropertyDescriptionSearchInfo);
@@ -278,12 +275,12 @@ namespace CustomWindowsProperties
                         hr = propSearchInfo.GetColumnIndexType(out ColumnIndexType ppType);
                         if (hr >= 0) installed.ColumnIndexType = ppType;
                         // Just the canonical name again
-                        hr = propSearchInfo.GetProjectionString(out IntPtr namePtr); 
-                        if (CoreErrorHelper.Succeeded(hr) && namePtr != IntPtr.Zero)
-                        {
-                            string displayName = Marshal.PtrToStringUni(namePtr);
-                            Marshal.FreeCoTaskMem(namePtr);
-                        }
+                        //hr = propSearchInfo.GetProjectionString(out IntPtr namePtr); 
+                        //if (CoreErrorHelper.Succeeded(hr) && namePtr != IntPtr.Zero)
+                        //{
+                        //    string displayName = Marshal.PtrToStringUni(namePtr);
+                        //    Marshal.FreeCoTaskMem(namePtr);
+                        //}
                         hr = propSearchInfo.GetMaxSize(out uint maxSize);
                         if (hr >= 0) installed.MaxSize = maxSize;
 
@@ -300,7 +297,10 @@ namespace CustomWindowsProperties
                         hr = propAliasInfo.GetSortByAlias(guidDescription, out IPropertyDescription alias);
                         if (hr >= 0 && alias != null)
                         {
-                            // To do use the information, if we ever get it
+                            alias.GetCanonicalName(out string canonicalName);
+                            pc.SortByAlias = canonicalName;
+
+                            // To do Consider adding additional aliases
 
                             Marshal.ReleaseComObject(alias);
                         }
@@ -308,7 +308,6 @@ namespace CustomWindowsProperties
                         Marshal.ReleaseComObject(propAliasInfo);
                     }
                 }
-                */
 
                 return installed;
             }
@@ -321,7 +320,7 @@ namespace CustomWindowsProperties
                 return null;
             }
         }
-      
+
         public bool UnregisterCustomProperty(string canonicalName)
         {
             // The file is held in a more protected common area away from the editor

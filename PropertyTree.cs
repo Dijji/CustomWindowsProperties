@@ -11,7 +11,7 @@ namespace CustomWindowsProperties
     static class PropertyTree
     {
         public static Dictionary<string, TreeItem> PopulatePropertyTree(
-            IEnumerable<PropertyConfig> properties, ObservableCollection<TreeItem> treeItems, 
+            IEnumerable<PropertyConfig> properties, ObservableCollection<TreeItem> treeItems,
             bool isInstalled, Action<TreeItem, PropertyConfig> OnCreate = null)
         {
             Dictionary<string, TreeItem> dict = new Dictionary<string, TreeItem>();
@@ -32,7 +32,7 @@ namespace CustomWindowsProperties
 
                 // Wire trees to tree controls, tweaking the structure as we go
                 TreeItem propGroup = null;
-                foreach (TreeItem root in 
+                foreach (TreeItem root in
                     roots)
                 {
                     if (root.Name == "System")
@@ -125,7 +125,7 @@ namespace CustomWindowsProperties
 
         // Recurse backwards through each term in the property name, adding tree items as we go,
         // until we join onto an existing part of the tree
-        private static TreeItem AddTreeItemInner(Dictionary<string, TreeItem> dict, 
+        private static TreeItem AddTreeItemInner(Dictionary<string, TreeItem> dict,
             ObservableCollection<TreeItem> roots,
             string name, bool addRootTop, string displayName = null)
         {

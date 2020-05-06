@@ -381,9 +381,19 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="272"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -420,68 +430,81 @@
                     <TextBlock Grid.Row="2" Grid.Column="1" Text="PropertyId:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding PropertyId}" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,10,0" Text="Search" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="3" Grid.Column="1" Text="unavailable" VerticalAlignment="Center"/>
-                    <!--<TextBlock Text="InInvertedIndex:" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding InInvertedIndex}" VerticalAlignment="Center"/>
-                <TextBlock Text="IsColumn:" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding IsColumn}" VerticalAlignment="Center"/>
-                <TextBlock Text="IsColumnSparse:" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="InInvertedIndex:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding InInvertedIndex}" VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="1" Text="IsColumn:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding IsColumn}" 
+                              VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="5" Grid.Column="1" Text="IsColumnSparse:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                <TextBlock Text="{Binding IsColumnSparse}" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="5" Grid.Column="2" Text="{Binding IsColumnSparse}" 
+                              VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                <TextBlock Text="ColumnIndexType:" VerticalAlignment="Center"
+                    <TextBlock Grid.Row="6" Grid.Column="1" Margin="0,0,10,0" Text="ColumnIndexType:" VerticalAlignment="Center"
                        Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
-                <TextBlock Text="{Binding ColumnIndexType}" VerticalAlignment="Center"
-                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>-->
-                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Label" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="4" Grid.Column="1" Text="DisplayName:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding DisplayName}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="5" Grid.Column="1" Margin="0,0,10,0" Text="SortDescription:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" Text="{Binding SortDescription}"/>
-                    <TextBlock Grid.Row="6" Grid.Column="1" Text="EditInvitation:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding EditInvitation}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="7" Grid.Column="1" Text="HideLabel:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="7" Grid.Column="2" Text="{Binding HideLabel}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Type" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="8" Grid.Column="1" Text="Type:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="8" Grid.Column="2" Text="{Binding Type}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="9" Grid.Column="1" Margin="0,0,10,0" Text="GroupingRange:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="9" Grid.Column="2" VerticalAlignment="Center" Text="{Binding GroupingRange}"/>
-                    <TextBlock Grid.Row="10" Grid.Column="1" Text="IsInnate:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="10" Grid.Column="2" Text="{Binding IsInnate}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="11" Grid.Column="1" Text="CanBePurged:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="11" Grid.Column="2" Text="{Binding CanBePurged}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="12" Grid.Column="1" Text="MultipleValues:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="12" Grid.Column="2" Text="{Binding MultipleValues}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="13" Grid.Column="1" Text="IsGroup:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="13" Grid.Column="2" VerticalAlignment="Center" Text="{Binding IsGroup}"/>
-                    <TextBlock Grid.Row="14" Grid.Column="1" Margin="0,0,10,0" Text="AggregationType:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="14" Grid.Column="2" Text="{Binding AggregationType}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="15" Grid.Column="1" Text="IsTreeProperty:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="15" Grid.Column="2" Text="{Binding IsTreeProperty}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="16" Grid.Column="1" Text="IsViewable:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="16" Grid.Column="2" Text="{Binding IsViewable}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="17" Grid.Column="1" Text="SearchRawValue:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="17" Grid.Column="2" VerticalAlignment="Center" Text="unavailable"/>
-                    <TextBlock Grid.Row="18" Grid.Column="1" Text="ConditionType:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="18" Grid.Column="2" Text="{Binding ConditionType}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="19" Grid.Column="1" Margin="0,0,10,0" Text="ConditionOperation:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="19" Grid.Column="2" Text="{Binding ConditionOperation}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="20" Grid.Column="0" Text="Display" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="20" Grid.Column="1" Text="DisplayType:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="20" Grid.Column="2" Text="{Binding DisplayType}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="21" Grid.Column="1" Text="Format:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="21" Grid.Column="2" Text="unavailable" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="22" Grid.Column="1" Margin="0,0,10,0" Text="DefaultColumWidth:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="22" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultColumnWidth}"/>
-                    <TextBlock Grid.Row="23" Grid.Column="1" Margin="0,0,10,0" Text="Alignment:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="23" Grid.Column="2" VerticalAlignment="Center" Text="{Binding Alignment}"/>
+                    <TextBlock Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"
+                       Text="{Binding ColumnIndexType}" 
+                       Visibility="{Binding IsColumn,Converter={StaticResource VisibleIfTrue}}"/>
+                    <TextBlock Grid.Row="7" Grid.Column="1" Text="MaxSize:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="7" Grid.Column="2" Text="{Binding MaxSize}"
+                             VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="8" Grid.Column="1" Text="Mnemonics:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="8" Grid.Column="2" Text="unavailable"
+                              VerticalAlignment="Center"/>
+                    
+                    <TextBlock Grid.Row="12" Grid.Column="0" Text="Label" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="12" Grid.Column="1" Text="DisplayName:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="12" Grid.Column="2" Text="{Binding DisplayName}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="13" Grid.Column="1" Margin="0,0,10,0" Text="SortDescription:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="13" Grid.Column="2" VerticalAlignment="Center" Text="{Binding SortDescription}"/>
+                    <TextBlock Grid.Row="14" Grid.Column="1" Text="EditInvitation:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="14" Grid.Column="2" Text="{Binding EditInvitation}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="15" Grid.Column="1" Text="HideLabel:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="15" Grid.Column="2" Text="{Binding HideLabel}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="16" Grid.Column="0" Text="Type" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="16" Grid.Column="1" Text="Type:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="16" Grid.Column="2" Text="{Binding Type}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="17" Grid.Column="1" Margin="0,0,10,0" Text="GroupingRange:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="17" Grid.Column="2" VerticalAlignment="Center" Text="{Binding GroupingRange}"/>
+                    <TextBlock Grid.Row="18" Grid.Column="1" Text="IsInnate:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="18" Grid.Column="2" Text="{Binding IsInnate}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="19" Grid.Column="1" Text="CanBePurged:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="19" Grid.Column="2" Text="{Binding CanBePurged}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="20" Grid.Column="1" Text="MultipleValues:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="20" Grid.Column="2" Text="{Binding MultipleValues}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="21" Grid.Column="1" Text="IsGroup:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="21" Grid.Column="2" VerticalAlignment="Center" Text="{Binding IsGroup}"/>
+                    <TextBlock Grid.Row="22" Grid.Column="1" Margin="0,0,10,0" Text="AggregationType:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="22" Grid.Column="2" Text="{Binding AggregationType}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="23" Grid.Column="1" Text="IsTreeProperty:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="23" Grid.Column="2" Text="{Binding IsTreeProperty}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="24" Grid.Column="1" Text="IsViewable:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="24" Grid.Column="2" Text="{Binding IsViewable}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="25" Grid.Column="1" Text="SearchRawValue:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="25" Grid.Column="2" VerticalAlignment="Center" Text="unavailable"/>
+                    <TextBlock Grid.Row="26" Grid.Column="1" Text="ConditionType:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="26" Grid.Column="2" Text="{Binding ConditionType}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="27" Grid.Column="1" Margin="0,0,10,0" Text="ConditionOperation:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="27" Grid.Column="2" Text="{Binding ConditionOperation}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="28" Grid.Column="0" Text="Alias" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="28" Grid.Column="1" Text="SortByAlias:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="28" Grid.Column="2" Text="{Binding SortByAlias}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="30" Grid.Column="0" Text="Display" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="30" Grid.Column="1" Text="DisplayType:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="30" Grid.Column="2" Text="{Binding DisplayType}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="31" Grid.Column="1" Text="Format:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="31" Grid.Column="2" Text="unavailable" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="32" Grid.Column="1" Margin="0,0,10,0" Text="DefaultColumWidth:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="32" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultColumnWidth}"/>
+                    <TextBlock Grid.Row="33" Grid.Column="1" Margin="0,0,10,0" Text="Alignment:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="33" Grid.Column="2" VerticalAlignment="Center" Text="{Binding Alignment}"/>
                     <!--<TextBlock Grid.Row="23" Grid.Column="1" Margin="0,0,10,0" Text="RelativeDescriptionType:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="23" Grid.Column="2" VerticalAlignment="Center" Text="{Binding RelativeDescriptionType}"/>-->
-                    <TextBlock Grid.Row="24" Grid.Column="1" Margin="0,0,10,0" Text="DefaultSortDirection:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="24" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultSortDirection}"/>
-                    <TextBlock Grid.Row="25" Grid.Column="1" Text="EditControl:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="25" Grid.Column="2" Text="unavailable" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="34" Grid.Column="1" Margin="0,0,10,0" Text="DefaultSortDirection:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="34" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultSortDirection}"/>
+                    <TextBlock Grid.Row="35" Grid.Column="1" Text="EditControl:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="35" Grid.Column="2" Text="unavailable" VerticalAlignment="Center"/>
                 </Grid>
             </ScrollViewer>
         </Border>

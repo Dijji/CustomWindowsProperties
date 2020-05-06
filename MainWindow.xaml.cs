@@ -201,7 +201,7 @@ namespace CustomWindowsProperties
                 MessageBox.Show(ex.ToString(), "Error deleting property");
             }
         }
-    
+
         private void InstalledUninstall_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             var config = (treeViewInstalled.SelectedItem as TreeItem)?.Item as PropertyConfig;

@@ -62,7 +62,7 @@ namespace CustomWindowsProperties
         Ascending,
         Descending,
     }
-    
+
     public enum StringFormat
     {
         General,
@@ -92,7 +92,7 @@ namespace CustomWindowsProperties
         DPI,
         Duration,
     }
-    
+
     public enum DateTimeFormat
     {
         General,
