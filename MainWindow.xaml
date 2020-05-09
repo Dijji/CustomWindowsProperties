@@ -333,6 +333,8 @@
         </StackPanel>-->
         <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,5,0,5" Orientation="Horizontal">
             <Button Content="Choose Save Folder..." Margin="5,0,10,0" Height="25" Click="ChooseDataFolder_Clicked"/>
+            <Button Content="New" Margin="10,0,0,0" Height="25" 
+                    Click="New_Clicked"/>
             <Button Content="Save" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanInstall}" Click="Save_Clicked"/>
             <Button Content="Discard" Margin="10,0,0,0" Height="25" 

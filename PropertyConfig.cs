@@ -534,23 +534,19 @@ namespace CustomWindowsProperties
             desc.SetAttribute("formatID", FormatId.ToString("B").ToUpper());
             desc.SetAttribute("propID", PropertyId.ToString());
 
-            // Unfortunately, we have no search information for system properties
-            if (!IsSystemProperty)
+            var search = doc.CreateElement("searchInfo");
+            search.SetAttribute("inInvertedIndex", InInvertedIndex.ToString());
+            if (IsColumn)
             {
-                var search = doc.CreateElement("searchInfo");
-                search.SetAttribute("inInvertedIndex", InInvertedIndex.ToString());
-                if (IsColumn)
-                {
-                    search.SetAttribute("isColumn", IsColumn.ToString());
-                    search.SetAttribute("isColumnSparse", IsColumnSparse.ToString());
-                    search.SetAttribute("columnIndexType", ColumnIndexType.ToString());
-                }
-                if (MaxSize != 512)
-                    search.SetAttribute("maxSize", MaxSize.ToString());
-                if (Mnemonics != null && Mnemonics.Length > 0)
-                    search.SetAttribute("mnemonics", Mnemonics);
-                desc.AppendChild(search);
+                search.SetAttribute("isColumn", IsColumn.ToString());
+                search.SetAttribute("isColumnSparse", IsColumnSparse.ToString());
+                search.SetAttribute("columnIndexType", ColumnIndexType.ToString());
             }
+            if (MaxSize != 512)
+                search.SetAttribute("maxSize", MaxSize.ToString());
+            if (Mnemonics != null && Mnemonics.Length > 0)
+                search.SetAttribute("mnemonics", Mnemonics);
+            desc.AppendChild(search);
 
             var label = doc.CreateElement("labelInfo");
             label.SetAttribute("label", DisplayName);
@@ -579,8 +575,8 @@ namespace CustomWindowsProperties
                 type.SetAttribute("isTreeProperty", IsTreeProperty.ToString());
             if (IsViewable)
                 type.SetAttribute("isViewable", IsViewable.ToString());
-            //if (SearchRawValue)
-            //    type.SetAttribute("searchRawValue", SearchRawValue.ToString());
+            if (SearchRawValue)
+                type.SetAttribute("searchRawValue", SearchRawValue.ToString());
             if (ConditionType != PropertyConditionType.String)
                 type.SetAttribute("conditionType", ConditionType.ToString());
             if (ConditionOperation != PropertyConditionOperation.Equal)
@@ -753,7 +749,8 @@ namespace CustomWindowsProperties
             if (AggregationType != baseline.AggregationType) result.Add(new Difference(nameof(AggregationType), AggregationType, baseline.AggregationType));
             if (IsTreeProperty != baseline.IsTreeProperty) result.Add(new Difference(nameof(IsTreeProperty), IsTreeProperty, baseline.IsTreeProperty));
             if (IsViewable != baseline.IsViewable) result.Add(new Difference(nameof(IsViewable), IsViewable, baseline.IsViewable));
-            if (SearchRawValue != baseline.SearchRawValue) result.Add(new Difference(nameof(SearchRawValue), SearchRawValue, baseline.SearchRawValue));
+            if (!isInstalled)
+                if (SearchRawValue != baseline.SearchRawValue) result.Add(new Difference(nameof(SearchRawValue), SearchRawValue, baseline.SearchRawValue));
             if (ConditionType != baseline.ConditionType) result.Add(new Difference(nameof(ConditionType), ConditionType, baseline.ConditionType));
             if (ConditionOperation != baseline.ConditionOperation) result.Add(new Difference(nameof(ConditionOperation), ConditionOperation, baseline.ConditionOperation));
 
@@ -770,7 +767,8 @@ namespace CustomWindowsProperties
             if (Alignment != baseline.Alignment) result.Add(new Difference(nameof(Alignment), Alignment, baseline.Alignment));
             //if (RelativeDescriptionType != baseline.RelativeDescriptionType) result.Add(new Difference(nameof(RelativeDescriptionType), RelativeDescriptionType, baseline.RelativeDescriptionType));
             if (DefaultSortDirection != baseline.DefaultSortDirection) result.Add(new Difference(nameof(DefaultSortDirection), DefaultSortDirection, baseline.DefaultSortDirection));
-            if (EditControl != baseline.EditControl) result.Add(new Difference(nameof(EditControl), EditControl, baseline.EditControl));
+            if (!isInstalled)
+                if (EditControl != baseline.EditControl) result.Add(new Difference(nameof(EditControl), EditControl, baseline.EditControl));
             return result;
         }
 

@@ -287,6 +287,13 @@ namespace CustomWindowsProperties
             RefreshEditorStatus();
         }
 
+        public void NewEditorProperty()
+        {
+            EditorBaseline = new PropertyConfig();
+            EditorBaseline.SetDefaultValues();
+            LoadEditorConfig(EditorBaseline, BaselineType.Standalone);
+        }
+
         public void DiscardEditorChanges()
         {
             LoadEditorConfig(EditorBaseline, EditorBaselineType, true);
@@ -543,11 +550,12 @@ namespace CustomWindowsProperties
             var parentName = PropertyTree.FirstPartsOf(config.CanonicalName);
             if (parentName != null && dictSavedTree.TryGetValue(parentName, out TreeItem parent))
             {
-                if (parent.Children.Count != 0)
+                var siblingConfigs = parent.Children.Select(c => c.Item).OfType<PropertyConfig>()
+                                           .Where(p => p != null).ToList();
+                if (siblingConfigs.Count > 0)
                 {
-                    config.FormatId = (parent.Children[0].Item as PropertyConfig).FormatId;
-                    config.PropertyId = parent.Children.Select(t => t.Item).Cast<PropertyConfig>()
-                        .Select(p => p?.PropertyId).Max() + 1;
+                    config.FormatId = siblingConfigs[0].FormatId;
+                    config.PropertyId = siblingConfigs.Select(p => p?.PropertyId).Max() + 1;
                     return;
                 }
             }

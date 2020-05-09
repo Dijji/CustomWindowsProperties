@@ -73,6 +73,11 @@ namespace CustomWindowsProperties
                 DisplayStatus($"Data folder is now {state.DataFolder}");
         }
 
+        private void New_Clicked(object sender, RoutedEventArgs e)
+        {
+            view.NewEditorProperty();
+        }
+
         private void Save_Clicked(object sender, RoutedEventArgs e)
         {
             try
