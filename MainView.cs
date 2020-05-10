@@ -193,6 +193,10 @@ namespace CustomWindowsProperties
                 {
                     LoadEditorConfig(SelectedSavedProperty, BaselineType.Saved);
                 }
+                else
+                {
+                    NewEditorProperty(treeItem.Tag);
+                }
             }
 
             CompareEditorToBaseline(); // in case there is an override 
@@ -287,10 +291,12 @@ namespace CustomWindowsProperties
             RefreshEditorStatus();
         }
 
-        public void NewEditorProperty()
+        public void NewEditorProperty(string canonicalName = null)
         {
             EditorBaseline = new PropertyConfig();
             EditorBaseline.SetDefaultValues();
+            if (canonicalName != null)
+                EditorBaseline.CanonicalName = canonicalName;
             LoadEditorConfig(EditorBaseline, BaselineType.Standalone);
         }
 
