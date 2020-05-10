@@ -168,7 +168,7 @@ InMemory: &lt;/td&gt;&lt;td&gt;Obsolete. Do not use.
 OnDiskAll: &lt;/td&gt;&lt;td&gt;Build a value index by default for this property, and if it is a vector property, also a value index for all concatenated vector values. 
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 OnDiskVector: &lt;/td&gt;&lt;td&gt;Build a value index by default for the concatenated vector values. 
-OnDemand: &lt;/td&gt;&lt;td&gt;Only build value indices by demand, that is, only first time they are used for a query.
+OnDemand: &lt;/td&gt;&lt;td&gt;Only build a value index on demand, that is, the first time it is needed for a query.
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="ConditionOperation" xml:space="preserve">
@@ -274,7 +274,7 @@ Rating&lt;/td&gt;&lt;td&gt;	Uses the 5-star rating control.
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 Text&lt;/td&gt;&lt;td&gt;	Uses the text edit control.
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-IconList&lt;/td&gt;&lt;td&gt;	Windows 7 and late
+IconList&lt;/td&gt;&lt;td&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="EditInvitation" xml:space="preserve">
@@ -314,13 +314,13 @@ The default is "false".</value>
     <value>The default is "true". If the property is multi-valued, this attribute is always "true".</value>
   </data>
   <data name="IsGroup" xml:space="preserve">
-    <value>Specifies whether the property is a group heading. Default is "false". A group heading is strictly used to group properties within a list, has no value, and is never stored in a file. Some UI in the system use property lists to indicate the sequence of the properties to display. These property lists may include references to group headings (eg, System.PropGroup.Camera), which tell the UI to start a new group section (eg, "Camera Settings"). A property description with IsGroup="true" should specify a , otherwise it isn't a useful property.</value>
+    <value>Specifies whether the property is a group heading. Default is "false". A group heading is strictly used to group properties within a list, has no value, and is never stored in a file. Some UI in the system use property lists to indicate the sequence of the properties to display. These property lists may include references to group headings (eg, System.PropGroup.Camera), which tell the UI to start a new group section (eg, "Camera Settings"). A property description with IsGroup="true" should specify a DisplayName to provide the text for the heading.</value>
   </data>
   <data name="IsInnate" xml:space="preserve">
     <value>Default is "false". Specifies whether the property is considered innate. An innate property is one which is either calculated from the content of a file, or from other resources or systems. For example, System.Size is an innate property provided by the file system; changing the value of the property in and of itself does nothing. Other examples are System.Image.Dimensions and System.Document.PageCount, which are calculated by programs based upon the content of the file, not based upon a user-changeable setting. Setting IsInnate="true" means the user cannot edit this property directly via a property control.</value>
   </data>
   <data name="IsTreeProperty" xml:space="preserve">
-    <value>Whether this is a tree property. The default is "false".</value>
+    <value>&lt;p&gt;Whether this is a tree property. The default is "false".&lt;/p&gt;&lt;p&gt; That is all the documentation has to say. We can speculate that it is something to do with how the property might be edited, but the exact meaning is most unclear. All we know for sure is that it was added in Windows 7.&lt;/p&gt;</value>
   </data>
   <data name="IsViewable" xml:space="preserve">
     <value>Specifies whether this property is intended to be viewable to the user. Default value is "false". For example, the Column Chooser UI only shows the properties that have IisViewable="true". The exception is UI that is driven by a property list, which will always show the property. If you have a property that is only meant to shuttle data between two objects, and never intended to be viewed by the user, this attribute should be false.</value>
@@ -368,7 +368,7 @@ At the moment, this tool will always use hh:mm:ss
     <value />
   </data>
   <data name="SearchRawValue" xml:space="preserve">
-    <value>The default is "false".</value>
+    <value>&lt;p&gt;The default is "false".&lt;/p&gt;&lt;p&gt; That is all the documentation has to say. We can speculate that it may be an instruction to the Index Server that even if the property value has been indexed (say because InInvertedIndex is "True"), the original raw value should be searched as well. This might take a good deal of extra time for a long string value. &lt;/p&gt;</value>
   </data>
   <data name="SortDescription" xml:space="preserve">
     <value>&lt;p&gt;Specifies the strings offered as sort options. The following values provide the corresponding UI strings.&lt;/p&gt;

@@ -1,9 +1,13 @@
 ﻿// Copyright (c) 2020, Dijji, and released under Ms-PL.  This, with other relevant licenses, can be found in the root of this distribution.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace CustomWindowsProperties
 {
@@ -20,6 +24,7 @@ namespace CustomWindowsProperties
         public MainWindow()
         {
             InitializeComponent();
+            AddRectanglesToPropertyEditor();
             DataContext = view;
             try
             {
@@ -60,6 +65,38 @@ namespace CustomWindowsProperties
         private void Editor_GotFocus(object sender, RoutedEventArgs e)
         {
             view.EditorFocusChanged(((FrameworkElement)e.OriginalSource).Tag as string, wbHelp);
+        }
+
+        private void AddRectanglesToPropertyEditor()
+        {
+            List<int> rows = new List<int>();
+            foreach (var child in PropertyEditor.Children.Cast<UIElement>())
+            {
+                if (Grid.GetColumn(child) == 2)
+                    rows.Add(Grid.GetRow(child));
+            }
+
+            foreach (var row in rows)
+            {
+                var rect = new Rectangle { Fill = Brushes.Transparent };
+                rect.MouseLeftButtonUp += Rectangle_MouseLeftButtonUp;
+                Grid.SetRow(rect, row);
+                Grid.SetColumn(rect, 0);
+                Grid.SetColumnSpan(rect, 2);
+                PropertyEditor.Children.Add(rect);
+            }
+        }
+
+        private void Rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            // Clicking on the invisible rectangle in columns 0 and 1 
+            // puts the focus on any control in column 2 of the same row
+            var rect = (Rectangle)sender;
+            var row = Grid.GetRow(rect);
+            var target = PropertyEditor.Children.Cast<UIElement>()
+                    .FirstOrDefault(el => Grid.GetRow(el) == row && Grid.GetColumn(el) == 2);
+            if (target != null)
+                target.Focus();
         }
 
         private void Editor_LostFocus(object sender, RoutedEventArgs e)
@@ -238,5 +275,6 @@ namespace CustomWindowsProperties
         {
             StatusBar.Text = text;
         }
+
     }
 }

@@ -313,7 +313,7 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specifies whether the property is a group heading. Default is &quot;false&quot;. A group heading is strictly used to group properties within a list, has no value, and is never stored in a file. Some UI in the system use property lists to indicate the sequence of the properties to display. These property lists may include references to group headings (eg, System.PropGroup.Camera), which tell the UI to start a new group section (eg, &quot;Camera Settings&quot;). A property description with IsGroup=&quot;true&quot; should specify a , other [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Specifies whether the property is a group heading. Default is &quot;false&quot;. A group heading is strictly used to group properties within a list, has no value, and is never stored in a file. Some UI in the system use property lists to indicate the sequence of the properties to display. These property lists may include references to group headings (eg, System.PropGroup.Camera), which tell the UI to start a new group section (eg, &quot;Camera Settings&quot;). A property description with IsGroup=&quot;true&quot; should specify a Display [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string IsGroup {
             get {
@@ -331,7 +331,7 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Whether this is a tree property. The default is &quot;false&quot;..
+        ///   Looks up a localized string similar to &lt;p&gt;Whether this is a tree property. The default is &quot;false&quot;.&lt;/p&gt;&lt;p&gt; That is all the documentation has to say. We can speculate that it is something to do with how the property might be edited, but the exact meaning is most unclear. All we know for sure is that it was added in Windows 7.&lt;/p&gt;.
         /// </summary>
         internal static string IsTreeProperty {
             get {
@@ -405,7 +405,7 @@ namespace CustomWindowsProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The default is &quot;false&quot;..
+        ///   Looks up a localized string similar to &lt;p&gt;The default is &quot;false&quot;.&lt;/p&gt;&lt;p&gt; That is all the documentation has to say. We can speculate that it may be an instruction to the Index Server that even if the property value has been indexed (say because InInvertedIndex is &quot;True&quot;), the original raw value should be searched as well. This might take a good deal of extra time for a long string value. &lt;/p&gt;.
         /// </summary>
         internal static string SearchRawValue {
             get {
