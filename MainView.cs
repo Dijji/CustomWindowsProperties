@@ -153,9 +153,9 @@ namespace CustomWindowsProperties
         public void Populate(State state)
         {
             this.state = state;
-            EditorBaseline = new PropertyConfig();
-            EditorBaseline.SetDefaultValues();
-            LoadEditorConfig(EditorBaseline, BaselineType.Standalone);
+            var newBaseline = new PropertyConfig();
+            newBaseline.SetDefaultValues();
+            LoadEditorConfig(newBaseline, BaselineType.Standalone, alwaysOverwrite: true);
             dictInstalledTree = PropertyTree.PopulatePropertyTree(state.SystemProperties.Concat(state.CustomProperties),
                 InstalledPropertyTree, true);
             dictSavedTree = PropertyTree.PopulatePropertyTree(state.SavedProperties,
@@ -293,17 +293,16 @@ namespace CustomWindowsProperties
 
         public void NewEditorProperty(string canonicalName = null)
         {
-            EditorBaseline = new PropertyConfig();
-            EditorBaseline.SetDefaultValues();
+            var newBaseline = new PropertyConfig();
+            newBaseline.SetDefaultValues();
             if (canonicalName != null)
-                EditorBaseline.CanonicalName = canonicalName;
-            LoadEditorConfig(EditorBaseline, BaselineType.Standalone);
+                newBaseline.CanonicalName = canonicalName;
+            LoadEditorConfig(newBaseline, BaselineType.Standalone);
         }
 
         public void DiscardEditorChanges()
         {
-            LoadEditorConfig(EditorBaseline, EditorBaselineType, true);
-            CheckIfEditorDirty();
+            LoadEditorConfig(EditorBaseline, EditorBaselineType, alwaysOverwrite: true);
         }
 
         public PropertyConfig SaveEditorProperty(TreeView treeViewSaved)
@@ -313,7 +312,7 @@ namespace CustomWindowsProperties
                 // Property is already known about, just update its values
                 config.CopyFrom(EditorConfig, false);
                 state.SavePropertyConfig(EditorConfig);
-                IsEditorDirty = false;
+                CheckIfEditorDirty();
                 return config;
             }
             else
@@ -421,7 +420,7 @@ namespace CustomWindowsProperties
             if (!alwaysOverwrite)
             {
                 string question = null;
-                if (IsEditorDirty)
+                if (CompareEditorToBaseline())
                     question = "Do you want to discard the changes you have made?";
                 else if (EditorBaselineType == BaselineType.Installed &&
                          type != BaselineType.Installed)
@@ -441,7 +440,6 @@ namespace CustomWindowsProperties
             IsBulkUpdating = false;
             EditorBaseline = baseline;
             EditorBaselineType = type;
-            IsEditorDirty = false;
             CheckIfEditorDirty();
             RefreshEditorStatus();
 
