@@ -38,7 +38,7 @@ What it does:
 - However, installed property configurations need to be held in a separate area, partly to ensure that they are accessible to all users of the machine, and partly because Windows may load data from them lazily at any time, and so they had better not move about after installation. The folder used is <System drive>:\ProgramData\CustomWindowsProperties. It is strongly recommended that you leave the contents of this folder alone. It is not useful to copy this folder from machine to machine: instead, copy the Saved Data folder and install the properties on the new machine.
 
 ## Versions:   
-0.4 - First complete version, for testing as a candidate for the initial release
+0.6 - Release candidate 3
 
 ## Work list
 - Source all messages from localised resources

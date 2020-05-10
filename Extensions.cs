@@ -1,4 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace CustomWindowsProperties
 {
@@ -12,6 +15,9 @@ namespace CustomWindowsProperties
                 return s.Substring(0, length);
         }
 
+        public static IEnumerable<T> Flatten<T>(this IEnumerable<T> e, Func<T, IEnumerable<T>> f) =>
+                e.SelectMany(c => f(c).Flatten(f)).Concat(e);
+    
         public static bool IsValidPropertyName(string name)
         {
             return Regex.IsMatch(name, @"\A([A-Z]([A-Z]|[a-z]|[0-9])*\.)+([A-Z]([A-Z]|[a-z]|[0-9])*)\z");

@@ -232,9 +232,8 @@ namespace CustomWindowsProperties
 
         public bool CanBeExported(TreeItem treeItem)
         {
-            // Must exist and be a leaf, or the immediate parent of leaves
-            return HasDataFolder && treeItem != null &&
-                (treeItem.Children.Count == 0 || treeItem.Children[0].Children.Count == 0);
+            // Must exist and that's about it
+            return HasDataFolder && treeItem != null;
         }
 
         public bool CanBeUninstalled(PropertyConfig config)
@@ -257,7 +256,7 @@ namespace CustomWindowsProperties
             }
             else
             {
-                items = treeItem.Children;
+                items = treeItem.Children.Flatten<TreeItem>(t => t.Children); 
                 configName = treeItem.Path;
             }
 
@@ -266,16 +265,6 @@ namespace CustomWindowsProperties
 
             var fileName = $"{Extensions.FixFileName(configName)}.propdesc";
             doc.Save(state.DataFolder + $@"\{fileName}");
-
-            // Testing
-            //if (treeItem.Item != null)
-            //{
-            //    var pc = state.InstalledProperties[treeItem.Item as string];
-            //    state.SavePropertyConfig(pc);
-            //    var pc2 = state.LoadPropertyConfig($@"{state.DataFolder}\{pc.CanonicalName}.xml");
-            //    pc2.CanonicalName = pc2.CanonicalName + "2";
-            //    state.SavePropertyConfig(pc2); // Round-trip for comparison at leisure
-            //}
 
             return fileName;
         }
