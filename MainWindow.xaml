@@ -305,8 +305,8 @@
                     <ComboBox Grid.Row="31" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding RelativeDescriptionType, UpdateSourceTrigger=PropertyChanged}" Tag="RelativeDescriptionType"
-                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:RelativeDescriptionType}}}"/>
-                    <TextBlock Grid.Row="32" Grid.Column="1" Margin="0,0,10,0" Text="DefaultSortDirection:" VerticalAlignment="Center"/>-->
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:RelativeDescriptionType}}}"/>-->
+                    <TextBlock Grid.Row="32" Grid.Column="1" Margin="0,0,10,0" Text="DefaultSortDirection:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="32" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding DefaultSortDirection, UpdateSourceTrigger=PropertyChanged}" Tag="DefaultSortDirection"
