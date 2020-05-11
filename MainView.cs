@@ -162,21 +162,6 @@ namespace CustomWindowsProperties
                 SavedPropertyTree, false, ShowIfSavedIsInstalled);
         }
 
-        public bool ChooseDataFolder()
-        {
-            var fsd = new FolderSelectDialog
-            {
-                Title = "Choose folder for storing data files",
-                InitialDirectory = state.DataFolder ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-            };
-            if (fsd.ShowDialog(IntPtr.Zero))
-            {
-                state.DataFolder = fsd.FileName;
-                RefreshEditorStatus();
-            }
-            return false;
-        }
-
         public PropertyConfig SetSelectedTreeItem(TreeItem treeItem, bool isInstalled)
         {
             SelectedTreeItem = treeItem;
@@ -195,7 +180,7 @@ namespace CustomWindowsProperties
                 }
                 else
                 {
-                    NewEditorProperty(treeItem.Tag);
+                    NewEditorProperty(treeItem.Tag + ".");
                 }
             }
 
@@ -203,6 +188,7 @@ namespace CustomWindowsProperties
             return selectedProperty;
         }
 
+        #region Editor support
         public void RefreshEditorStatus()
         {
             OnPropertyChanged(nameof(EditorInstalledText));
@@ -212,72 +198,8 @@ namespace CustomWindowsProperties
 
         public void EditorFocusChanged(string tag, WebBrowser browser)
         {
-            //CheckIfEditorDirty();
             if (tag != null)
                 browser.NavigateToString(Help.HtmlText(tag));
-        }
-
-        public bool CanBeInstalled(PropertyConfig config)
-        {
-            return HasDataFolder && config != null &&
-                ValidateName(config.CanonicalName) == null &&
-                !state.DictInstalledProperties.ContainsKey(config.CanonicalName);
-        }
-
-        public bool CanBeDeleted(PropertyConfig config)
-        {
-            return CanBeInstalled(config) &&
-                state.DictSavedProperties.ContainsKey(config.CanonicalName);
-        }
-
-        public bool CanBeExported(TreeItem treeItem)
-        {
-            // Must exist and that's about it
-            return HasDataFolder && treeItem != null;
-        }
-
-        public bool CanBeUninstalled(PropertyConfig config)
-        {
-            return HasDataFolder && config != null &&
-                state.DictInstalledProperties.ContainsKey(config.CanonicalName) &&
-                state.DictSavedProperties.ContainsKey(config.CanonicalName);
-        }
-
-        public string ExportPropDesc(TreeItem treeItem)
-        {
-            XmlDocument doc;
-            string configName;
-            IEnumerable<TreeItem> items;
-
-            if (treeItem.Children.Count == 0)
-            {
-                items = new TreeItem[] { treeItem };
-                configName = ((PropertyConfig)treeItem.Item).CanonicalName;
-            }
-            else
-            {
-                items = treeItem.Children.Flatten<TreeItem>(t => t.Children); 
-                configName = treeItem.Path;
-            }
-
-            doc = PropertyConfig.GetPropDesc(
-                    items.Select(t => t.Item).Cast<PropertyConfig>().Where(s => s != null));
-
-            var fileName = $"{Extensions.FixFileName(configName)}.propdesc";
-            doc.Save(state.DataFolder + $@"\{fileName}");
-
-            return fileName;
-        }
-
-        public void DeleteProperty(PropertyConfig config)
-        {
-            var canonicalName = config.CanonicalName;
-
-            // Caller must ensure that property is in the editor tree, but not installed
-            state.DeletePropertyConfig(canonicalName);
-            state.RemoveSavedProperty(canonicalName);
-            PropertyTree.RemoveTreeItem(dictSavedTree, SavedPropertyTree, canonicalName);
-            RefreshEditorStatus();
         }
 
         public void NewEditorProperty(string canonicalName = null)
@@ -325,6 +247,148 @@ namespace CustomWindowsProperties
             }
         }
 
+        public void CopyInstalledPropertyToEditor()
+        {
+            LoadEditorConfig(SelectedInstalledProperty, BaselineType.Installed);
+        }
+        #endregion
+
+        #region Command support
+
+        public bool ChooseDataFolder()
+        {
+            var fsd = new FolderSelectDialog
+            {
+                Title = "Choose folder for storing data files",
+                InitialDirectory = state.DataFolder ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
+            if (fsd.ShowDialog(IntPtr.Zero))
+            {
+                state.DataFolder = fsd.FileName;
+                RefreshEditorStatus();
+            }
+            return false;
+        }
+
+        public bool CanBeExported(TreeItem treeItem)
+        {
+            // Must exist and that's about it
+            return HasDataFolder && treeItem != null;
+        }
+
+        public bool CanBeDeleted(TreeItem treeItem)
+        {
+            return GetTreeTargets(treeItem, out bool isGroup)
+                .Where(p => CanBeDeleted(p) && !IsDirtyGroupConfig(p, isGroup))
+                .FirstOrDefault() != null;
+        }
+
+        public bool CanBeDeleted(PropertyConfig config)
+        {
+            return CanBeInstalled(config) &&
+                state.DictSavedProperties.ContainsKey(config.CanonicalName);
+        }
+
+        public bool CanBeInstalled(TreeItem treeItem)
+        {
+            return GetTreeTargets(treeItem, out bool isGroup)
+                .Where(p => CanBeInstalled(p) && !IsDirtyGroupConfig(p, isGroup))
+                .FirstOrDefault() != null;
+        }
+
+        public bool CanBeInstalled(PropertyConfig config)
+        {
+            return HasDataFolder && config != null &&
+                ValidateName(config.CanonicalName) == null &&
+                !state.DictInstalledProperties.ContainsKey(config.CanonicalName);
+        }
+
+        public bool CanBeUninstalled(TreeItem treeItem)
+        {
+            return GetTreeTargets(treeItem, out bool isGroup)
+                .Where(p => CanBeUninstalled(p))
+                .FirstOrDefault() != null;
+        }
+
+        public bool CanBeUninstalled(PropertyConfig config)
+        {
+            return HasDataFolder && config != null &&
+                state.DictInstalledProperties.ContainsKey(config.CanonicalName) &&
+                state.DictSavedProperties.ContainsKey(config.CanonicalName);
+        }
+
+        public string ExportPropDesc(TreeItem treeItem)
+        {
+            XmlDocument doc;
+            string configName;
+
+            var items = GetTreeTargets(treeItem, out bool isGroup);
+
+            if (!isGroup)
+                configName = items.First().CanonicalName;
+            else
+                configName = treeItem.Path;
+
+            doc = PropertyConfig.GetPropDesc(items);
+
+            var fileName = $"{Extensions.FixFileName(configName)}.propdesc";
+            doc.Save(state.DataFolder + $@"\{fileName}");
+
+            return fileName;
+        }
+
+        public int DeleteProperties(TreeItem treeItem)
+        {
+            var configs = GetTreeTargets(treeItem, out bool isGroup)
+                .Where(p => CanBeDeleted(p) && !IsDirtyGroupConfig(p, isGroup)).ToList();
+
+            if (isGroup)
+            {
+                if (MessageBox.Show($"This will delete {PropertyNameListQ(configs)}",
+                    "Delete Properties", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    return 0;
+            }
+
+            foreach (var config in configs)
+                DeleteProperty(config);
+
+            return configs.Count();
+        }
+
+        public void DeleteProperty(PropertyConfig config)
+        {
+            var canonicalName = config.CanonicalName;
+
+            // Caller must ensure that property is in the editor tree, but not installed
+            state.DeletePropertyConfig(canonicalName);
+            state.RemoveSavedProperty(canonicalName);
+            PropertyTree.RemoveTreeItem(dictSavedTree, SavedPropertyTree, canonicalName);
+            RefreshEditorStatus();
+        }
+
+        // Returns a tuple of success and failure counts (property matching not in target Windows .Net)
+        public Tuple<int, int> InstallProperties(TreeItem treeItem, TreeView treeViewInstalled)
+        {
+            var configs = GetTreeTargets(treeItem, out bool isGroup)
+                .Where(p => CanBeInstalled(p) && !IsDirtyGroupConfig(p, isGroup)).ToList();
+
+            if (isGroup)
+            {
+                if (MessageBox.Show($"This will install {PropertyNameListQ(configs)}",
+                    "Install Properties", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    return new Tuple<int, int>(0, 0);
+            }
+
+            int good = 0;
+            foreach (var config in configs)
+            {
+                if (InstallProperty(config, isGroup ? null : treeViewInstalled) > 0)
+                    good++;
+            }
+
+            return new Tuple<int, int>(good, configs.Count() - good);
+        }
+        
         public int InstallEditorProperty(TreeView treeViewSaved, TreeView treeViewInstalled)
         {
             // Save as XML and update state and tree as necessary
@@ -333,6 +397,7 @@ namespace CustomWindowsProperties
             return InstallProperty(config, treeViewInstalled);
         }
 
+        // Returns negative numbers for failure, positive for success
         public int InstallProperty(PropertyConfig config, TreeView treeViewInstalled)
         {
             // Save as propdesc
@@ -349,12 +414,31 @@ namespace CustomWindowsProperties
                 state.AddInstalledProperty(installedConfig);
                 var treeItem = PropertyTree.AddTreeItem(dictInstalledTree, InstalledPropertyTree,
                                 installedConfig, addRootTop: true);
-                SelectTreeItemAfterDelay(treeViewInstalled, treeItem);
+                if (treeViewInstalled != null)
+                    SelectTreeItemAfterDelay(treeViewInstalled, treeItem);
                 ShowIfSavedIsInstalled(installedConfig.CanonicalName);
                 RefreshEditorStatus();
             }
 
             return result;
+        }
+
+        public int UninstallProperties(TreeItem treeItem)
+        {
+            var configs = GetTreeTargets(treeItem, out bool isGroup)
+                .Where(p => CanBeUninstalled(p)).ToList();
+
+            if (isGroup)
+            {
+                if (MessageBox.Show($"This will uninstall {PropertyNameListQ(configs)}",
+                    "Uninstall Properties", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    return 0;
+            }
+
+            foreach (var config in configs)
+                UninstallProperty(config);
+
+            return configs.Count();
         }
 
         public bool UninstallProperty(PropertyConfig config)
@@ -374,13 +458,10 @@ namespace CustomWindowsProperties
 
             return succeeded;
         }
-
-
-        public void CopyInstalledPropertyToEditor()
-        {
-            LoadEditorConfig(SelectedInstalledProperty, BaselineType.Installed);
-        }
         #endregion
+
+        #endregion
+
         #region Private methods
         private string ValidateName(string name)
         {
@@ -446,6 +527,22 @@ namespace CustomWindowsProperties
             return true;
         }
 
+        private string PropertyNameListQ(List<PropertyConfig> configs)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < configs.Count; i++)
+            {
+                sb.Append(configs[i].CanonicalName);
+                if (i < configs.Count - 2)
+                    sb.Append(", ");
+                else if (i == configs.Count - 2)
+                    sb.Append(" and ");
+            }
+            sb.AppendLine("");
+            sb.AppendLine("Do you wish to continue?");
+            return sb.ToString();
+        }
+
         private void ShowIfSavedIsInstalled(string canonicalName)
         {
             var treeItem = PropertyTree.FindTreeItem(canonicalName, dictSavedTree);
@@ -459,6 +556,12 @@ namespace CustomWindowsProperties
                 treeItem.Background = Brushes.LightGreen;
             else
                 treeItem.Background = null;
+        }
+
+        private bool IsDirtyGroupConfig(PropertyConfig config, bool isGroup)
+        {
+            // Check for a group property which is open and changed in the editor 
+            return isGroup && EditorConfig.CanonicalName == config.CanonicalName && IsEditorDirty;
         }
 
         private void CheckIfEditorDirty()
@@ -556,6 +659,24 @@ namespace CustomWindowsProperties
             // No usable parent, give it a new name  
             config.FormatId = Guid.NewGuid();
             config.PropertyId = 1;
+        }
+
+        private IEnumerable<PropertyConfig> GetTreeTargets(TreeItem treeItem, out bool isGroup)
+        {
+            IEnumerable<TreeItem> items;
+
+            if (treeItem.Children.Count == 0)
+            {
+                items = new TreeItem[] { treeItem };
+                isGroup = false;
+            }
+            else
+            {
+                items = treeItem.Children.Flatten<TreeItem>(t => t.Children);
+                isGroup = true;
+            }
+
+            return items.Select(t => t.Item).Cast<PropertyConfig>().Where(s => s != null);
         }
 
         private void SelectTreeItemAfterDelay(TreeView treeView, TreeItem treeItem)

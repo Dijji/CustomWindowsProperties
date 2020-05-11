@@ -17,7 +17,7 @@ namespace CustomWindowsProperties
 
         public static IEnumerable<T> Flatten<T>(this IEnumerable<T> e, Func<T, IEnumerable<T>> f) =>
                 e.SelectMany(c => f(c).Flatten(f)).Concat(e);
-    
+
         public static bool IsValidPropertyName(string name)
         {
             return Regex.IsMatch(name, @"\A([A-Z]([A-Z]|[a-z]|[0-9])*\.)+([A-Z]([A-Z]|[a-z]|[0-9])*)\z");

@@ -167,7 +167,7 @@ InMemory: &lt;/td&gt;&lt;td&gt;Obsolete. Do not use.
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 OnDiskAll: &lt;/td&gt;&lt;td&gt;Build a value index by default for this property, and if it is a vector property, also a value index for all concatenated vector values. 
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-OnDiskVector: &lt;/td&gt;&lt;td&gt;Build a value index by default for the concatenated vector values. 
+OnDiskVector: &lt;/td&gt;&lt;td&gt;Build a value index by default for the concatenated vector values. &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 OnDemand: &lt;/td&gt;&lt;td&gt;Only build a value index on demand, that is, the first time it is needed for a query.
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
@@ -274,7 +274,7 @@ Rating&lt;/td&gt;&lt;td&gt;	Uses the 5-star rating control.
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 Text&lt;/td&gt;&lt;td&gt;	Uses the text edit control.
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-IconList&lt;/td&gt;&lt;td&gt;
+IconList&lt;/td&gt;&lt;td&gt; Windows 7 or later. That is all the documentation says. We can speculate that the property editor is asked to select from a number of icons. 
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="EditInvitation" xml:space="preserve">

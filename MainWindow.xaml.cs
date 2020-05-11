@@ -166,52 +166,16 @@ namespace CustomWindowsProperties
             RefreshPropertyEditor();
         }
 
-        private void EditedInstall_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void SavedExport_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            var config = (treeViewSaved.SelectedItem as TreeItem)?.Item as PropertyConfig;
-            e.CanExecute = view.CanBeInstalled(config);
+            e.CanExecute = view.CanBeExported(treeViewSaved.SelectedItem as TreeItem);
         }
 
-        private void EditedInstall_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void SavedExport_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var config = (treeViewSaved.SelectedItem as TreeItem)?.Item as PropertyConfig;
-            Mouse.OverrideCursor = Cursors.Wait; // Tree search can be slow
             try
             {
-                switch (view.InstallProperty(config, treeViewInstalled))
-                {
-                    case 0:
-                        DisplayStatus($"Property {config.CanonicalName} installed");
-                        break;
-                    case 1:
-                        DisplayStatus($"Property {config.CanonicalName} installed with warnings of possible incompleteness");
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error installing property");
-            }
-            finally
-            {
-                Mouse.OverrideCursor = null;
-            }
-        }
-
-        private void EditedExport_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            var treeItem = treeViewSaved.SelectedItem as TreeItem;
-            e.CanExecute = view.CanBeExported(treeItem);
-        }
-
-        private void EditedExport_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            var treeItem = treeViewSaved.SelectedItem as TreeItem;
-            try
-            {
-                var outputFile = view.ExportPropDesc(treeItem);
+                var outputFile = view.ExportPropDesc(treeViewSaved.SelectedItem as TreeItem);
                 if (outputFile != null)
                 {
                     DisplayStatus($"Exported successfully to {outputFile}");
@@ -223,44 +187,62 @@ namespace CustomWindowsProperties
             }
         }
 
-        private void EditedDelete_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void SavedDelete_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            var config = (treeViewSaved.SelectedItem as TreeItem)?.Item as PropertyConfig;
-            e.CanExecute = view.CanBeDeleted(config);
+            e.CanExecute = view.CanBeDeleted(treeViewSaved.SelectedItem as TreeItem);
         }
 
-        private void EditedDelete_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void SavedDelete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var config = (treeViewSaved.SelectedItem as TreeItem)?.Item as PropertyConfig;
-
             try
             {
-                view.DeleteProperty(config);
-                DisplayStatus($"Property {config.CanonicalName} deleted");
+                var count = view.DeleteProperties(treeViewSaved.SelectedItem as TreeItem);
+                DisplayStatus($"Deleted {count} {(count == 1 ? "property" : "properties")}");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Error deleting property");
+                MessageBox.Show(ex.ToString(), "Error deleting properties");
+            }
+        }
+
+        private void SavedInstall_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = view.CanBeInstalled(treeViewSaved.SelectedItem as TreeItem);
+        }
+
+        private void SavedInstall_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Wait; // Tree search can be slow
+            try
+            {
+                var result = view.InstallProperties(treeViewSaved.SelectedItem as TreeItem, treeViewInstalled);
+                DisplayStatus($"There were {result.Item1} successful installations and {result.Item2} failures");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error installing properties");
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
             }
         }
 
         private void InstalledUninstall_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            var config = (treeViewInstalled.SelectedItem as TreeItem)?.Item as PropertyConfig;
-            e.CanExecute = view.CanBeUninstalled(config);
+            e.CanExecute = view.CanBeUninstalled(treeViewInstalled.SelectedItem as TreeItem);
         }
 
         private void InstalledUninstall_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var config = (treeViewInstalled.SelectedItem as TreeItem)?.Item as PropertyConfig;
             try
             {
-                if (view.UninstallProperty(config))
-                    DisplayStatus($"Property {config.CanonicalName} uninstalled");
+                var count = view.UninstallProperties(treeViewInstalled.SelectedItem as TreeItem);
+                DisplayStatus($"Uninstalled {count} {(count == 1 ? "property" : "properties")}");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Error uninstalling property");
+                MessageBox.Show(ex.ToString(), "Error uninstalling properties");
             }
         }
 

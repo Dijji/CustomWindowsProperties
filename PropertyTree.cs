@@ -70,13 +70,15 @@ namespace CustomWindowsProperties
 
             return dict;
         }
-        public static TreeItem FindTreeItem(string name, Dictionary<string, TreeItem> dictTree)
+        public static TreeItem FindTreeItem(string canonicalName, Dictionary<string, TreeItem> dictTree)
         {
             TreeItem result = null;
-            var parentName = FirstPartsOf(name);
+            var parentName = FirstPartsOf(canonicalName);
             if (parentName != null && dictTree.TryGetValue(parentName, out TreeItem parent))
             {
-                result = parent.Children.Where(t => t.Name == LastPartOf(name)).FirstOrDefault();
+                result = parent.Children
+                    .Where(t => (t.Item as PropertyConfig)?.CanonicalName == canonicalName)
+                    .FirstOrDefault();
             }
             return result;
         }

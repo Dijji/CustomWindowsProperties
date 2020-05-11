@@ -76,9 +76,9 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
             <TreeView.CommandBindings>
-                <CommandBinding Command="Open" CanExecute="EditedInstall_CanExecute" Executed="EditedInstall_Executed"/>
-                <CommandBinding Command="SaveAs" CanExecute="EditedExport_CanExecute" Executed="EditedExport_Executed"/>
-                <CommandBinding Command="Delete" CanExecute="EditedDelete_CanExecute" Executed="EditedDelete_Executed"/>
+                <CommandBinding Command="Open" CanExecute="SavedInstall_CanExecute" Executed="SavedInstall_Executed"/>
+                <CommandBinding Command="SaveAs" CanExecute="SavedExport_CanExecute" Executed="SavedExport_Executed"/>
+                <CommandBinding Command="Delete" CanExecute="SavedDelete_CanExecute" Executed="SavedDelete_Executed"/>
             </TreeView.CommandBindings>
             <TreeView.ContextMenu>
                 <ContextMenu>
