@@ -67,7 +67,13 @@
                   x:Name="treeViewSaved"
                       ItemsSource="{Binding Path=SavedPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectExpandedTreeViewItemStyle}"
-                      SelectedItemChanged="SavedTree_SelectedItemChanged">
+                      SelectedItemChanged="SavedTree_SelectedItemChanged" Height="296" VerticalAlignment="Top">
+            <TreeView.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                      Color="SkyBlue" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                      Color="Black" />
+            </TreeView.Resources>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
                     <Grid>
@@ -359,6 +365,12 @@
                       ItemsSource="{Binding Path=InstalledPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectTreeViewItemStyle}"
                       SelectedItemChanged="InstalledTree_SelectedItemChanged">
+            <TreeView.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                      Color="SkyBlue" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                      Color="Black" />
+            </TreeView.Resources>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
                     <Grid>
