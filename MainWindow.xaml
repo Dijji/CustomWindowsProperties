@@ -67,7 +67,7 @@
                   x:Name="treeViewSaved"
                       ItemsSource="{Binding Path=SavedPropertyTree}" FontSize="12"
                       ItemContainerStyle="{StaticResource SelectExpandedTreeViewItemStyle}"
-                      SelectedItemChanged="SavedTree_SelectedItemChanged" Height="296" VerticalAlignment="Top">
+                      SelectedItemChanged="SavedTree_SelectedItemChanged">
             <TreeView.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
                       Color="SkyBlue" />
@@ -333,10 +333,6 @@
         </Border>
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Installed:" FontSize="12"
                    Margin="5,0,0,0" VerticalAlignment="Bottom"/>
-        <!--<StackPanel Grid.Row="2" Grid.Column="0" Margin="0,5,0,5" Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-            
-        </StackPanel>-->
         <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,5,0,5" Orientation="Horizontal">
             <Button Content="Choose Save Folder..." Margin="5,0,10,0" Height="25" Click="ChooseDataFolder_Clicked"/>
             <Button Content="New" Margin="10,0,0,0" Height="25" 
@@ -348,7 +344,6 @@
             <Button Content="Install" Margin="10,0,0,0" Height="25" 
                     IsEnabled="{Binding CanInstall}" Click="Install_Clicked"/>
         </StackPanel>
-        
         <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,5,0,5" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Copy ^" Margin="10,0,40,0" Height="25" 
                     IsEnabled="{Binding CanCopy}" Click="Copy_Clicked"/>
@@ -522,8 +517,6 @@
                 </Grid>
             </ScrollViewer>
         </Border>
-        
-        
         <Border Grid.Row="3" Grid.Column="4" BorderBrush="Gray" BorderThickness="1">
             <ScrollViewer>
                 <TextBlock Text="{Binding DifferencesText}" TextWrapping="Wrap" Margin="5,5,0,0" />
