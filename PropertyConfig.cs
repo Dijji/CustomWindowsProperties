@@ -263,11 +263,16 @@ namespace CustomWindowsProperties
         /// interface (UI). This influences the list of predicate conditions 
         /// (for example, equals, less than, and contains) that are shown 
         /// for this property.
+        /// Note that the installed enumeration differs from the configurable enumeration,
+        /// hence the need for two versions of the property
         /// </summary>
         /// <remarks>For more information, see the <c>conditionType</c> attribute of the 
         /// <c>typeInfo</c> element in the property's .propdesc file.</remarks>
-        public PropertyConditionOperation ConditionOperation { get { return conditionOperation; } set { conditionOperation = value; OnPropertyChanged(); } }
-        private PropertyConditionOperation conditionOperation;
+        public ConditionOperationConfigured ConditionOperation { get { return conditionOperation; } set { conditionOperation = value; OnPropertyChanged(); } }
+        private ConditionOperationConfigured conditionOperation;
+
+        public PropertyConditionOperation ConditionOperationInstalled { get { return conditionOperationInstalled; } set { conditionOperationInstalled = value; OnPropertyChanged(); } }
+        private PropertyConditionOperation conditionOperationInstalled;
 
         // ALIAS
 
@@ -424,7 +429,7 @@ namespace CustomWindowsProperties
             IsViewable = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IsViewable);
             IsSystemProperty = propertyDescription.TypeFlags.HasFlag(PropertyTypeOptions.IsSystemProperty);
             ConditionType = propertyDescription.ConditionType;
-            ConditionOperation = propertyDescription.ConditionOperation;
+            ConditionOperationInstalled = propertyDescription.ConditionOperation;
 
             // Display information
             DisplayType = propertyDescription.DisplayType;
@@ -481,7 +486,7 @@ namespace CustomWindowsProperties
             IsViewable = false;
             SearchRawValue = false;
             ConditionType = PropertyConditionType.None;
-            ConditionOperation = PropertyConditionOperation.Equal;
+            ConditionOperation = ConditionOperationConfigured.Equal;
 
             DisplayType = PropertyDisplayType.String;
             StringFormat = StringFormat.General;
@@ -565,7 +570,7 @@ namespace CustomWindowsProperties
                 type.SetAttribute("isInnate", IsInnate.ToString());
             if (IsInnate && CanBePurged)
                 type.SetAttribute("canBePurged", CanBePurged.ToString());
-            if (MultipleValues)
+            //if (MultipleValues)
                 type.SetAttribute("multipleValues", MultipleValues.ToString());
             if (IsGroup)
                 type.SetAttribute("isGroup", IsGroup.ToString());
@@ -579,7 +584,7 @@ namespace CustomWindowsProperties
                 type.SetAttribute("searchRawValue", SearchRawValue.ToString());
             if (ConditionType != PropertyConditionType.String)
                 type.SetAttribute("conditionType", ConditionType.ToString());
-            if (ConditionOperation != PropertyConditionOperation.Equal)
+            if (ConditionOperation != ConditionOperationConfigured.Equal)
                 type.SetAttribute("defaultOperation", ConditionOperation.ToString());
             desc.AppendChild(type);
 
@@ -679,7 +684,10 @@ namespace CustomWindowsProperties
             if (!isInstalled)
                 SearchRawValue = from.SearchRawValue;
             ConditionType = from.ConditionType;
-            ConditionOperation = from.ConditionOperation;
+            if (!isInstalled)
+                ConditionOperation = from.ConditionOperation;
+            else
+                ConditionOperation = ConfiguredOperationFromInstalled(from.ConditionOperationInstalled);
 
             // Display
             DisplayType = from.DisplayType;
@@ -696,6 +704,35 @@ namespace CustomWindowsProperties
             DefaultSortDirection = from.DefaultSortDirection;
             if (!isInstalled)
                 EditControl = from.EditControl;
+        }
+
+        ConditionOperationConfigured ConfiguredOperationFromInstalled (PropertyConditionOperation operation)
+        {
+            switch(operation)
+            {
+                case PropertyConditionOperation.Equal:
+                case PropertyConditionOperation.WordEqual:
+                default:
+                    return ConditionOperationConfigured.Equal;
+
+                case PropertyConditionOperation.NotEqual:
+                case PropertyConditionOperation.ValueNotContains:
+                    return ConditionOperationConfigured.NotEqual;
+
+                case PropertyConditionOperation.LessThan:
+                case PropertyConditionOperation.LessThanOrEqual:
+                    return ConditionOperationConfigured.LessThan;
+
+                case PropertyConditionOperation.GreaterThan:
+                case PropertyConditionOperation.GreaterThanOrEqual:
+                    return ConditionOperationConfigured.GreaterThan;
+
+                case PropertyConditionOperation.ValueContains:
+                case PropertyConditionOperation.ValueEndsWith:
+                case PropertyConditionOperation.ValueStartsWith:
+                case PropertyConditionOperation.WordStartsWith:
+                    return ConditionOperationConfigured.Contains;
+            }
         }
 
         internal struct Difference

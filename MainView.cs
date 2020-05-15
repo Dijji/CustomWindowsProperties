@@ -222,6 +222,8 @@ namespace CustomWindowsProperties
             {
                 // Property is already known about, just update its values
                 config.CopyFrom(EditorConfig, false);
+                if (config.PropertyId <= 1) // Nust be at least 2
+                    AssignPropertyKey(config);
                 state.SavePropertyConfig(EditorConfig);
                 CheckIfEditorDirty();
                 return config;
@@ -278,8 +280,8 @@ namespace CustomWindowsProperties
 
         public bool CanBeDeleted(TreeItem treeItem)
         {
-            return GetTreeTargets(treeItem, out bool isGroup)
-                .Where(p => CanBeDeleted(p) && !IsDirtyGroupConfig(p, isGroup))
+            return GetTreeTargets(treeItem, out bool isSubTree)
+                .Where(p => CanBeDeleted(p) && !IsDirtySubTreeConfig(p, isSubTree))
                 .FirstOrDefault() != null;
         }
 
@@ -291,8 +293,8 @@ namespace CustomWindowsProperties
 
         public bool CanBeInstalled(TreeItem treeItem)
         {
-            return GetTreeTargets(treeItem, out bool isGroup)
-                .Where(p => CanBeInstalled(p) && !IsDirtyGroupConfig(p, isGroup))
+            return GetTreeTargets(treeItem, out bool isSubTree)
+                .Where(p => CanBeInstalled(p) && !IsDirtySubTreeConfig(p, isSubTree))
                 .FirstOrDefault() != null;
         }
 
@@ -305,7 +307,7 @@ namespace CustomWindowsProperties
 
         public bool CanBeUninstalled(TreeItem treeItem)
         {
-            return GetTreeTargets(treeItem, out bool isGroup)
+            return GetTreeTargets(treeItem, out bool isSubTree)
                 .Where(p => CanBeUninstalled(p))
                 .FirstOrDefault() != null;
         }
@@ -322,9 +324,9 @@ namespace CustomWindowsProperties
             XmlDocument doc;
             string configName;
 
-            var items = GetTreeTargets(treeItem, out bool isGroup);
+            var items = GetTreeTargets(treeItem, out bool isSubTree);
 
-            if (!isGroup)
+            if (!isSubTree)
                 configName = items.First().CanonicalName;
             else
                 configName = treeItem.Path;
@@ -339,10 +341,10 @@ namespace CustomWindowsProperties
 
         public int DeleteProperties(TreeItem treeItem)
         {
-            var configs = GetTreeTargets(treeItem, out bool isGroup)
-                .Where(p => CanBeDeleted(p) && !IsDirtyGroupConfig(p, isGroup)).ToList();
+            var configs = GetTreeTargets(treeItem, out bool isSubTree)
+                .Where(p => CanBeDeleted(p) && !IsDirtySubTreeConfig(p, isSubTree)).ToList();
 
-            if (isGroup)
+            if (isSubTree)
             {
                 if (MessageBox.Show($"This will delete {PropertyNameListQ(configs)}",
                     "Delete Properties", MessageBoxButton.YesNo) == MessageBoxResult.No)
@@ -369,10 +371,10 @@ namespace CustomWindowsProperties
         // Returns a tuple of success and failure counts (property matching not in target Windows .Net)
         public Tuple<int, int> InstallProperties(TreeItem treeItem, TreeView treeViewInstalled)
         {
-            var configs = GetTreeTargets(treeItem, out bool isGroup)
-                .Where(p => CanBeInstalled(p) && !IsDirtyGroupConfig(p, isGroup)).ToList();
+            var configs = GetTreeTargets(treeItem, out bool isSubTree)
+                .Where(p => CanBeInstalled(p) && !IsDirtySubTreeConfig(p, isSubTree)).ToList();
 
-            if (isGroup)
+            if (isSubTree)
             {
                 if (MessageBox.Show($"This will install {PropertyNameListQ(configs)}",
                     "Install Properties", MessageBoxButton.YesNo) == MessageBoxResult.No)
@@ -382,7 +384,7 @@ namespace CustomWindowsProperties
             int good = 0;
             foreach (var config in configs)
             {
-                if (InstallProperty(config, isGroup ? null : treeViewInstalled) > 0)
+                if (InstallProperty(config, isSubTree ? null : treeViewInstalled) > 0)
                     good++;
             }
 
@@ -425,10 +427,10 @@ namespace CustomWindowsProperties
 
         public int UninstallProperties(TreeItem treeItem)
         {
-            var configs = GetTreeTargets(treeItem, out bool isGroup)
+            var configs = GetTreeTargets(treeItem, out bool isSubTree)
                 .Where(p => CanBeUninstalled(p)).ToList();
 
-            if (isGroup)
+            if (isSubTree)
             {
                 if (MessageBox.Show($"This will uninstall {PropertyNameListQ(configs)}",
                     "Uninstall Properties", MessageBoxButton.YesNo) == MessageBoxResult.No)
@@ -558,10 +560,10 @@ namespace CustomWindowsProperties
                 treeItem.Background = null;
         }
 
-        private bool IsDirtyGroupConfig(PropertyConfig config, bool isGroup)
+        private bool IsDirtySubTreeConfig(PropertyConfig config, bool isSubTree)
         {
-            // Check for a group property which is open and changed in the editor 
-            return isGroup && EditorConfig.CanonicalName == config.CanonicalName && IsEditorDirty;
+            // Check if this is a subtree property which is open and changed in the editor 
+            return isSubTree && EditorConfig.CanonicalName == config.CanonicalName && IsEditorDirty;
         }
 
         private void CheckIfEditorDirty()
@@ -657,23 +659,24 @@ namespace CustomWindowsProperties
             }
 
             // No usable parent, give it a new name  
+            // Start numbering at 2. 0 and 1 are reserved by the system
             config.FormatId = Guid.NewGuid();
-            config.PropertyId = 1;
+            config.PropertyId = 2;
         }
 
-        private IEnumerable<PropertyConfig> GetTreeTargets(TreeItem treeItem, out bool isGroup)
+        private IEnumerable<PropertyConfig> GetTreeTargets(TreeItem treeItem, out bool isSubTree)
         {
             IEnumerable<TreeItem> items;
 
             if (treeItem.Children.Count == 0)
             {
                 items = new TreeItem[] { treeItem };
-                isGroup = false;
+                isSubTree = false;
             }
             else
             {
                 items = treeItem.Children.Flatten<TreeItem>(t => t.Children);
-                isGroup = true;
+                isSubTree = true;
             }
 
             return items.Select(t => t.Item).Cast<PropertyConfig>().Where(s => s != null);

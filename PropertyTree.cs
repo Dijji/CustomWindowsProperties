@@ -39,13 +39,12 @@ namespace CustomWindowsProperties
                     {
                         lastRoots.Insert(0, root);
 
-                        // Move property groups from root to their own list
+                        // Move property groups from root to their own subtree
                         propGroup = root.Children.Where(x => x.Name == "PropGroup").FirstOrDefault();
                         if (propGroup != null)
                         {
-                            //    foreach (TreeItem ti in propGroup.Children)
-                            //      GroupProperties.Add(ti.Name);
                             root.RemoveChild(propGroup);
+                            lastRoots.Add(propGroup);
                         }
 
                         // Move properties with names of the form System.* to their own subtree

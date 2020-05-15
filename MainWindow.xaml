@@ -263,7 +263,7 @@
                     <ComboBox Grid.Row="26" Grid.Column="2" VerticalAlignment="Center" 
                           MinWidth="100" HorizontalAlignment="Left"
                        SelectedItem="{Binding ConditionOperation, UpdateSourceTrigger=PropertyChanged}" Tag="ConditionOperation"
-                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:PropertyConditionOperation}}}"/>
+                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:ConditionOperationConfigured}}}"/>
                     <TextBlock Grid.Row="28" Grid.Column="0" Text="Display" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="28" Grid.Column="1" Text="DisplayType:" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="28" Grid.Column="2" VerticalAlignment="Center" 
@@ -495,7 +495,7 @@
                     <TextBlock Grid.Row="26" Grid.Column="1" Text="ConditionType:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="26" Grid.Column="2" Text="{Binding ConditionType}" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="27" Grid.Column="1" Margin="0,0,10,0" Text="ConditionOperation:" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="27" Grid.Column="2" Text="{Binding ConditionOperation}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="27" Grid.Column="2" Text="{Binding ConditionOperationInstalled}" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="28" Grid.Column="0" Text="Alias" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="28" Grid.Column="1" Text="SortByAlias:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="28" Grid.Column="2" Text="{Binding SortByAlias}" VerticalAlignment="Center"/>

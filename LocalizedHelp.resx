@@ -163,11 +163,12 @@ NotIndexed:&lt;/td&gt;&lt;td&gt; Never build a value index.
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 OnDisk: &lt;/td&gt;&lt;td&gt;Build a value index by default for this property.
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-InMemory: &lt;/td&gt;&lt;td&gt;Obsolete. Do not use.
-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 OnDiskAll: &lt;/td&gt;&lt;td&gt;Build a value index by default for this property, and if it is a vector property, also a value index for all concatenated vector values. 
+&lt;b&gt; Only use if MultipleValues= "true"&lt;/b&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-OnDiskVector: &lt;/td&gt;&lt;td&gt;Build a value index by default for the concatenated vector values. &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+OnDiskVector: &lt;/td&gt;&lt;td&gt;Build a value index by default for the concatenated vector values. 
+&lt;b&gt; Only use if MultipleValues= "true"&lt;/b&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 OnDemand: &lt;/td&gt;&lt;td&gt;Only build a value index on demand, that is, the first time it is needed for a query.
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
@@ -183,6 +184,51 @@ LessThan&lt;/td&gt;&lt;td&gt;	Indicates less than.
 GreaterThan	&lt;/td&gt;&lt;td&gt;Default for properties of ConditionType="Size". Indicates greater than.
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 Contains&lt;/td&gt;&lt;td&gt;	Default for properties of ConditionType="String". Indicates inclusion.
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;p&gt; ConditionOperation is a rare case where the 
+value read back from Windows is almost never the 
+same as the one configured. Windows refines the 
+value, depending on  Type and ConditionType, into 
+one of the following:&lt;/p&gt; 
+  &lt;table&gt;&lt;tr&gt;&lt;td&gt;Implicit &lt;/td&gt;&lt;td&gt;
+       The implicit comparison between the value of the property and the value of the constant.
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; Equal &lt;/td&gt;&lt;td&gt;
+       The value of the property and the value of the constant must be equal.
+       
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; NotEqual &lt;/td&gt;&lt;td&gt;
+       The value of the property and the value of the constant must not be equal.
+       
+        
+
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; LessThan &lt;/td&gt;&lt;td&gt;
+       The value of the property must be less than the value of the constant.
+       
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; GreaterThan &lt;/td&gt;&lt;td&gt;
+       The value of the property must be greater than the value of the constant.
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; LessThanOrEqual &lt;/td&gt;&lt;td&gt;
+       The value of the property must be less than or equal to the value of the constant.
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; GreaterThanOrEqual &lt;/td&gt;&lt;td&gt;
+       The value of the property must be greater than or equal to the value of the constant.
+       
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; ValueStartsWith &lt;/td&gt;&lt;td&gt;
+       The value of the property must begin with the value of the constant.
+       
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; ValueEndsWith &lt;/td&gt;&lt;td&gt;
+       The value of the property must end with the value of the constant.
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; ValueContains &lt;/td&gt;&lt;td&gt;
+       The value of the property must contain the value of the constant.
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; ValueNotContains &lt;/td&gt;&lt;td&gt;
+       The value of the property must not contain the value of the constant.
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; DOSWildCards &lt;/td&gt;&lt;td&gt;
+       The value of the property must match the value of the constant, where '?' matches any single character and '*' matches any sequence of characters.
+       
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; WordEqual &lt;/td&gt;&lt;td&gt;
+       The value of the property must contain a word that is the value of the constant.
+       
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; WordStartsWith &lt;/td&gt;&lt;td&gt;
+       The value of the property must contain a word that begins with the value of the constant.
+        &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; ApplicationSpecific &lt;/td&gt;&lt;td&gt;
+       The application is free to interpret this in any suitable way.
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="ConditionType" xml:space="preserve">

@@ -31,10 +31,19 @@ namespace CustomWindowsProperties
     {
         NotIndexed = 0,
         OnDisk = 1,
-        InMemory = 2, // Obsolete
+        //InMemory = 2, // Obsolete
         OnDiskAll = 3,
         OnDiskVector = 4,
         OnDemand = 5,
+    }
+
+    public enum ConditionOperationConfigured
+    {
+        Equal,
+        NotEqual,
+        LessThan,
+        GreaterThan,
+        Contains,
     }
 
     public enum EditControl
