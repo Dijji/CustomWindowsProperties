@@ -789,7 +789,16 @@ namespace CustomWindowsProperties
             if (!isInstalled)
                 if (SearchRawValue != baseline.SearchRawValue) result.Add(new Difference(nameof(SearchRawValue), SearchRawValue, baseline.SearchRawValue));
             if (ConditionType != baseline.ConditionType) result.Add(new Difference(nameof(ConditionType), ConditionType, baseline.ConditionType));
-            if (ConditionOperation != baseline.ConditionOperation) result.Add(new Difference(nameof(ConditionOperation), ConditionOperation, baseline.ConditionOperation));
+            if (!isInstalled)
+            {
+                if (ConditionOperation != baseline.ConditionOperation) result.Add(new Difference(nameof(ConditionOperation), ConditionOperation, baseline.ConditionOperation));
+            }
+            else
+            {
+                if (baseline.ConditionOperationInstalled > PropertyConditionOperation.GreaterThan || 
+                    (int)baseline.ConditionOperationInstalled != (int)ConditionOperation)
+                    result.Add(new Difference(nameof(ConditionOperation), ConditionOperation, baseline.ConditionOperationInstalled));
+            }
 
             // Display
             if (DisplayType != baseline.DisplayType) result.Add(new Difference(nameof(DisplayType), DisplayType, baseline.DisplayType));
