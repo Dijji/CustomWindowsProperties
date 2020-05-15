@@ -110,7 +110,8 @@ namespace CustomWindowsProperties
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, $"Error reading saved property {fullFileName}");
+                    MessageBox.Show($"Error '{ex.Message}' loading saved property from '{fullFileName}'",
+                        "Error loading saved property");
                 }
             }
 
@@ -119,10 +120,10 @@ namespace CustomWindowsProperties
 
         public void SavePropertyConfig(PropertyConfig config)
         {
+            string fileName = DataFolder + Path.DirectorySeparatorChar + config.CanonicalName + ".xml";
+
             try
             {
-                string fileName = DataFolder + Path.DirectorySeparatorChar + config.CanonicalName + ".xml";
-
                 XmlSerializer x = new XmlSerializer(typeof(PropertyConfig));
                 using (TextWriter writer = new StreamWriter(fileName))
                 {
@@ -131,21 +132,24 @@ namespace CustomWindowsProperties
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, $"Error saving property configuration {config.CanonicalName}");
+                MessageBox.Show($"Error '{ex.Message}' saving property {config.CanonicalName} to '{fileName}'",
+                    "Error saving property");
             }
         }
 
         public void DeletePropertyConfig(string canonicalName)
         {
+            string fileName = DataFolder + Path.DirectorySeparatorChar + canonicalName + ".xml";
+
             try
             {
-                string fileName = DataFolder + Path.DirectorySeparatorChar + canonicalName + ".xml";
                 if (File.Exists(fileName))
                     File.Delete(fileName);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, $"Error deleting property configuration {canonicalName}");
+                MessageBox.Show($"Error '{ex.Message}' deleting property {canonicalName} saved in '{fileName}'",
+                    "Error deleting property");
             }
         }
 

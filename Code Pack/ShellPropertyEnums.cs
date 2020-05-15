@@ -535,17 +535,17 @@ namespace CustomWindowsProperties
         /// <summary>
         /// The numerical sort, "Lowest on top", "Highest on top".
         /// </summary>
-        LowestToHighest,
+        LowestHighest,
 
         /// <summary>
         /// The size sort, "Smallest on top", "Largest on top".
         /// </summary>
-        SmallestToBiggest,
+        SmallestBiggest,
 
         /// <summary>
         /// The chronological sort, "Oldest on top", "Newest on top".
         /// </summary>
-        OldestToNewest,
+        OldestNewest,
     }
 
     /// <summary>
