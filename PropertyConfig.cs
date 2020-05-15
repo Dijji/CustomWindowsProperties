@@ -795,7 +795,8 @@ namespace CustomWindowsProperties
             }
             else
             {
-                if (baseline.ConditionOperationInstalled > PropertyConditionOperation.GreaterThan || 
+                if (baseline.ConditionOperationInstalled < PropertyConditionOperation.Equal ||
+                    baseline.ConditionOperationInstalled > PropertyConditionOperation.GreaterThan ||
                     (int)baseline.ConditionOperationInstalled != (int)ConditionOperation)
                     result.Add(new Difference(nameof(ConditionOperation), ConditionOperation, baseline.ConditionOperationInstalled));
             }

@@ -39,11 +39,11 @@ namespace CustomWindowsProperties
 
     public enum ConditionOperationConfigured
     {
-        Equal,
-        NotEqual,
-        LessThan,
-        GreaterThan,
-        Contains,
+        Equal = 1,
+        NotEqual = 2,
+        LessThan = 3,
+        GreaterThan = 4,
+        Contains = 5,
     }
 
     public enum EditControl
