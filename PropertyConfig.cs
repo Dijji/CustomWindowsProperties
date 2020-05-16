@@ -472,7 +472,7 @@ namespace CustomWindowsProperties
 
             DisplayName = null;
             SortDescription = PropertySortDescription.General;
-            EditInvitation = null;
+            EditInvitation = "Add text";
             HideLabel = false;
 
             Type = PropertyTypes.Any;
@@ -483,7 +483,7 @@ namespace CustomWindowsProperties
             IsGroup = false;
             AggregationType = PropertyAggregationType.Default;
             IsTreeProperty = false;
-            IsViewable = false;
+            IsViewable = true;
             SearchRawValue = false;
             ConditionType = PropertyConditionType.None;
             ConditionOperation = ConditionOperationConfigured.Equal;

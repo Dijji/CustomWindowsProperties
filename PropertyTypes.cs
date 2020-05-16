@@ -32,9 +32,9 @@ namespace CustomWindowsProperties
         NotIndexed = 0,
         OnDisk = 1,
         //InMemory = 2, // Obsolete
-        OnDiskAll = 3,
-        OnDiskVector = 4,
-        OnDemand = 5,
+        OnDemand = 3,
+        OnDiskAll = 4,
+        OnDiskVector = 5,
     }
 
     public enum ConditionOperationConfigured
