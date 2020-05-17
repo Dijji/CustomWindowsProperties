@@ -335,13 +335,13 @@ Alphanumeric &lt;/td&gt;&lt;td&gt;Displays static alphanumeric ranges for values
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 Size&lt;/td&gt;&lt;td&gt;	Displays static size ranges for values.
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-Date	&lt;/td&gt;&lt;td&gt;Displays month/year groups. Default for properties of type="DateTime".
-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-TimeRelative&lt;/td&gt;&lt;td&gt; Displays in time-relative groups.
-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 Dynamic	&lt;/td&gt;&lt;td&gt;Displays dynamically created ranges for the values.
 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Date	&lt;/td&gt;&lt;td&gt;Displays month/year groups. Default for properties of type="DateTime".
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
 Percent	&lt;/td&gt;&lt;td&gt;Displays percent buckets.
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+Enumerated&lt;/td&gt;&lt;td&gt;Displays percent buckets based on the possible values of the property.
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</value>
   </data>
   <data name="HideLabel" xml:space="preserve">

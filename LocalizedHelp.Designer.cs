@@ -263,9 +263,9 @@ namespace CustomWindowsProperties {
         ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
         ///Size&lt;/td&gt;&lt;td&gt;	Displays static size ranges for values.
         ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-        ///Date	&lt;/td&gt;&lt;td&gt;Displays month/year groups. Default for properties of type=&quot;DateTime&quot;.
+        ///Dynamic	&lt;/td&gt;&lt;td&gt;Displays dynamically created ranges for the values.
         ///&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-        ///TimeRelative&lt;/td&gt;&lt;td&gt; Displays [rest of string was truncated]&quot;;.
+        ///Date	&lt;/td&gt;&lt;td&gt;Displays month/year groups. Defa [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GroupingRange {
             get {
