@@ -492,7 +492,7 @@ namespace CustomWindowsProperties
             if (!alwaysOverwrite)
             {
                 string question = null;
-                if (CompareEditorToBaseline())
+                if (CompareEditorToBaseline(allowOverride: false))
                     question = "Do you want to discard the changes you have made?";
                 else if (EditorBaselineType == BaselineType.Installed &&
                          type != BaselineType.Installed)
@@ -572,18 +572,21 @@ namespace CustomWindowsProperties
                 IsEditorDirty = CompareEditorToBaseline();
         }
 
-        private bool CompareEditorToBaseline()
+        private bool CompareEditorToBaseline(bool allowOverride = true)
         {
             var baseline = EditorBaseline;
             var isInstalled = (EditorBaselineType == BaselineType.Installed);
 
             // Check for comparison override
-            if (CompareSaved && EditorBaselineType == BaselineType.Installed)
-                baseline = SelectedSavedProperty;
-            else if (CompareInstalled && EditorBaselineType != BaselineType.Installed)
+            if (allowOverride)
             {
-                baseline = SelectedInstalledProperty;
-                isInstalled = true;
+                if (CompareSaved && EditorBaselineType == BaselineType.Installed)
+                    baseline = SelectedSavedProperty;
+                else if (CompareInstalled && EditorBaselineType != BaselineType.Installed)
+                {
+                    baseline = SelectedInstalledProperty;
+                    isInstalled = true;
+                }
             }
 
             if (baseline == null)
