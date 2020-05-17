@@ -540,7 +540,7 @@ namespace CustomWindowsProperties
         /// <summary>
         /// The size sort, "Smallest on top", "Largest on top".
         /// </summary>
-        SmallestBiggest,
+        SmallestLargest,
 
         /// <summary>
         /// The chronological sort, "Oldest on top", "Newest on top".
