@@ -48,6 +48,9 @@ namespace CustomWindowsProperties
             }
         }
 
+        public bool IsExpanded { get { return isExpanded; } set { isExpanded = value; OnPropertyChanged(); } }
+        private bool isExpanded;
+
         public string Path
         {
             get

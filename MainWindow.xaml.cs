@@ -93,8 +93,9 @@ namespace CustomWindowsProperties
             // puts the focus on any control in column 2 of the same row
             var rect = (Rectangle)sender;
             var row = Grid.GetRow(rect);
-            var target = PropertyEditor.Children.Cast<UIElement>()
-                    .FirstOrDefault(el => Grid.GetRow(el) == row && Grid.GetColumn(el) == 2);
+            var target = PropertyEditor.Children.Cast<FrameworkElement>()
+                    .FirstOrDefault(el => Grid.GetRow(el) == row && Grid.GetColumn(el) == 2 && 
+                                    el.Tag as string != null );
             if (target != null)
                 target.Focus();
         }

@@ -66,6 +66,9 @@ namespace CustomWindowsProperties
                 foreach (var ti in lastRoots)
                     treeItems.Add(ti);
             }
+            else
+                // Fully expand the saved tree
+                ExpandTree(treeItems);
 
             return dict;
         }
@@ -165,6 +168,20 @@ namespace CustomWindowsProperties
             }
 
             return ti;
+        }
+
+        public static void ExpandTree(ObservableCollection<TreeItem> roots)
+        {
+            ExpandTreeInner(roots);
+        }
+
+        private static void ExpandTreeInner(ICollection<TreeItem> treeItems)
+        {
+            foreach (var treeItem in treeItems.Where(t => t.Children.Count > 0))
+            {
+                treeItem.IsExpanded = true;
+                ExpandTreeInner(treeItem.Children);
+            }
         }
 
         public static void RemoveTreeItem(Dictionary<string, TreeItem> dict, ObservableCollection<TreeItem> roots, string canonicalName)

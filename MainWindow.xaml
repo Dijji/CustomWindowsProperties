@@ -27,7 +27,7 @@
         </Style>
         <Style x:Key="SelectExpandedTreeViewItemStyle"
                TargetType="{x:Type TreeViewItem}">
-            <Setter Property="IsExpanded" Value="True"/>
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
             <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
             <Setter Property="FontWeight" Value="Normal" />
             <Setter Property="ItemsPanel">
@@ -145,24 +145,22 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Basics" FontWeight="Bold"  VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="Name:" VerticalAlignment="Center"/>
-                    <Grid Grid.Row="0" Grid.Column="2">
-                        <TextBox Text="{Binding CanonicalName, UpdateSourceTrigger=PropertyChanged}"
-                                 MinWidth="150" VerticalAlignment="Center" x:Name="NameTextBox"
-                                 Tag="CanonicalName" HorizontalAlignment="Left"/>
-                        <TextBlock IsHitTestVisible="False" Text="Property name goes here"
-                                   VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="DarkGray">
-                            <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Text, ElementName=NameTextBox}" Value="">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </Grid>
+                    <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding CanonicalName, UpdateSourceTrigger=PropertyChanged}"
+                                MinWidth="150" VerticalAlignment="Center" x:Name="NameTextBox"
+                                Tag="CanonicalName" HorizontalAlignment="Left"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" IsHitTestVisible="False" Text="Property name goes here"
+                                VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="DarkGray">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=NameTextBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     <TextBlock Grid.Row="1" Grid.Column="1" Text="Installed:" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding EditorInstalledText}" VerticalAlignment="Center"
                            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, 

@@ -49,12 +49,12 @@ namespace CustomWindowsProperties
         }
         private PropertyConfig selectedInstalledProperty;
 
-        public TreeItem SelectedTreeItem
+        public TreeItem SelectedSavedTreeItem
         {
-            get { return selectedTreeItem; }
-            private set { selectedTreeItem = value; OnPropertyChanged(); }
+            get { return selectedSavedTreeItem; }
+            private set { selectedSavedTreeItem = value; OnPropertyChanged(); }
         }
-        private TreeItem selectedTreeItem;
+        private TreeItem selectedSavedTreeItem;
 
         public PropertyConfig EditorConfig { get; set; }
 
@@ -164,7 +164,6 @@ namespace CustomWindowsProperties
 
         public PropertyConfig SetSelectedTreeItem(TreeItem treeItem, bool isInstalled)
         {
-            SelectedTreeItem = treeItem;
             var selectedProperty = (treeItem)?.Item as PropertyConfig;
 
             if (isInstalled)
@@ -173,6 +172,7 @@ namespace CustomWindowsProperties
             }
             else
             {
+                SelectedSavedTreeItem = treeItem;
                 SelectedSavedProperty = selectedProperty;
                 if (SelectedSavedProperty != null)
                 {
@@ -204,6 +204,8 @@ namespace CustomWindowsProperties
 
         public void NewEditorProperty(string canonicalName = null)
         {
+            if (SelectedSavedTreeItem != null)
+                SelectedSavedTreeItem.IsSelected = false;
             var newBaseline = new PropertyConfig();
             newBaseline.SetDefaultValues();
             if (canonicalName != null)
@@ -243,7 +245,10 @@ namespace CustomWindowsProperties
                 EditorBaseline = newConfig;
                 EditorBaselineType = BaselineType.Saved;
                 CheckIfEditorDirty();
-                SelectTreeItemAfterDelay(treeViewSaved, treeItem);
+                // Just select rather than bring into view for the moment
+                // to avoid having the tree collapsed
+                treeItem.IsSelected = true; 
+                //SelectTreeItemAfterDelay(treeViewSaved, treeItem);
                 RefreshEditorStatus();
                 return newConfig;
             }
