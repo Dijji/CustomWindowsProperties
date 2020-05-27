@@ -245,10 +245,7 @@ namespace CustomWindowsProperties
                 EditorBaseline = newConfig;
                 EditorBaselineType = BaselineType.Saved;
                 CheckIfEditorDirty();
-                // Just select rather than bring into view for the moment
-                // to avoid having the tree collapsed
-                treeItem.IsSelected = true; 
-                //SelectTreeItemAfterDelay(treeViewSaved, treeItem);
+                SelectTreeItemAfterDelay(treeViewSaved, treeItem, leaveExpanded: true);
                 RefreshEditorStatus();
                 return newConfig;
             }
@@ -690,7 +687,7 @@ namespace CustomWindowsProperties
             return items.Select(t => t.Item).Cast<PropertyConfig>().Where(s => s != null);
         }
 
-        private void SelectTreeItemAfterDelay(TreeView treeView, TreeItem treeItem)
+        private void SelectTreeItemAfterDelay(TreeView treeView, TreeItem treeItem, bool leaveExpanded = false)
         {
             // Need to give the tree view a little time before selecting a new item
             Task.Factory.StartNew(() =>
@@ -698,7 +695,7 @@ namespace CustomWindowsProperties
                 Thread.Sleep(200);
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    TreeViewHelper.SelectTreeProperty(treeView, treeItem);
+                    TreeViewHelper.SelectTreeProperty(treeView, treeItem, leaveExpanded);
                 }));
             });
         }

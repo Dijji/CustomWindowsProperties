@@ -7,13 +7,13 @@ namespace CustomWindowsProperties
 {
     internal class TreeViewHelper
     {
-        public static void SelectTreeProperty(TreeView tv, TreeItem ti)
+        public static void SelectTreeProperty(TreeView tv, TreeItem ti, bool leaveExpanded = false)
         {
             ti.IsSelected = true;
 
             // This is the slow part, as it involves a walk of the visual items behind the tree view
             // Unfortunately, there is no binding trick to get around it.
-            var tvi = GetTreeViewItem(tv, ti);
+            var tvi = GetTreeViewItem(tv, ti, leaveExpanded);
             if (tvi != null)
                 tvi.BringIntoView();
         }
@@ -34,7 +34,7 @@ namespace CustomWindowsProperties
         /// <returns>
         /// The TreeViewItem that contains the specified item.
         /// </returns>
-        private static TreeViewItem GetTreeViewItem(ItemsControl container, object item)
+        private static TreeViewItem GetTreeViewItem(ItemsControl container, object item, bool leaveExpanded = false)
         {
             if (container != null)
             {
@@ -120,8 +120,8 @@ namespace CustomWindowsProperties
                         else
                         {
                             // The object is not under this TreeViewItem
-                            // so collapse it.
-                            subContainer.IsExpanded = false;
+                            // so collapse it unless asked not to
+                            subContainer.IsExpanded = leaveExpanded;
                         }
                     }
                 }
